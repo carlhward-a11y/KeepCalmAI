@@ -1,0 +1,52 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionHeader from '../components/SectionHeader.astro';
+import Callout from '../components/Callout.astro';
+---
+
+<BaseLayout
+  title="Start | KeepCalmAI"
+  description="Answer a few calm onboarding questions before starting your KeepCalmAI journey."
+>
+  <section class="panel onboarding" aria-labelledby="start-title">
+    <SectionHeader
+      eyebrow="Start calmly"
+      title="Tell us what would help most"
+      text="These questions will later personalise the learning route. For now, they define the first onboarding experience."
+    />
+
+    <form class="onboarding-form">
+      <fieldset>
+        <legend>Why are you here today?</legend>
+        <label><input type="radio" name="goal" value="everyday" /> Everyday life</label>
+        <label><input type="radio" name="goal" value="work" /> Work</label>
+        <label><input type="radio" name="goal" value="study" /> Study</label>
+        <label><input type="radio" name="goal" value="curious" /> Just curious</label>
+      </fieldset>
+
+      <fieldset>
+        <legend>How confident do you feel with AI?</legend>
+        <label><input type="radio" name="confidence" value="new" /> I have never used it</label>
+        <label><input type="radio" name="confidence" value="tried" /> I have tried it a few times</label>
+        <label><input type="radio" name="confidence" value="sometimes" /> I use it sometimes</label>
+        <label><input type="radio" name="confidence" value="regular" /> I use it regularly</label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Which AI assistant do you use?</legend>
+        <label><input type="radio" name="platform" value="chatgpt" /> ChatGPT</label>
+        <label><input type="radio" name="platform" value="copilot" /> Microsoft Copilot</label>
+        <label><input type="radio" name="platform" value="gemini" /> Google Gemini</label>
+        <label><input type="radio" name="platform" value="claude" /> Claude</label>
+        <label><input type="radio" name="platform" value="none" /> I am not sure yet</label>
+      </fieldset>
+
+      <a class="button" href="/journeys/ai-without-overwhelm/">Continue to recommended journey</a>
+    </form>
+
+    <Callout
+      title="Why these questions matter"
+      text="KeepCalmAI will use these answers to suggest examples, activities and routes that feel more relevant to the learner."
+    />
+  </section>
+</BaseLayout>
