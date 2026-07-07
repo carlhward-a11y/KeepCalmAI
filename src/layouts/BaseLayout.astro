@@ -1,0 +1,37 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = 'KeepCalmAI',
+  description = 'Calm, accessible AI learning for people who want to build confidence one small step at a time.'
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={description} />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    <title>{title}</title>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="site-header__inner">
+        <p class="brand">KeepCalmAI</p>
+        <p class="tagline">Calm Today. Confident Tomorrow.</p>
+      </div>
+    </header>
+    <main>
+      <slot />
+    </main>
+  </body>
+</html>
