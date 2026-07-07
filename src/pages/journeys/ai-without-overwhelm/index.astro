@@ -1,8 +1,10 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import Hero from '../../../components/Hero.astro';
-import LessonStep from '../../../components/LessonStep.astro';
+import SectionHeader from '../../../components/SectionHeader.astro';
 import { aiWithoutOverwhelm } from '../../../data/aiWithoutOverwhelm';
+
+const firstStep = aiWithoutOverwhelm[0];
 ---
 
 <BaseLayout
@@ -12,25 +14,27 @@ import { aiWithoutOverwhelm } from '../../../data/aiWithoutOverwhelm';
   <Hero
     eyebrow="Foundations"
     title="AI Without Overwhelm"
-    text="A calm first journey for people who want to understand AI one small step at a time."
-    ctaText="Begin the first step"
-    ctaHref="#step-1"
+    text="A calm first journey for people who want to understand AI one small step at a time. Each step now opens as its own focused page."
+    ctaText="Begin step 1"
+    ctaHref={`/journeys/ai-without-overwhelm/${firstStep.id}/`}
   />
 
-  <div class="journey-steps">
-    {aiWithoutOverwhelm.map((lesson, index) => (
-      <section id={`step-${index + 1}`}>
-        <LessonStep
-          title={lesson.title}
-          time={lesson.time}
-          body={lesson.body}
-          activityTitle={lesson.activityTitle}
-          activityText={lesson.activityText}
-          takeaway={lesson.takeaway}
-          current={index + 1}
-          total={aiWithoutOverwhelm.length}
-        />
-      </section>
-    ))}
-  </div>
+  <section class="panel" aria-labelledby="journey-map-title">
+    <SectionHeader
+      eyebrow="Journey map"
+      title="What you will cover"
+      text="You can move through the journey one step at a time. Each page includes one idea, one practical action and a clear point at which to continue."
+    />
+    <ol class="journey-map">
+      {aiWithoutOverwhelm.map((lesson, index) => (
+        <li>
+          <a href={`/journeys/ai-without-overwhelm/${lesson.id}/`}>
+            <span>Step {index + 1}</span>
+            <strong>{lesson.title}</strong>
+            <small>{lesson.time}</small>
+          </a>
+        </li>
+      ))}
+    </ol>
+  </section>
 </BaseLayout>
