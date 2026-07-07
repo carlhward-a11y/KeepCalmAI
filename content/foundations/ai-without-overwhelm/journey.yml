@@ -11,29 +11,36 @@ personas:
 status: draft
 lessons:
   - id: 01-welcome
+    file: 01-welcome.md
     title: Welcome
     time: 2 minutes
   - id: 02-what-is-ai
+    file: 02-what-is-ai.md
     title: What is AI?
     time: 3 minutes
-  - id: 03-ai-around-you
-    title: AI is already around you
-    time: 3 minutes
   - id: 04-ai-helper
+    file: 04-ai-helper.md
     title: AI as a helper
     time: 3 minutes
   - id: 05-first-conversation
+    file: 05-first-conversation.md
     title: Your first conversation
     time: 4 minutes
-  - id: 06-first-prompt
-    title: Writing your first prompt
+  - id: 06-prompt-basics
+    file: 06-prompt-basics.md
+    title: Prompt basics
     time: 4 minutes
   - id: 07-checking-answers
+    file: 07-checking-answers.md
     title: Checking answers
     time: 4 minutes
-  - id: 08-confidence-check
-    title: Confidence check
+  - id: 08-checkpoint
+    file: 08-checkpoint.md
+    title: Checkpoint
     time: 3 minutes
-  - id: 09-next-steps
-    title: Next steps
+  - id: 09-finish
+    file: 09-finish.md
+    title: Finish
     time: 3 minutes
+notes:
+  - Everyday examples lesson to be expanded during editorial pass.
