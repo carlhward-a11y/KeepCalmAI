@@ -22,11 +22,15 @@ import { aiWithoutOverwhelm } from '../../../data/aiWithoutOverwhelm';
     <SectionHeader
       eyebrow="Journey player"
       title="One step at a time"
-      text="Each step gives you one idea, one reason it matters, one practical action and a clear point at which to continue."
+      text="Each step gives you one idea, one reason it matters, one practical action and a clear point at which to continue. Your progress is saved on this device."
     />
   </section>
 
   <div id="player">
-    <JourneyPlayer journeyId="ai-without-overwhelm" steps={aiWithoutOverwhelm} />
+    <JourneyPlayer
+      journeyId="ai-without-overwhelm"
+      steps={aiWithoutOverwhelm}
+      completeHref="/journeys/ai-without-overwhelm/complete/"
+    />
   </div>
 </BaseLayout>
