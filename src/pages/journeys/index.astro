@@ -3,6 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import SectionHeader from '../../components/SectionHeader.astro';
 import JourneyCard from '../../components/JourneyCard.astro';
 import ProgressResume from '../../components/ProgressResume.astro';
+import JourneyMap from '../../components/JourneyMap.astro';
 import { journeys } from '../../data/journeys';
 import { aiWithoutOverwhelm } from '../../data/aiWithoutOverwhelm';
 ---
@@ -18,11 +19,13 @@ import { aiWithoutOverwhelm } from '../../data/aiWithoutOverwhelm';
     href="/journeys/ai-without-overwhelm/"
   />
 
+  <JourneyMap />
+
   <section class="panel">
     <SectionHeader
-      eyebrow="Learning journeys"
-      title="Choose a calm place to start"
-      text="Each journey is made from short practical steps. Start with the route that feels most useful now."
+      eyebrow="All journeys"
+      title="Current journey library"
+      text="The first journey is active. Additional journeys are shown in the learning map as planned product routes."
     />
     <div class="grid">
       {journeys.map((journey) => (
