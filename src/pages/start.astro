@@ -12,13 +12,13 @@ import Callout from '../components/Callout.astro';
     <SectionHeader
       eyebrow="Start calmly"
       title="Tell us what would help most"
-      text="These questions will later personalise the learning route. For now, they define the first onboarding experience."
+      text="Answer three quick questions. Your answers stay on this device and help KeepCalmAI use more relevant wording."
     />
 
-    <form class="onboarding-form">
+    <form id="onboarding-form" class="onboarding-form">
       <fieldset>
         <legend>Why are you here today?</legend>
-        <label><input type="radio" name="goal" value="everyday" /> Everyday life</label>
+        <label><input type="radio" name="goal" value="everyday" required /> Everyday life</label>
         <label><input type="radio" name="goal" value="work" /> Work</label>
         <label><input type="radio" name="goal" value="study" /> Study</label>
         <label><input type="radio" name="goal" value="curious" /> Just curious</label>
@@ -26,7 +26,7 @@ import Callout from '../components/Callout.astro';
 
       <fieldset>
         <legend>How confident do you feel with AI?</legend>
-        <label><input type="radio" name="confidence" value="new" /> I have never used it</label>
+        <label><input type="radio" name="confidence" value="new" required /> I have never used it</label>
         <label><input type="radio" name="confidence" value="tried" /> I have tried it a few times</label>
         <label><input type="radio" name="confidence" value="sometimes" /> I use it sometimes</label>
         <label><input type="radio" name="confidence" value="regular" /> I use it regularly</label>
@@ -34,19 +34,50 @@ import Callout from '../components/Callout.astro';
 
       <fieldset>
         <legend>Which AI assistant do you use?</legend>
-        <label><input type="radio" name="platform" value="chatgpt" /> ChatGPT</label>
-        <label><input type="radio" name="platform" value="copilot" /> Microsoft Copilot</label>
-        <label><input type="radio" name="platform" value="gemini" /> Google Gemini</label>
-        <label><input type="radio" name="platform" value="claude" /> Claude</label>
-        <label><input type="radio" name="platform" value="none" /> I am not sure yet</label>
+        <label><input type="radio" name="platform" value="ChatGPT" required /> ChatGPT</label>
+        <label><input type="radio" name="platform" value="Microsoft Copilot" /> Microsoft Copilot</label>
+        <label><input type="radio" name="platform" value="Google Gemini" /> Google Gemini</label>
+        <label><input type="radio" name="platform" value="Claude" /> Claude</label>
+        <label><input type="radio" name="platform" value="your AI assistant" /> I am not sure yet</label>
       </fieldset>
 
-      <a class="button" href="/journeys/ai-without-overwhelm/">Continue to recommended journey</a>
+      <button class="button" type="submit">Continue to recommended journey</button>
+      <p id="onboarding-status" class="copy-status" role="status"></p>
     </form>
 
     <Callout
       title="Why these questions matter"
-      text="KeepCalmAI will use these answers to suggest examples, activities and routes that feel more relevant to the learner."
+      text="KeepCalmAI can adapt small wording details, such as saying 'Open ChatGPT' or 'Open Microsoft Copilot', while keeping the same calm learning route."
     />
   </section>
 </BaseLayout>
+
+<script>
+  const form = document.querySelector('#onboarding-form');
+  const status = document.querySelector('#onboarding-status');
+  const storageKey = 'keepcalmai:onboarding';
+  const saved = JSON.parse(window.localStorage.getItem(storageKey) || '{}');
+
+  Object.entries(saved).forEach(([name, value]) => {
+    const input = form?.querySelector(`input[name="${name}"][value="${value}"]`);
+    if (input instanceof HTMLInputElement) {
+      input.checked = true;
+    }
+  });
+
+  form?.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const data = new FormData(form);
+    const onboarding = {
+      goal: data.get('goal'),
+      confidence: data.get('confidence'),
+      platform: data.get('platform')
+    };
+
+    window.localStorage.setItem(storageKey, JSON.stringify(onboarding));
+    if (status) {
+      status.textContent = 'Preferences saved. Opening your recommended journey.';
+    }
+    window.location.href = '/journeys/ai-without-overwhelm/';
+  });
+</script>
