@@ -1,0 +1,13 @@
+.platform-note {
+  margin: 0;
+  color: var(--colour-muted);
+  font-weight: 800;
+}
+
+.platform-note:empty {
+  display: none;
+}
+
+.onboarding-form .button {
+  justify-self: start;
+}
