@@ -1,0 +1,50 @@
+---
+interface Props {
+  journeyId: string;
+  title: string;
+  totalSteps: number;
+  href: string;
+}
+
+const { journeyId, title, totalSteps, href } = Astro.props;
+---
+
+<section class="resume-card" data-journey={journeyId} data-total={totalSteps} data-href={href} hidden>
+  <p class="eyebrow">Continue learning</p>
+  <h2>{title}</h2>
+  <p id={`resume-text-${journeyId}`}>Your progress is saved on this device.</p>
+  <div class="progress" aria-hidden="true">
+    <span id={`resume-bar-${journeyId}`} style="width: 0%"></span>
+  </div>
+  <a class="button" href={href}>Continue journey</a>
+</section>
+
+<script>
+  document.querySelectorAll('.resume-card').forEach((card) => {
+    const journeyId = card.getAttribute('data-journey');
+    const total = Number(card.getAttribute('data-total'));
+    const current = Number(window.localStorage.getItem(`keepcalmai:${journeyId}:current-step`) || 0);
+    const complete = window.localStorage.getItem(`keepcalmai:${journeyId}:complete`) === 'true';
+
+    if (!journeyId || total === 0 || (current === 0 && !complete)) {
+      return;
+    }
+
+    const completedSteps = complete ? total : current + 1;
+    const percentage = Math.round((completedSteps / total) * 100);
+    const text = card.querySelector(`#resume-text-${journeyId}`);
+    const bar = card.querySelector(`#resume-bar-${journeyId}`);
+
+    if (text) {
+      text.textContent = complete
+        ? `You have completed this journey. You can repeat it whenever you like.`
+        : `You are on step ${current + 1} of ${total}.`;
+    }
+
+    if (bar) {
+      bar.style.width = `${percentage}%`;
+    }
+
+    card.hidden = false;
+  });
+</script>
