@@ -5,6 +5,7 @@
   --colour-muted: #5f6f7a;
   --colour-primary: #1f6f8b;
   --colour-accent: #f2c94c;
+  --colour-border: #dbe7ea;
   --space-sm: 0.5rem;
   --space-md: 1rem;
   --space-lg: 1.5rem;
@@ -27,7 +28,7 @@ body {
 .site-header {
   padding: var(--space-lg) var(--space-xl);
   background: var(--colour-surface);
-  border-bottom: 1px solid #dbe7ea;
+  border-bottom: 1px solid var(--colour-border);
 }
 
 .brand {
@@ -57,9 +58,16 @@ main {
 }
 
 .eyebrow,
-.progress-label {
+.progress-label,
+.lesson-time {
   color: var(--colour-primary);
   font-weight: 700;
+}
+
+.button-row {
+  display: flex;
+  gap: var(--space-md);
+  flex-wrap: wrap;
 }
 
 .button {
@@ -75,15 +83,26 @@ main {
   cursor: pointer;
 }
 
+.button-secondary {
+  background: white;
+  color: var(--colour-primary);
+  border: 2px solid var(--colour-primary);
+}
+
 .button:focus-visible {
   outline: 3px solid var(--colour-accent);
   outline-offset: 3px;
 }
 
+.button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
 .progress {
   width: 100%;
   height: 0.75rem;
-  background: #dbe7ea;
+  background: var(--colour-border);
   border-radius: 999px;
   overflow: hidden;
 }
@@ -94,9 +113,30 @@ main {
   background: var(--colour-primary);
 }
 
+.try-box,
+.summary-box {
+  margin-top: var(--space-lg);
+  padding: var(--space-md);
+  border-radius: 0.75rem;
+}
+
 .try-box {
   border-left: 4px solid var(--colour-accent);
-  padding: var(--space-md);
   background: #fff8df;
-  border-radius: 0.75rem;
+}
+
+.summary-box {
+  border-left: 4px solid var(--colour-primary);
+  background: #eef7fa;
+}
+
+@media (max-width: 640px) {
+  main {
+    padding: var(--space-md);
+  }
+
+  .hero,
+  .lesson-card {
+    padding: var(--space-lg);
+  }
 }
