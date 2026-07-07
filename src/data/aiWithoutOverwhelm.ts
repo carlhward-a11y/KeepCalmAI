@@ -16,60 +16,131 @@ export const aiWithoutOverwhelm: LessonStep[] = [
   {
     id: 'welcome',
     title: 'Welcome',
-    time: '2 minutes',
+    time: 'About 30 seconds',
     body: [
-      'You do not need technical knowledge to start using AI.',
-      'This journey introduces AI in short, calm steps. Each step gives you one thing to understand and one thing to try.'
+      'Welcome to KeepCalmAI.',
+      'We are going to learn AI together, one small step at a time.'
     ],
-    whyItMatters: 'Many people feel they are already behind with AI. This first step is designed to make the starting point feel manageable.',
+    whyItMatters: 'The first aim is not to learn everything. The first aim is to make AI feel less intimidating.',
+    actionTitle: 'Begin calmly',
+    actionSteps: [
+      'Take a breath.',
+      'Read this screen without rushing.',
+      'Continue when you feel ready to begin.'
+    ],
+    readyToContinue: 'Continue when you are ready to take the first small step.',
+    takeaway: 'You do not need to know everything before you start.'
+  },
+  {
+    id: 'not-behind',
+    title: 'You are not behind',
+    time: 'About 45 seconds',
+    body: [
+      'Many people feel as though everyone else already understands AI.',
+      'That is rarely true. Lots of people are only just starting.'
+    ],
+    whyItMatters: 'Feeling behind can stop people from trying. KeepCalmAI starts by removing that pressure.',
     actionTitle: 'Choose your starting point',
     actionSteps: [
-      'Select the statement that feels closest to your current confidence.',
-      'There is no right or wrong answer.',
-      'Your choice helps you notice your starting point.'
+      'Select the statement that feels closest to where you are today.',
+      'There is no right or wrong choice.',
+      'Your answer simply helps you notice your starting point.'
     ],
     choices: [
       'I have never used AI.',
       'I have tried AI once or twice.',
       'I use AI sometimes but do not feel confident.',
-      'I use AI already and want clearer guidance.'
+      'I already use AI and want clearer guidance.'
     ],
     readyToContinue: 'Continue when you have selected the statement that fits best.',
-    takeaway: 'You are not behind. You are starting from where you are.'
+    takeaway: 'Confidence starts from an honest starting point.'
+  },
+  {
+    id: 'what-we-will-do',
+    title: 'What we will do together',
+    time: 'About 1 minute',
+    body: [
+      'This journey takes about 25 to 30 minutes.',
+      'You will learn what AI is, try your first prompt, ask follow-up questions and practise checking answers.'
+    ],
+    whyItMatters: 'Knowing what will happen reduces uncertainty. That makes the learning feel safer and more manageable.',
+    actionTitle: 'Notice the structure',
+    actionSteps: [
+      'You will see one step at a time.',
+      'Each step gives you one idea and one action.',
+      'Your progress bar will show how far you have come.'
+    ],
+    readyToContinue: 'Continue when the structure feels clear enough.',
+    takeaway: 'You will not be given a wall of information.'
   },
   {
     id: 'what-is-ai',
     title: 'What is AI?',
-    time: '3 minutes',
+    time: 'About 1 minute',
     body: [
       'AI stands for artificial intelligence.',
-      'In everyday terms, it means computer systems that can respond to questions, recognise patterns, generate text, summarise information or help with tasks.'
+      'In simple terms, it is software that can respond to questions, recognise patterns, generate text, summarise information and help with tasks.'
     ],
-    whyItMatters: 'A simple definition helps remove some of the mystery. AI is easier to approach when it is treated as a practical tool rather than something magical.',
-    actionTitle: 'Ask for a simple explanation',
+    whyItMatters: 'A plain definition helps remove some of the mystery. AI is easier to approach when it is treated as a practical tool.',
+    actionTitle: 'Read the simple definition',
     actionSteps: [
-      'Open the AI assistant you have available, such as ChatGPT, Copilot, Gemini or Claude.',
-      'Copy the example prompt below.',
-      'Read the answer and notice whether it feels clear or too technical.'
+      'Read the definition above once.',
+      'Do not worry about remembering the exact wording.',
+      'Focus on the idea that AI can help with tasks.'
     ],
-    examplePrompt: 'Explain artificial intelligence in one short paragraph for someone who has never used it before.',
-    readyToContinue: 'Continue when you have read one short explanation of AI.',
-    takeaway: 'AI is a practical tool. You remain responsible for deciding whether the result is useful.'
+    readyToContinue: 'Continue when you can say, roughly, that AI is software that can help with tasks.',
+    takeaway: 'AI is a tool, not magic.'
   },
   {
-    id: 'familiar-technology',
-    title: 'Familiar technology',
-    time: '3 minutes',
+    id: 'ai-is-not-magic',
+    title: 'AI is not magic',
+    time: 'About 1 minute',
     body: [
-      'AI feels less strange when we connect it to tools people already know.',
-      'Some tools can suggest words, routes, songs, products or photo groups. These are not all the same as modern AI chat tools, but they show how technology can use patterns to make suggestions.'
+      'AI can seem impressive because it replies quickly and confidently.',
+      'But it does not understand the world in the same way a person does. It produces responses based on patterns in information.'
     ],
-    whyItMatters: 'Starting with familiar examples makes AI feel less separate from everyday life.',
-    actionTitle: 'Spot one familiar example',
+    whyItMatters: 'This helps keep expectations realistic. AI can be useful without being perfect.',
+    actionTitle: 'Hold two ideas together',
     actionSteps: [
-      'Choose one familiar place where technology makes a suggestion.',
-      'Think about whether the suggestion was useful, partly useful or not useful.',
-      'Select the example that feels most familiar to you.'
+      'AI can be helpful.',
+      'AI can also be wrong.',
+      'Both things can be true at the same time.'
+    ],
+    readyToContinue: 'Continue when that balance makes sense.',
+    takeaway: 'Useful does not mean perfect.'
+  },
+  {
+    id: 'ai-is-a-conversation',
+    title: 'AI is a conversation',
+    time: 'About 1 minute',
+    body: [
+      'You do not have to get the perfect question first time.',
+      'You can ask, read the answer, then ask another question to make it clearer, shorter or more useful.'
+    ],
+    whyItMatters: 'Many beginners think the first question has to be perfect. It does not. The conversation is where the learning happens.',
+    actionTitle: 'Remember this pattern',
+    actionSteps: [
+      'Ask a question.',
+      'Read the answer.',
+      'Ask a follow-up question.'
+    ],
+    readyToContinue: 'Continue when you understand that you can ask more than once.',
+    takeaway: 'You are not limited to the first answer.'
+  },
+  {
+    id: 'already-used-ai',
+    title: 'You may have used AI already',
+    time: 'About 1 minute',
+    body: [
+      'AI may feel new, but you may already use technology that makes suggestions.',
+      'Examples include predictive text, route suggestions, music recommendations and photo grouping.'
+    ],
+    whyItMatters: 'Connecting AI to familiar tools can make it feel less alien.',
+    actionTitle: 'Choose one familiar example',
+    actionSteps: [
+      'Look at the options below.',
+      'Choose one example you recognise.',
+      'Think about whether it has ever been useful.'
     ],
     choices: [
       'My phone suggests words when I type.',
@@ -77,133 +148,574 @@ export const aiWithoutOverwhelm: LessonStep[] = [
       'A music or video app recommends something.',
       'A photo app groups or recognises pictures.'
     ],
-    readyToContinue: 'Continue when you can name one familiar example of technology making a suggestion.',
-    takeaway: 'AI is easier to understand when it is connected to familiar technology.'
+    readyToContinue: 'Continue when you have selected one familiar example.',
+    takeaway: 'AI is easier to understand when it connects to something familiar.'
   },
   {
-    id: 'ai-helper',
-    title: 'AI as a helper',
-    time: '3 minutes',
+    id: 'small-reflection',
+    title: 'A small reflection',
+    time: 'About 45 seconds',
     body: [
-      'AI can help with thinking, writing, planning and checking ideas.',
-      'It works best when you treat it as a helpful tool, not as a final authority.'
+      'You have already covered something important.',
+      'AI is not completely separate from everyday technology. It is another tool you can learn to use gradually.'
     ],
-    whyItMatters: 'This keeps you in control. AI can make suggestions, but you decide what is useful, accurate and appropriate.',
-    actionTitle: 'Ask for useful ideas',
+    whyItMatters: 'Reflection helps the learning settle before adding another idea.',
+    actionTitle: 'Notice what changed',
     actionSteps: [
-      'Choose a simple everyday area, such as planning meals, writing a note or organising a list.',
-      'Ask the AI for three ideas only.',
-      'Pick one idea that seems useful and ignore anything that does not fit.'
+      'Think about whether AI feels slightly less unfamiliar now.',
+      'If it does not, that is fine.',
+      'The next steps will make it more practical.'
     ],
-    examplePrompt: 'Give me three simple ideas for using AI in everyday life. Keep them practical and easy to try.',
-    readyToContinue: 'Continue when you have seen at least one useful idea.',
-    takeaway: 'AI can support you, but it should not replace your judgement.'
+    readyToContinue: 'Continue when you are ready to try using AI directly.',
+    takeaway: 'Small shifts in understanding count.'
   },
   {
-    id: 'first-conversation',
-    title: 'Your first conversation',
-    time: '4 minutes',
+    id: 'open-ai-assistant',
+    title: 'Open your AI assistant',
+    time: 'About 1 minute',
     body: [
-      'Using AI can feel easier if you treat it like a conversation.',
-      'You do not need to find the perfect wording at the start. You can ask a follow-up question if the first answer is not clear.'
+      'Now we will try a simple interaction.',
+      'Open the AI assistant you have available. This may be ChatGPT, Microsoft Copilot, Google Gemini, Claude or another similar tool.'
     ],
-    whyItMatters: 'Many beginners think they only get one chance to ask the question correctly. In practice, the follow-up question is often where the answer becomes useful.',
-    actionTitle: 'Ask a follow-up question',
+    whyItMatters: 'Confidence grows faster when you move from reading about AI to trying one small task.',
+    actionTitle: 'Open the tool',
     actionSteps: [
-      'Use an answer you already received in this journey.',
-      'Ask the AI to explain it again in a different way.',
-      'Compare the first answer with the second one.'
+      'Open your AI assistant in another tab, app or window.',
+      'Do not worry if the screen looks different from someone else’s.',
+      'Come back here when it is open.'
+    ],
+    readyToContinue: 'Continue when your AI assistant is open.',
+    takeaway: 'The first practical step is simply opening the tool.'
+  },
+  {
+    id: 'what-do-you-see',
+    title: 'What do you see?',
+    time: 'About 1 minute',
+    body: [
+      'Most AI assistants have a message box where you type a question or instruction.',
+      'The exact layout may differ, but the basic idea is usually the same.'
+    ],
+    whyItMatters: 'Knowing what to look for reduces the feeling of being lost on a new screen.',
+    actionTitle: 'Find the message box',
+    actionSteps: [
+      'Look for a box where you can type a message.',
+      'It may say something like ask anything, message, or prompt.',
+      'You do not need to type yet.'
+    ],
+    readyToContinue: 'Continue when you have found where to type.',
+    takeaway: 'The message box is where the conversation starts.'
+  },
+  {
+    id: 'message-box',
+    title: 'The message box',
+    time: 'About 45 seconds',
+    body: [
+      'The message box is where you give AI an instruction.',
+      'That instruction is often called a prompt.'
+    ],
+    whyItMatters: 'Understanding the message box makes the interface feel simpler. It is just the place where you ask for help.',
+    actionTitle: 'Name the part you will use',
+    actionSteps: [
+      'Look again at the message box in your AI assistant.',
+      'Think of it as the place where you start the conversation.',
+      'You will use it in the next step.'
+    ],
+    readyToContinue: 'Continue when you know where the prompt will go.',
+    takeaway: 'A prompt is the message you give to AI.'
+  },
+  {
+    id: 'copy-first-prompt',
+    title: 'Copy your first prompt',
+    time: 'About 1 minute',
+    body: [
+      'We will start with a simple prompt.',
+      'It asks AI to explain itself in plain language.'
+    ],
+    whyItMatters: 'A ready-made prompt removes the pressure of having to think of the perfect words.',
+    actionTitle: 'Copy this prompt',
+    actionSteps: [
+      'Use the copy button below if available.',
+      'If copying is not available, select the text manually.',
+      'Paste it into your AI assistant on the next step.'
+    ],
+    examplePrompt: 'Explain artificial intelligence in one short paragraph for someone who has never used it before.',
+    readyToContinue: 'Continue when the prompt is copied or you are ready to type it manually.',
+    takeaway: 'You can start by copying a prompt. You do not have to invent one.'
+  },
+  {
+    id: 'paste-first-prompt',
+    title: 'Paste the prompt',
+    time: 'About 1 minute',
+    body: [
+      'Now paste the prompt into your AI assistant.',
+      'Then send it.'
+    ],
+    whyItMatters: 'This is your first meaningful AI interaction in the journey.',
+    actionTitle: 'Send the prompt',
+    actionSteps: [
+      'Paste the prompt into the message box.',
+      'Send the message.',
+      'Wait for the answer to appear.'
+    ],
+    readyToContinue: 'Continue when you have sent the prompt and received an answer.',
+    takeaway: 'You have now asked AI a real question.'
+  },
+  {
+    id: 'read-answer',
+    title: 'Read the answer',
+    time: 'About 1 minute',
+    body: [
+      'Read the answer you received.',
+      'You do not need to judge it perfectly. Just notice whether it feels clear, confusing or somewhere in between.'
+    ],
+    whyItMatters: 'The first answer is only a starting point. You can improve it in the next steps.',
+    actionTitle: 'Choose how it felt',
+    actionSteps: [
+      'Read the AI answer once.',
+      'Do not worry if some parts are unclear.',
+      'Choose the option that best describes it.'
+    ],
+    choices: [
+      'It made sense.',
+      'It partly made sense.',
+      'It was too technical.',
+      'I am not sure yet.'
+    ],
+    readyToContinue: 'Continue when you have chosen how the answer felt.',
+    takeaway: 'It is normal if the first answer is not perfect.'
+  },
+  {
+    id: 'did-it-surprise-you',
+    title: 'Did that surprise you?',
+    time: 'About 45 seconds',
+    body: [
+      'People often expect AI to feel more complicated than it does.',
+      'Sometimes the most useful moment is simply realising that you can ask a question and get something back.'
+    ],
+    whyItMatters: 'A small surprise can become confidence if it feels manageable.',
+    actionTitle: 'Notice your reaction',
+    actionSteps: [
+      'Think about your first reaction to the answer.',
+      'Choose the option closest to how you felt.',
+      'There is no need to analyse it deeply.'
+    ],
+    choices: [
+      'Yes, it was easier than expected.',
+      'A little.',
+      'Not really.',
+      'I am still unsure.'
+    ],
+    readyToContinue: 'Continue when you have noticed your reaction.',
+    takeaway: 'Noticing your reaction is part of learning.'
+  },
+  {
+    id: 'ai-is-not-google',
+    title: 'AI is not Google',
+    time: 'About 1 minute',
+    body: [
+      'A search engine usually gives you links to explore.',
+      'An AI assistant gives you a generated response. You can then ask it to change, explain or improve that response.'
+    ],
+    whyItMatters: 'This helps you use the right mental model. AI is more like a conversation than a list of search results.',
+    actionTitle: 'Compare the difference',
+    actionSteps: [
+      'Search engines help you find sources.',
+      'AI assistants help you generate and shape an answer.',
+      'Both can be useful, but they work differently.'
+    ],
+    readyToContinue: 'Continue when the difference feels clear enough.',
+    takeaway: 'AI is usually conversational rather than just a list of links.'
+  },
+  {
+    id: 'ask-another-question',
+    title: 'Ask another question',
+    time: 'About 1 minute',
+    body: [
+      'You can ask a follow-up question without starting again.',
+      'The AI will usually use the previous conversation as context.'
+    ],
+    whyItMatters: 'Follow-up questions are one of the easiest ways to make AI more useful.',
+    actionTitle: 'Ask a follow-up',
+    actionSteps: [
+      'Return to your AI assistant.',
+      'Use the prompt below as a follow-up.',
+      'Read how the answer changes.'
     ],
     examplePrompt: 'Can you explain that again using a simple everyday example?',
     readyToContinue: 'Continue when you have asked one follow-up question.',
-    takeaway: 'You can ask follow-up questions. You are not limited to the first answer.'
+    takeaway: 'You can keep shaping the answer.'
   },
   {
-    id: 'prompt-basics',
-    title: 'Prompt basics',
-    time: '4 minutes',
+    id: 'make-it-shorter',
+    title: 'Make it shorter',
+    time: 'About 1 minute',
     body: [
-      'A prompt is the question or instruction you give to an AI tool.',
-      'Good prompts are usually clear and specific. A useful prompt often says what you want, gives a little context and explains the style you need.'
+      'If an AI answer is too long, ask for a shorter version.',
+      'This is often easier than trying to read through too much detail.'
     ],
-    whyItMatters: 'A clearer prompt usually gives a more useful answer. It also reduces frustration because the AI has more information to work with.',
-    actionTitle: 'Build one useful prompt',
+    whyItMatters: 'Reducing length can reduce overwhelm, especially when you are learning something new.',
+    actionTitle: 'Ask for a shorter answer',
     actionSteps: [
-      'Choose a small task you would genuinely like help with.',
-      'Say what the task is.',
-      'Add who it is for or what tone you need.',
-      'Ask for a short answer first.'
+      'Use the prompt below.',
+      'Compare the shorter answer with the earlier one.',
+      'Notice whether it feels easier to read.'
+    ],
+    examplePrompt: 'Make that answer shorter and easier to scan.',
+    readyToContinue: 'Continue when you have tried making the answer shorter.',
+    takeaway: 'You can control the length of the answer.'
+  },
+  {
+    id: 'make-it-simpler',
+    title: 'Make it simpler',
+    time: 'About 1 minute',
+    body: [
+      'If the answer uses words that feel too technical, ask for a simpler version.',
+      'This is not cheating. It is good use of the tool.'
+    ],
+    whyItMatters: 'AI can adapt explanations to suit the reader. That is one of its most useful learning features.',
+    actionTitle: 'Ask for plain English',
+    actionSteps: [
+      'Use the prompt below.',
+      'Look for any words that become clearer.',
+      'Decide whether the new answer is easier to understand.'
+    ],
+    examplePrompt: 'Explain that in plain English, without technical words.',
+    readyToContinue: 'Continue when you have tried making the answer simpler.',
+    takeaway: 'You can ask AI to meet you where you are.'
+  },
+  {
+    id: 'ask-for-example',
+    title: 'Ask for an example',
+    time: 'About 1 minute',
+    body: [
+      'Examples often make abstract ideas easier to understand.',
+      'If an answer feels vague, ask for an example from everyday life.'
+    ],
+    whyItMatters: 'A practical example can replace several paragraphs of explanation.',
+    actionTitle: 'Ask for an everyday example',
+    actionSteps: [
+      'Use the prompt below.',
+      'Read the example.',
+      'Think about whether it makes the idea more concrete.'
+    ],
+    examplePrompt: 'Give me a simple everyday example of that.',
+    readyToContinue: 'Continue when you have asked for an example.',
+    takeaway: 'Examples make learning easier to apply.'
+  },
+  {
+    id: 'notice-improvement',
+    title: 'Notice how the answer improves',
+    time: 'About 1 minute',
+    body: [
+      'You have now asked AI to change the answer in several ways.',
+      'Shorter. Simpler. More practical. This is how you guide the tool.'
+    ],
+    whyItMatters: 'The learner is not passive. You can shape the response until it is more useful.',
+    actionTitle: 'Choose the most useful change',
+    actionSteps: [
+      'Think about the follow-up prompts you tried.',
+      'Choose the one that helped most.',
+      'Remember it for future use.'
+    ],
+    choices: [
+      'Making it shorter helped most.',
+      'Making it simpler helped most.',
+      'Asking for an example helped most.',
+      'I am still working it out.'
+    ],
+    readyToContinue: 'Continue when you have chosen the most useful change.',
+    takeaway: 'Good AI use is often a conversation, not a single question.'
+  },
+  {
+    id: 'what-is-prompt',
+    title: 'What is a prompt?',
+    time: 'About 1 minute',
+    body: [
+      'A prompt is the instruction or question you give to AI.',
+      'It can be short, but it should usually say what you want clearly.'
+    ],
+    whyItMatters: 'Understanding prompts gives you more control over the result.',
+    actionTitle: 'Remember the simple formula',
+    actionSteps: [
+      'Say what you want.',
+      'Add a little context.',
+      'Say how you want the answer presented.'
+    ],
+    readyToContinue: 'Continue when the idea of a prompt feels clear enough.',
+    takeaway: 'A prompt is simply your instruction to AI.'
+  },
+  {
+    id: 'good-prompt',
+    title: 'A useful prompt',
+    time: 'About 1 minute',
+    body: [
+      'A useful prompt gives the AI enough information to help you well.',
+      'It usually includes the task, the context and the style or length you want.'
+    ],
+    whyItMatters: 'Clearer prompts reduce frustration and usually produce better answers.',
+    actionTitle: 'Look at this prompt',
+    actionSteps: [
+      'Read the example prompt below.',
+      'Notice that it says the task.',
+      'Notice that it says the tone and length.'
     ],
     examplePrompt: 'Help me write a short note to a neighbour. Make it friendly, clear and no more than four sentences.',
-    readyToContinue: 'Continue when you have written or copied one complete prompt.',
-    takeaway: 'You can change or improve a prompt after you see the first answer.'
+    readyToContinue: 'Continue when you can see why this prompt is useful.',
+    takeaway: 'Useful prompts give clear direction.'
   },
   {
-    id: 'checking-answers',
-    title: 'Checking answers',
-    time: '4 minutes',
+    id: 'poor-prompt',
+    title: 'A vague prompt',
+    time: 'About 1 minute',
     body: [
-      'AI can be useful, but it can also make mistakes.',
-      'It may sound confident even when the answer is incomplete, out of date or wrong.'
+      'A vague prompt gives AI very little to work with.',
+      'For example, writing only “help me” may produce a vague or unhelpful answer.'
     ],
-    whyItMatters: 'Checking is one of the most important AI habits. It helps you use AI safely without treating every answer as fact.',
-    actionTitle: 'Practise a checking question',
+    whyItMatters: 'If the instruction is unclear, the answer may be unclear too.',
+    actionTitle: 'Compare the vague version',
     actionSteps: [
-      'Look at an answer from an AI tool.',
-      'Ask what might need checking.',
-      'Think about whether the topic is low risk or important enough to verify elsewhere.'
+      'Read the vague prompt below.',
+      'Notice what information is missing.',
+      'Think about how you might improve it.'
+    ],
+    examplePrompt: 'Help me write something.',
+    readyToContinue: 'Continue when you can see why this is less helpful.',
+    takeaway: 'Vague prompts often lead to vague answers.'
+  },
+  {
+    id: 'compare-prompts',
+    title: 'Compare two prompts',
+    time: 'About 1 minute',
+    body: [
+      'Now compare the two prompt styles.',
+      'One gives clear direction. One leaves too much for AI to guess.'
+    ],
+    whyItMatters: 'Comparing examples helps you recognise what makes a prompt stronger.',
+    actionTitle: 'Choose the better prompt',
+    actionSteps: [
+      'Look at the options below.',
+      'Choose the prompt that is more likely to give a useful answer.',
+      'Do not overthink it.'
+    ],
+    choices: [
+      'Help me write something.',
+      'Help me write a short, friendly note to a neighbour about a parcel delivery.',
+      'Make this better.',
+      'What do I do?'
+    ],
+    readyToContinue: 'Continue when you have selected the stronger prompt.',
+    takeaway: 'Specific usually beats vague.'
+  },
+  {
+    id: 'write-your-own',
+    title: 'Write your own prompt',
+    time: 'About 2 minutes',
+    body: [
+      'Now think of one simple task where AI could help you.',
+      'Keep it low pressure. A note, a list, a plan or a simple explanation is enough.'
+    ],
+    whyItMatters: 'Writing your own prompt turns the learning into something personally useful.',
+    actionTitle: 'Build a prompt in three parts',
+    actionSteps: [
+      'Say what you want help with.',
+      'Add one piece of context.',
+      'Say how short, simple or formal you want the answer to be.'
+    ],
+    examplePrompt: 'Help me plan three simple meals for this week. Keep them quick, affordable and easy to cook.',
+    readyToContinue: 'Continue when you have written or adapted one prompt for yourself.',
+    takeaway: 'Your own prompt does not need to be perfect. It just needs to start the conversation.'
+  },
+  {
+    id: 'ai-can-be-wrong',
+    title: 'AI can be wrong',
+    time: 'About 1 minute',
+    body: [
+      'AI can sound confident even when it is wrong, incomplete or out of date.',
+      'That does not mean it is useless. It means you need to know when to check.'
+    ],
+    whyItMatters: 'Safe AI use depends on judgement. Confidence should include knowing the limits.',
+    actionTitle: 'Remember the safety rule',
+    actionSteps: [
+      'Use AI for help, ideas and drafts.',
+      'Check important information before relying on it.',
+      'Be especially careful with health, money, law, safety and work decisions.'
+    ],
+    readyToContinue: 'Continue when the safety rule feels clear.',
+    takeaway: 'AI can help, but important answers need checking.'
+  },
+  {
+    id: 'when-to-check',
+    title: 'When should you check?',
+    time: 'About 1 minute',
+    body: [
+      'Some AI answers are low risk. Others should be checked carefully.',
+      'A recipe idea is usually low risk. Medical, legal or financial advice is not.'
+    ],
+    whyItMatters: 'Knowing when to check helps you use AI confidently and safely.',
+    actionTitle: 'Choose the answers you would check',
+    actionSteps: [
+      'Read the options below.',
+      'Choose the one that most clearly needs checking.',
+      'Think about why it matters.'
+    ],
+    choices: [
+      'Ideas for a birthday card message.',
+      'A summary of a public webpage.',
+      'Advice about a medical symptom.',
+      'A list of possible meal ideas.'
+    ],
+    readyToContinue: 'Continue when you have selected the option that needs checking most.',
+    takeaway: 'The more important the decision, the more carefully you should check.'
+  },
+  {
+    id: 'human-judgement',
+    title: 'Human judgement matters',
+    time: 'About 1 minute',
+    body: [
+      'AI can suggest, draft, summarise and explain.',
+      'You decide what is suitable, accurate and appropriate.'
+    ],
+    whyItMatters: 'This keeps the learner in control. AI should support judgement, not replace it.',
+    actionTitle: 'Use this simple question',
+    actionSteps: [
+      'When AI gives an answer, ask yourself: does this make sense?',
+      'Ask: would I act on this without checking?',
+      'Ask: what might be missing?'
     ],
     examplePrompt: 'What should I check before trusting this answer?',
-    readyToContinue: 'Continue when you can name one thing you would check before relying on an AI answer.',
-    takeaway: 'AI is useful, but important answers should still be checked.'
+    readyToContinue: 'Continue when you can name one thing you might check.',
+    takeaway: 'You are still the decision maker.'
   },
   {
-    id: 'checkpoint',
-    title: 'Checkpoint',
-    time: '3 minutes',
+    id: 'safety-reflection',
+    title: 'A safety reflection',
+    time: 'About 1 minute',
     body: [
-      'This is a pause point, not a test.',
-      'The aim is to notice what feels clearer and what still feels uncertain.'
+      'You do not need to be afraid of AI.',
+      'You simply need a habit of checking when the answer matters.'
     ],
-    whyItMatters: 'Confidence grows when learners can pause and recognise progress without being judged.',
+    whyItMatters: 'This balances confidence and caution. Both are needed for responsible use.',
+    actionTitle: 'Choose the statement you want to remember',
+    actionSteps: [
+      'Read the options below.',
+      'Choose the one that feels most useful to remember.',
+      'Keep it as your personal safety rule.'
+    ],
+    choices: [
+      'AI can help me start.',
+      'Important answers should be checked.',
+      'I can ask follow-up questions.',
+      'I stay in control.'
+    ],
+    readyToContinue: 'Continue when you have chosen your safety reminder.',
+    takeaway: 'Calm confidence includes knowing when to pause.'
+  },
+  {
+    id: 'you-have-learnt',
+    title: 'You have learnt a lot',
+    time: 'About 45 seconds',
+    body: [
+      'You have already done several important things.',
+      'You opened AI, asked a prompt, shaped the answer and thought about checking it.'
+    ],
+    whyItMatters: 'Progress is easy to miss when learning feels new. This step makes that progress visible.',
+    actionTitle: 'Notice your progress',
+    actionSteps: [
+      'Look at the progress bar.',
+      'Notice that you have moved through many small steps.',
+      'Let that count.'
+    ],
+    readyToContinue: 'Continue when you have noticed the progress you have made.',
+    takeaway: 'Confidence grows through repeated small steps.'
+  },
+  {
+    id: 'confidence-now',
+    title: 'Where do you feel now?',
+    time: 'About 1 minute',
+    body: [
+      'This is not a test.',
+      'It is just a chance to notice whether anything feels clearer than it did at the start.'
+    ],
+    whyItMatters: 'Confidence grows when people can recognise movement, even if they are not fully confident yet.',
     actionTitle: 'Choose your confidence level',
     actionSteps: [
-      'Select the option that best fits how you feel now.',
-      'If you are still unsure, that is fine.',
-      'Your choice simply helps you decide what to do next.'
+      'Choose the option that fits best.',
+      'Be honest rather than optimistic.',
+      'Any answer is acceptable.'
     ],
     choices: [
       'I am still unsure.',
       'I am starting to understand.',
       'I feel more confident.',
-      'I could show someone else.'
+      'I could show someone else one thing.'
     ],
-    readyToContinue: 'Continue when you have chosen the confidence level that best fits how you feel now.',
-    takeaway: 'Confidence grows through small repeated steps.'
+    readyToContinue: 'Continue when you have selected your current confidence level.',
+    takeaway: 'Noticing progress is part of building confidence.'
   },
   {
-    id: 'finish',
-    title: 'Finish',
-    time: '3 minutes',
+    id: 'try-tomorrow',
+    title: 'One thing to try tomorrow',
+    time: 'About 1 minute',
     body: [
-      'You have reached the end of this first journey.',
-      'You have started to learn what AI is, how to ask a first question, how to follow up and why checking matters.'
+      'The best next step is small and practical.',
+      'Choose one low-pressure way to use AI again.'
     ],
-    whyItMatters: 'Finishing with one practical next step helps the learner leave with momentum rather than more information to absorb.',
-    actionTitle: 'Choose one next step',
+    whyItMatters: 'A small repeat use helps turn this journey from something you watched into something you can use.',
+    actionTitle: 'Choose a next step',
     actionSteps: [
-      'Select one small thing you will try next.',
-      'Keep it low pressure and practical.',
-      'Check anything important before acting on it.'
+      'Choose one option below.',
+      'Pick something realistic.',
+      'Do it when you have a quiet moment.'
     ],
     choices: [
       'Ask AI to explain something I am interested in.',
-      'Ask AI to help me write a short note.',
-      'Ask AI to help me make a simple plan.',
-      'Repeat this journey another time.'
+      'Ask AI to help me write a short message.',
+      'Ask AI to make a simple plan.',
+      'Repeat this journey before trying more.'
     ],
-    examplePrompt: 'Explain one thing I am interested in using plain English. Then give me one practical next step.',
-    readyToContinue: 'You have completed this journey when you have chosen one small way to use AI again.',
-    takeaway: 'One small useful step is enough to begin.'
+    readyToContinue: 'Continue when you have chosen one small next step.',
+    takeaway: 'The next step should feel achievable, not impressive.'
+  },
+  {
+    id: 'summary',
+    title: 'What you now know',
+    time: 'About 1 minute',
+    body: [
+      'AI is software that can help with questions, writing, planning, summaries and ideas.',
+      'You can ask follow-up questions, ask for simpler answers and check important information before relying on it.'
+    ],
+    whyItMatters: 'A short summary helps close the journey without adding more to remember.',
+    actionTitle: 'Read the summary once',
+    actionSteps: [
+      'Read the summary above.',
+      'Notice one idea that feels useful.',
+      'Do not try to memorise everything.'
+    ],
+    readyToContinue: 'Continue when one useful idea stands out.',
+    takeaway: 'You now have a basic pattern for using AI calmly.'
+  },
+  {
+    id: 'journey-complete',
+    title: 'Journey complete',
+    time: 'About 1 minute',
+    body: [
+      'You have just done something that may have felt difficult half an hour ago.',
+      'That is how confidence grows. Not by learning everything, but by taking one small step at a time.'
+    ],
+    whyItMatters: 'Ending positively helps the learner leave with confidence rather than a list of things they still do not know.',
+    actionTitle: 'Finish calmly',
+    actionSteps: [
+      'Notice that you completed the journey.',
+      'Choose one small way to use AI again.',
+      'Finish without adding more pressure.'
+    ],
+    choices: [
+      'I will try one simple prompt this week.',
+      'I will repeat this journey later.',
+      'I will move to another beginner journey.',
+      'I will show someone else one thing I learnt.'
+    ],
+    readyToContinue: 'Select Finish journey when you are ready to close this journey.',
+    takeaway: 'Calm today. Confident tomorrow.'
   }
 ];
