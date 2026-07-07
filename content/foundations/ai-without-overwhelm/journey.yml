@@ -18,6 +18,10 @@ lessons:
     file: 02-what-is-ai.md
     title: What is AI?
     time: 3 minutes
+  - id: 03-familiar-technology
+    file: 03-familiar-technology.md
+    title: Familiar technology
+    time: 3 minutes
   - id: 04-ai-helper
     file: 04-ai-helper.md
     title: AI as a helper
@@ -42,5 +46,3 @@ lessons:
     file: 09-finish.md
     title: Finish
     time: 3 minutes
-notes:
-  - Everyday examples lesson to be expanded during editorial pass.
