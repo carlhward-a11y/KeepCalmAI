@@ -1,0 +1,20 @@
+---
+interface Props {
+  eyebrow?: string;
+  title: string;
+  text: string;
+  ctaText?: string;
+  ctaHref?: string;
+}
+
+const { eyebrow, title, text, ctaText, ctaHref } = Astro.props;
+---
+
+<section class="hero" aria-labelledby="hero-title">
+  <div>
+    {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+    <h1 id="hero-title">{title}</h1>
+    <p class="lead">{text}</p>
+    {ctaText && ctaHref && <a class="button" href={ctaHref}>{ctaText}</a>}
+  </div>
+</section>
