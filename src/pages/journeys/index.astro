@@ -2,13 +2,22 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import SectionHeader from '../../components/SectionHeader.astro';
 import JourneyCard from '../../components/JourneyCard.astro';
+import ProgressResume from '../../components/ProgressResume.astro';
 import { journeys } from '../../data/journeys';
+import { aiWithoutOverwhelm } from '../../data/aiWithoutOverwhelm';
 ---
 
 <BaseLayout
   title="Journeys | KeepCalmAI"
   description="Browse calm, accessible AI learning journeys."
 >
+  <ProgressResume
+    journeyId="ai-without-overwhelm"
+    title="AI Without Overwhelm"
+    totalSteps={aiWithoutOverwhelm.length}
+    href="/journeys/ai-without-overwhelm/"
+  />
+
   <section class="panel">
     <SectionHeader
       eyebrow="Learning journeys"
