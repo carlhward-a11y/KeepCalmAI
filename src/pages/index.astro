@@ -4,6 +4,8 @@ import Hero from '../components/Hero.astro';
 import FeatureGrid from '../components/FeatureGrid.astro';
 import SectionHeader from '../components/SectionHeader.astro';
 import Callout from '../components/Callout.astro';
+import ProgressResume from '../components/ProgressResume.astro';
+import { aiWithoutOverwhelm } from '../data/aiWithoutOverwhelm';
 
 const approachFeatures = [
   {
@@ -45,7 +47,14 @@ const platformFeatures = [
     title="Calm Today. Confident Tomorrow."
     text="KeepCalmAI helps people understand and use AI through short, practical learning journeys that build confidence one step at a time."
     ctaText="Start with AI Without Overwhelm"
-    ctaHref="#start"
+    ctaHref="/journeys/ai-without-overwhelm/"
+  />
+
+  <ProgressResume
+    journeyId="ai-without-overwhelm"
+    title="AI Without Overwhelm"
+    totalSteps={aiWithoutOverwhelm.length}
+    href="/journeys/ai-without-overwhelm/"
   />
 
   <section class="panel" aria-labelledby="why-title">
@@ -77,15 +86,15 @@ const platformFeatures = [
   <section id="start" class="lesson-card" aria-labelledby="journey-title">
     <p class="eyebrow">First journey</p>
     <h2 id="journey-title">AI Without Overwhelm</h2>
-    <p>This first journey introduces AI in short beginner-friendly steps. It explains what AI is, where it may already appear in everyday life, how to ask a first question, and why checking answers matters.</p>
+    <p>This first journey introduces AI through 35 micro-steps. It explains what AI is, where it may already appear in everyday life, how to ask a first question, how to follow up, and why checking answers matters.</p>
     <Callout
       variant="try"
       title="Designed to feel manageable"
-      text="The journey is built as a sequence of small steps rather than one long article."
+      text="The journey is built as one focused screen at a time, with progress saved locally on the learner's device."
     />
     <Callout
-      title="Phase 1 foundation complete"
-      text="The app now has navigation, footer, global styles, responsive layout and reusable components ready for the learning engine."
+      title="Current product direction"
+      text="KeepCalmAI is becoming a guided learning experience, not a traditional course library."
     />
   </section>
 </BaseLayout>
