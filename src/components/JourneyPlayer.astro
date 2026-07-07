@@ -16,13 +16,19 @@ interface Step {
 interface Props {
   journeyId: string;
   steps: Step[];
+  completeHref?: string;
 }
 
-const { journeyId, steps } = Astro.props;
+const { journeyId, steps, completeHref = '/journeys/' } = Astro.props;
 const encodedSteps = JSON.stringify(steps);
 ---
 
 <section class="player" data-journey={journeyId}>
+  <div class="player-toolbar">
+    <p id="player-save-status" class="save-status">Progress is saved on this device.</p>
+    <button id="player-reset" class="button button-secondary button-small" type="button">Start again</button>
+  </div>
+
   <div class="progress-wrap">
     <p id="player-progress-label" class="progress-label">Step 1 of {steps.length}</p>
     <div class="progress" aria-hidden="true"><span id="player-progress-bar" style="width: 1%"></span></div>
@@ -71,15 +77,18 @@ const encodedSteps = JSON.stringify(steps);
   </nav>
 </section>
 
-<script define:vars={{ encodedSteps, journeyId }}>
+<script define:vars={{ encodedSteps, journeyId, completeHref }}>
   const steps = JSON.parse(encodedSteps);
   const storageKey = `keepcalmai:${journeyId}:current-step`;
   const answerKey = `keepcalmai:${journeyId}:answers`;
+  const completeKey = `keepcalmai:${journeyId}:complete`;
   let current = Number(window.localStorage.getItem(storageKey) || 0);
   let answers = JSON.parse(window.localStorage.getItem(answerKey) || '{}');
 
   const progressLabel = document.querySelector('#player-progress-label');
   const progressBar = document.querySelector('#player-progress-bar');
+  const saveStatus = document.querySelector('#player-save-status');
+  const reset = document.querySelector('#player-reset');
   const time = document.querySelector('#player-time');
   const title = document.querySelector('#player-title');
   const body = document.querySelector('#player-body');
@@ -100,6 +109,12 @@ const encodedSteps = JSON.stringify(steps);
 
   function saveAnswers() {
     window.localStorage.setItem(answerKey, JSON.stringify(answers));
+    saveStatus.textContent = 'Choice saved on this device.';
+  }
+
+  function saveProgress() {
+    window.localStorage.setItem(storageKey, String(current));
+    saveStatus.textContent = current === 0 ? 'Progress is saved on this device.' : `Progress saved: step ${current + 1}.`;
   }
 
   function renderChoices(step) {
@@ -168,7 +183,7 @@ const encodedSteps = JSON.stringify(steps);
 
     back.disabled = current === 0;
     next.textContent = current === steps.length - 1 ? 'Finish journey' : 'I have done this, continue';
-    window.localStorage.setItem(storageKey, String(current));
+    saveProgress();
     title.focus();
   }
 
@@ -184,9 +199,18 @@ const encodedSteps = JSON.stringify(steps);
       current += 1;
       render();
     } else {
-      window.localStorage.setItem(`keepcalmai:${journeyId}:complete`, 'true');
-      window.location.href = '/journeys/';
+      window.localStorage.setItem(completeKey, 'true');
+      window.location.href = completeHref;
     }
+  });
+
+  reset.addEventListener('click', () => {
+    current = 0;
+    answers = {};
+    window.localStorage.removeItem(storageKey);
+    window.localStorage.removeItem(answerKey);
+    window.localStorage.removeItem(completeKey);
+    render();
   });
 
   copyButton.addEventListener('click', async () => {
