@@ -1,0 +1,122 @@
+.dashboard {
+  display: grid;
+  gap: var(--space-xl);
+  margin-bottom: var(--space-xl);
+}
+
+.dashboard-hero,
+.metric-card,
+.journey-map {
+  background: var(--colour-surface);
+  border: 1px solid var(--colour-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
+  box-shadow: var(--shadow-card);
+}
+
+.dashboard-hero {
+  background: linear-gradient(135deg, var(--colour-surface), var(--colour-soft-blue));
+}
+
+.dashboard-hero h1 {
+  margin-top: 0;
+  line-height: 1.1;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  max-width: 12ch;
+}
+
+.dashboard-actions {
+  display: flex;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--space-lg);
+}
+
+.metric-card h2 {
+  margin-top: 0;
+}
+
+.journey-map {
+  margin-bottom: var(--space-xl);
+}
+
+.map-list {
+  display: grid;
+  gap: var(--space-lg);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.map-node {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--space-md);
+  align-items: start;
+  position: relative;
+}
+
+.map-marker {
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  background: var(--colour-soft-blue);
+  border: 2px solid var(--colour-primary);
+  color: var(--colour-primary);
+  font-weight: 900;
+}
+
+.map-content {
+  border: 1px solid var(--colour-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-lg);
+  background: var(--colour-surface);
+}
+
+.map-content h3 {
+  margin-top: 0;
+}
+
+.map-status {
+  margin: 0 0 var(--space-sm);
+  color: var(--colour-primary);
+  font-weight: 900;
+}
+
+.map-node.is-current .map-content {
+  border-color: var(--colour-primary);
+  background: var(--colour-soft-blue);
+}
+
+.map-node.is-complete .map-marker {
+  background: var(--colour-primary);
+  color: var(--colour-surface);
+}
+
+.map-node.is-locked {
+  opacity: 0.72;
+}
+
+.map-locked {
+  cursor: not-allowed;
+}
+
+@media (max-width: 760px) {
+  .dashboard-hero,
+  .metric-card,
+  .journey-map {
+    padding: var(--space-lg);
+  }
+
+  .dashboard-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+}
