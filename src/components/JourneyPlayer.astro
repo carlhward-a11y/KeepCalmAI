@@ -35,16 +35,20 @@ const encodedSteps = JSON.stringify(steps);
   </div>
 
   <article class="player-card" aria-live="polite">
+    <div class="step-visual" aria-hidden="true">
+      <span id="player-visual-icon">K</span>
+    </div>
+
     <p id="player-time" class="lesson-time"></p>
     <h1 id="player-title" tabindex="-1"></h1>
     <div id="player-body" class="lesson-body"></div>
 
-    <div class="summary-box">
-      <h2>Why this matters</h2>
+    <details id="player-why-wrap" class="detail-box">
+      <summary>Why this matters</summary>
       <p id="player-why"></p>
-    </div>
+    </details>
 
-    <div class="try-box">
+    <div class="try-box action-box">
       <h2 id="player-action-title"></h2>
       <ol id="player-action-list" class="action-list"></ol>
       <fieldset id="player-choice-field" class="choice-field" hidden>
@@ -59,13 +63,13 @@ const encodedSteps = JSON.stringify(steps);
       </div>
     </div>
 
-    <div class="summary-box">
-      <h2>Ready to continue?</h2>
+    <details class="detail-box">
+      <summary>Ready to continue?</summary>
       <p id="player-ready"></p>
       <p id="choice-status" class="copy-status" role="status"></p>
-    </div>
+    </details>
 
-    <div class="summary-box">
+    <div class="takeaway-box">
       <h2>Key takeaway</h2>
       <p id="player-takeaway"></p>
     </div>
@@ -89,6 +93,7 @@ const encodedSteps = JSON.stringify(steps);
   const progressBar = document.querySelector('#player-progress-bar');
   const saveStatus = document.querySelector('#player-save-status');
   const reset = document.querySelector('#player-reset');
+  const visualIcon = document.querySelector('#player-visual-icon');
   const time = document.querySelector('#player-time');
   const title = document.querySelector('#player-title');
   const body = document.querySelector('#player-body');
@@ -106,6 +111,14 @@ const encodedSteps = JSON.stringify(steps);
   const takeaway = document.querySelector('#player-takeaway');
   const back = document.querySelector('#player-back');
   const next = document.querySelector('#player-next');
+
+  function getStepIcon(step) {
+    if (step.choices?.length) return '✓';
+    if (step.examplePrompt) return '⌘';
+    if (step.id.includes('check') || step.id.includes('safe') || step.id.includes('wrong')) return '?';
+    if (step.id.includes('complete') || step.id.includes('summary')) return '★';
+    return 'K';
+  }
 
   function saveAnswers() {
     window.localStorage.setItem(answerKey, JSON.stringify(answers));
@@ -162,6 +175,7 @@ const encodedSteps = JSON.stringify(steps);
 
     progressLabel.textContent = `Step ${current + 1} of ${steps.length}`;
     progressBar.style.width = `${progress}%`;
+    visualIcon.textContent = getStepIcon(step);
     time.textContent = step.time;
     title.textContent = step.title;
     body.innerHTML = step.body.map((paragraph) => `<p>${paragraph}</p>`).join('');
