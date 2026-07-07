@@ -1,0 +1,36 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Hero from '../../../components/Hero.astro';
+import LessonStep from '../../../components/LessonStep.astro';
+import { aiWithoutOverwhelm } from '../../../data/aiWithoutOverwhelm';
+---
+
+<BaseLayout
+  title="AI Without Overwhelm | KeepCalmAI"
+  description="A calm first AI learning journey for beginners."
+>
+  <Hero
+    eyebrow="Foundations"
+    title="AI Without Overwhelm"
+    text="A calm first journey for people who want to understand AI one small step at a time."
+    ctaText="Begin the first step"
+    ctaHref="#step-1"
+  />
+
+  <div class="journey-steps">
+    {aiWithoutOverwhelm.map((lesson, index) => (
+      <section id={`step-${index + 1}`}>
+        <LessonStep
+          title={lesson.title}
+          time={lesson.time}
+          body={lesson.body}
+          activityTitle={lesson.activityTitle}
+          activityText={lesson.activityText}
+          takeaway={lesson.takeaway}
+          current={index + 1}
+          total={aiWithoutOverwhelm.length}
+        />
+      </section>
+    ))}
+  </div>
+</BaseLayout>
