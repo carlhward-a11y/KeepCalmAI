@@ -6,6 +6,7 @@ export interface LessonStep {
   whyItMatters: string;
   actionTitle: string;
   actionSteps: string[];
+  choices?: string[];
   examplePrompt?: string;
   readyToContinue: string;
   takeaway: string;
@@ -23,12 +24,17 @@ export const aiWithoutOverwhelm: LessonStep[] = [
     whyItMatters: 'Many people feel they are already behind with AI. This first step is designed to make the starting point feel manageable.',
     actionTitle: 'Choose your starting point',
     actionSteps: [
-      'Read the four statements below.',
-      'Choose the one that feels closest to your current confidence.',
-      'Keep that answer in mind as you move through the journey.'
+      'Select the statement that feels closest to your current confidence.',
+      'There is no right or wrong answer.',
+      'Your choice helps you notice your starting point.'
     ],
-    examplePrompt: 'I have never used AI. I want a calm beginner introduction.',
-    readyToContinue: 'Continue when you know which confidence statement fits you best.',
+    choices: [
+      'I have never used AI.',
+      'I have tried AI once or twice.',
+      'I use AI sometimes but do not feel confident.',
+      'I use AI already and want clearer guidance.'
+    ],
+    readyToContinue: 'Continue when you have selected the statement that fits best.',
     takeaway: 'You are not behind. You are starting from where you are.'
   },
   {
@@ -61,9 +67,15 @@ export const aiWithoutOverwhelm: LessonStep[] = [
     whyItMatters: 'Starting with familiar examples makes AI feel less separate from everyday life.',
     actionTitle: 'Spot one familiar example',
     actionSteps: [
-      'Think about your phone, email, maps, shopping apps, music apps or photo library.',
-      'Choose one place where a tool suggests something to you.',
-      'Ask whether the suggestion was useful, partly useful or not useful.'
+      'Choose one familiar place where technology makes a suggestion.',
+      'Think about whether the suggestion was useful, partly useful or not useful.',
+      'Select the example that feels most familiar to you.'
+    ],
+    choices: [
+      'My phone suggests words when I type.',
+      'A map app suggests a route.',
+      'A music or video app recommends something.',
+      'A photo app groups or recognises pictures.'
     ],
     readyToContinue: 'Continue when you can name one familiar example of technology making a suggestion.',
     takeaway: 'AI is easier to understand when it is connected to familiar technology.'
@@ -156,9 +168,15 @@ export const aiWithoutOverwhelm: LessonStep[] = [
     whyItMatters: 'Confidence grows when learners can pause and recognise progress without being judged.',
     actionTitle: 'Choose your confidence level',
     actionSteps: [
-      'Choose one option: still unsure, starting to understand, more confident, or able to show someone else.',
-      'If you are still unsure, repeat one earlier step.',
-      'If you feel more confident, move on to the finish step.'
+      'Select the option that best fits how you feel now.',
+      'If you are still unsure, that is fine.',
+      'Your choice simply helps you decide what to do next.'
+    ],
+    choices: [
+      'I am still unsure.',
+      'I am starting to understand.',
+      'I feel more confident.',
+      'I could show someone else.'
     ],
     readyToContinue: 'Continue when you have chosen the confidence level that best fits how you feel now.',
     takeaway: 'Confidence grows through small repeated steps.'
@@ -174,9 +192,15 @@ export const aiWithoutOverwhelm: LessonStep[] = [
     whyItMatters: 'Finishing with one practical next step helps the learner leave with momentum rather than more information to absorb.',
     actionTitle: 'Choose one next step',
     actionSteps: [
-      'Ask AI for a short explanation of something you are interested in.',
-      'Ask it to make the answer clearer or more practical.',
+      'Select one small thing you will try next.',
+      'Keep it low pressure and practical.',
       'Check anything important before acting on it.'
+    ],
+    choices: [
+      'Ask AI to explain something I am interested in.',
+      'Ask AI to help me write a short note.',
+      'Ask AI to help me make a simple plan.',
+      'Repeat this journey another time.'
     ],
     examplePrompt: 'Explain one thing I am interested in using plain English. Then give me one practical next step.',
     readyToContinue: 'You have completed this journey when you have chosen one small way to use AI again.',
