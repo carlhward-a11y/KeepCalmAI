@@ -1,7 +1,39 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/Hero.astro';
-import Card from '../components/Card.astro';
+import FeatureGrid from '../components/FeatureGrid.astro';
+import SectionHeader from '../components/SectionHeader.astro';
+import Callout from '../components/Callout.astro';
+
+const approachFeatures = [
+  {
+    title: 'One idea at a time',
+    text: 'Each step focuses on a single concept so the learner is not faced with a long page of information.'
+  },
+  {
+    title: 'Try it quickly',
+    text: 'Every journey includes practical activities that help the learner use AI rather than only read about it.'
+  },
+  {
+    title: 'Confidence first',
+    text: 'Progress is measured by whether the learner feels clearer, calmer and able to try the next step.'
+  }
+];
+
+const platformFeatures = [
+  {
+    title: 'Accessible by design',
+    text: 'The site uses semantic structure, visible focus states, clear contrast and calm layouts from the start.'
+  },
+  {
+    title: 'Reusable components',
+    text: 'Lessons, callouts, cards and progress patterns are being built as reusable Astro components.'
+  },
+  {
+    title: 'Ready to scale',
+    text: 'The framework, design system and prompt engine sit alongside the app so future journeys remain consistent.'
+  }
+];
 ---
 
 <BaseLayout
@@ -17,32 +49,43 @@ import Card from '../components/Card.astro';
   />
 
   <section class="panel" aria-labelledby="why-title">
-    <p class="eyebrow">Why KeepCalmAI?</p>
-    <h2 id="why-title">Built for people who feel unsure, excluded or behind</h2>
-    <p class="lead">Most AI training assumes confidence before it has been earned. KeepCalmAI starts from the opposite place: calm explanation, familiar examples and small practical steps.</p>
+    <SectionHeader
+      eyebrow="Why KeepCalmAI?"
+      title="Built for people who feel unsure, excluded or behind"
+      text="Most AI training assumes confidence before it has been earned. KeepCalmAI starts from the opposite place: calm explanation, familiar examples and small practical steps."
+    />
   </section>
 
   <section class="panel" aria-labelledby="approach-title">
-    <p class="eyebrow">The approach</p>
-    <h2 id="approach-title">Small steps, clear progress</h2>
-    <div class="grid">
-      <Card title="One idea at a time" text="Each step focuses on a single concept so the learner is not faced with a long page of information." />
-      <Card title="Try it quickly" text="Every journey includes practical activities that help the learner use AI rather than only read about it." />
-      <Card title="Confidence first" text="Progress is measured by whether the learner feels clearer, calmer and able to try the next step." />
-    </div>
+    <SectionHeader
+      eyebrow="The approach"
+      title="Small steps, clear progress"
+      text="The learning experience is designed around short journeys, practical tasks and visible progress."
+    />
+    <FeatureGrid features={approachFeatures} />
+  </section>
+
+  <section class="panel" aria-labelledby="platform-title">
+    <SectionHeader
+      eyebrow="Platform foundation"
+      title="A product structure, not just course notes"
+      text="KeepCalmAI now has a working Astro foundation with reusable layout, navigation, footer, styling and component patterns."
+    />
+    <FeatureGrid features={platformFeatures} />
   </section>
 
   <section id="start" class="lesson-card" aria-labelledby="journey-title">
     <p class="eyebrow">First journey</p>
     <h2 id="journey-title">AI Without Overwhelm</h2>
     <p>This first journey introduces AI in short beginner-friendly steps. It explains what AI is, where it may already appear in everyday life, how to ask a first question, and why checking answers matters.</p>
-    <div class="try-box">
-      <h3>Designed to feel manageable</h3>
-      <p>The journey is built as a sequence of small steps rather than one long article.</p>
-    </div>
-    <div class="summary-box">
-      <h3>Current status</h3>
-      <p>The journey content and prototype exist in the repository. The next phase is to convert it fully into Astro routes and components.</p>
-    </div>
+    <Callout
+      variant="try"
+      title="Designed to feel manageable"
+      text="The journey is built as a sequence of small steps rather than one long article."
+    />
+    <Callout
+      title="Phase 1 foundation complete"
+      text="The app now has navigation, footer, global styles, responsive layout and reusable components ready for the learning engine."
+    />
   </section>
 </BaseLayout>
