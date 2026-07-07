@@ -1,17 +1,48 @@
 ---
-
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import Card from '../components/Card.astro';
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout
+  title="KeepCalmAI | Calm Today. Confident Tomorrow."
+  description="A calm, accessible way to learn AI one small step at a time."
+>
+  <Hero
+    eyebrow="AI learning without overwhelm"
+    title="Calm Today. Confident Tomorrow."
+    text="KeepCalmAI helps people understand and use AI through short, practical learning journeys that build confidence one step at a time."
+    ctaText="Start with AI Without Overwhelm"
+    ctaHref="#start"
+  />
+
+  <section class="panel" aria-labelledby="why-title">
+    <p class="eyebrow">Why KeepCalmAI?</p>
+    <h2 id="why-title">Built for people who feel unsure, excluded or behind</h2>
+    <p class="lead">Most AI training assumes confidence before it has been earned. KeepCalmAI starts from the opposite place: calm explanation, familiar examples and small practical steps.</p>
+  </section>
+
+  <section class="panel" aria-labelledby="approach-title">
+    <p class="eyebrow">The approach</p>
+    <h2 id="approach-title">Small steps, clear progress</h2>
+    <div class="grid">
+      <Card title="One idea at a time" text="Each step focuses on a single concept so the learner is not faced with a long page of information." />
+      <Card title="Try it quickly" text="Every journey includes practical activities that help the learner use AI rather than only read about it." />
+      <Card title="Confidence first" text="Progress is measured by whether the learner feels clearer, calmer and able to try the next step." />
+    </div>
+  </section>
+
+  <section id="start" class="lesson-card" aria-labelledby="journey-title">
+    <p class="eyebrow">First journey</p>
+    <h2 id="journey-title">AI Without Overwhelm</h2>
+    <p>This first journey introduces AI in short beginner-friendly steps. It explains what AI is, where it may already appear in everyday life, how to ask a first question, and why checking answers matters.</p>
+    <div class="try-box">
+      <h3>Designed to feel manageable</h3>
+      <p>The journey is built as a sequence of small steps rather than one long article.</p>
+    </div>
+    <div class="summary-box">
+      <h3>Current status</h3>
+      <p>The journey content and prototype exist in the repository. The next phase is to convert it fully into Astro routes and components.</p>
+    </div>
+  </section>
+</BaseLayout>
