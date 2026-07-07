@@ -1,0 +1,15 @@
+---
+interface Props {
+  title: string;
+  text: string;
+  variant?: 'try' | 'summary';
+}
+
+const { title, text, variant = 'summary' } = Astro.props;
+const className = variant === 'try' ? 'try-box' : 'summary-box';
+---
+
+<div class={className}>
+  <h3>{title}</h3>
+  <p>{text}</p>
+</div>
