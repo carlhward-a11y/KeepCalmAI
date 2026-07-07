@@ -2,9 +2,8 @@
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import Hero from '../../../components/Hero.astro';
 import SectionHeader from '../../../components/SectionHeader.astro';
+import JourneyPlayer from '../../../components/JourneyPlayer.astro';
 import { aiWithoutOverwhelm } from '../../../data/aiWithoutOverwhelm';
-
-const firstStep = aiWithoutOverwhelm[0];
 ---
 
 <BaseLayout
@@ -14,27 +13,20 @@ const firstStep = aiWithoutOverwhelm[0];
   <Hero
     eyebrow="Foundations"
     title="AI Without Overwhelm"
-    text="A calm first journey for people who want to understand AI one small step at a time. Each step now opens as its own focused page."
-    ctaText="Begin step 1"
-    ctaHref={`/journeys/ai-without-overwhelm/${firstStep.id}/`}
+    text="A calm first journey for people who want to understand AI one small step at a time. The Journey Player shows one focused step at a time."
+    ctaText="Begin the journey"
+    ctaHref="#player"
   />
 
   <section class="panel" aria-labelledby="journey-map-title">
     <SectionHeader
-      eyebrow="Journey map"
-      title="What you will cover"
-      text="You can move through the journey one step at a time. Each page includes one idea, one practical action and a clear point at which to continue."
+      eyebrow="Journey player"
+      title="One step at a time"
+      text="Each step gives you one idea, one reason it matters, one practical action and a clear point at which to continue."
     />
-    <ol class="journey-map">
-      {aiWithoutOverwhelm.map((lesson, index) => (
-        <li>
-          <a href={`/journeys/ai-without-overwhelm/${lesson.id}/`}>
-            <span>Step {index + 1}</span>
-            <strong>{lesson.title}</strong>
-            <small>{lesson.time}</small>
-          </a>
-        </li>
-      ))}
-    </ol>
   </section>
+
+  <div id="player">
+    <JourneyPlayer journeyId="ai-without-overwhelm" steps={aiWithoutOverwhelm} />
+  </div>
 </BaseLayout>
