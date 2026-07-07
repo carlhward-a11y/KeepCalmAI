@@ -1,0 +1,30 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SectionHeader from '../../components/SectionHeader.astro';
+import JourneyCard from '../../components/JourneyCard.astro';
+import { journeys } from '../../data/journeys';
+---
+
+<BaseLayout
+  title="Journeys | KeepCalmAI"
+  description="Browse calm, accessible AI learning journeys."
+>
+  <section class="panel">
+    <SectionHeader
+      eyebrow="Learning journeys"
+      title="Choose a calm place to start"
+      text="Each journey is made from short practical steps. Start with the route that feels most useful now."
+    />
+    <div class="grid">
+      {journeys.map((journey) => (
+        <JourneyCard
+          title={journey.title}
+          description={journey.description}
+          estimatedTime={journey.estimatedTime}
+          difficulty={journey.difficulty}
+          href={journey.href}
+        />
+      ))}
+    </div>
+  </section>
+</BaseLayout>
