@@ -115,7 +115,7 @@ main {
   border-radius: 999px;
 }
 .site-nav a:hover { background: var(--colour-soft-blue); }
-.hero, .panel, .lesson-card, .player-card {
+.hero, .panel, .lesson-card, .player-card, .resume-card {
   background: var(--colour-surface);
   border: 1px solid var(--colour-border);
   border-radius: var(--radius-lg);
@@ -157,6 +157,13 @@ main {
 .card h2, .card h3 { margin-top: 0; }
 .journey-card { display: flex; flex-direction: column; }
 .journey-card .button { align-self: flex-start; margin-top: auto; }
+.resume-card {
+  border-left: 6px solid var(--colour-primary);
+  background: linear-gradient(135deg, var(--colour-surface), var(--colour-soft-blue));
+}
+.resume-card[hidden] { display: none; }
+.resume-card h2 { margin-top: 0; }
+.resume-card .progress { margin: var(--space-md) 0; }
 .try-box, .summary-box {
   margin-top: var(--space-lg);
   padding: var(--space-md);
@@ -344,7 +351,7 @@ main {
   .site-header { position: static; padding: var(--space-md); }
   .site-header__inner, .site-footer__inner { display: grid; grid-template-columns: 1fr; }
   .site-nav { align-items: flex-start; }
-  .hero, .panel, .lesson-card, .player-card { padding: var(--space-lg); }
+  .hero, .panel, .lesson-card, .player-card, .resume-card { padding: var(--space-lg); }
   .player-toolbar, .lesson-nav, .completion-actions { display: grid; grid-template-columns: 1fr; }
   .player-card { min-height: auto; }
   .copyright { text-align: left; }
