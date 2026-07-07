@@ -7,6 +7,7 @@ interface Step {
   whyItMatters: string;
   actionTitle: string;
   actionSteps: string[];
+  choices?: string[];
   examplePrompt?: string;
   readyToContinue: string;
   takeaway: string;
@@ -29,7 +30,7 @@ const encodedSteps = JSON.stringify(steps);
 
   <article class="player-card" aria-live="polite">
     <p id="player-time" class="lesson-time"></p>
-    <h1 id="player-title"></h1>
+    <h1 id="player-title" tabindex="-1"></h1>
     <div id="player-body" class="lesson-body"></div>
 
     <div class="summary-box">
@@ -40,6 +41,10 @@ const encodedSteps = JSON.stringify(steps);
     <div class="try-box">
       <h2 id="player-action-title"></h2>
       <ol id="player-action-list" class="action-list"></ol>
+      <fieldset id="player-choice-field" class="choice-field" hidden>
+        <legend>Choose one option</legend>
+        <div id="player-choices" class="choice-grid"></div>
+      </fieldset>
       <div id="player-prompt" class="prompt-box" hidden>
         <h3>Ask your AI this</h3>
         <p id="player-prompt-text"></p>
@@ -51,6 +56,7 @@ const encodedSteps = JSON.stringify(steps);
     <div class="summary-box">
       <h2>Ready to continue?</h2>
       <p id="player-ready"></p>
+      <p id="choice-status" class="copy-status" role="status"></p>
     </div>
 
     <div class="summary-box">
@@ -68,7 +74,9 @@ const encodedSteps = JSON.stringify(steps);
 <script define:vars={{ encodedSteps, journeyId }}>
   const steps = JSON.parse(encodedSteps);
   const storageKey = `keepcalmai:${journeyId}:current-step`;
+  const answerKey = `keepcalmai:${journeyId}:answers`;
   let current = Number(window.localStorage.getItem(storageKey) || 0);
+  let answers = JSON.parse(window.localStorage.getItem(answerKey) || '{}');
 
   const progressLabel = document.querySelector('#player-progress-label');
   const progressBar = document.querySelector('#player-progress-bar');
@@ -78,14 +86,60 @@ const encodedSteps = JSON.stringify(steps);
   const why = document.querySelector('#player-why');
   const actionTitle = document.querySelector('#player-action-title');
   const actionList = document.querySelector('#player-action-list');
+  const choiceField = document.querySelector('#player-choice-field');
+  const choiceGrid = document.querySelector('#player-choices');
   const promptBox = document.querySelector('#player-prompt');
   const promptText = document.querySelector('#player-prompt-text');
   const copyButton = document.querySelector('#copy-prompt');
   const copyStatus = document.querySelector('#copy-status');
   const ready = document.querySelector('#player-ready');
+  const choiceStatus = document.querySelector('#choice-status');
   const takeaway = document.querySelector('#player-takeaway');
   const back = document.querySelector('#player-back');
   const next = document.querySelector('#player-next');
+
+  function saveAnswers() {
+    window.localStorage.setItem(answerKey, JSON.stringify(answers));
+  }
+
+  function renderChoices(step) {
+    choiceGrid.innerHTML = '';
+    choiceStatus.textContent = '';
+
+    if (!step.choices || step.choices.length === 0) {
+      choiceField.hidden = true;
+      return;
+    }
+
+    choiceField.hidden = false;
+    const selected = answers[step.id];
+
+    step.choices.forEach((choice, index) => {
+      const id = `choice-${step.id}-${index}`;
+      const label = document.createElement('label');
+      label.className = 'choice-card';
+      label.setAttribute('for', id);
+
+      const input = document.createElement('input');
+      input.type = 'radio';
+      input.id = id;
+      input.name = `choice-${step.id}`;
+      input.value = choice;
+      input.checked = selected === choice;
+
+      const span = document.createElement('span');
+      span.textContent = choice;
+
+      input.addEventListener('change', () => {
+        answers[step.id] = choice;
+        saveAnswers();
+        choiceStatus.textContent = 'Choice saved.';
+      });
+
+      label.append(input, span);
+      choiceGrid.append(label);
+    });
+  }
 
   function render() {
     const step = steps[current];
@@ -101,6 +155,7 @@ const encodedSteps = JSON.stringify(steps);
     actionList.innerHTML = step.actionSteps.map((item) => `<li>${item}</li>`).join('');
     ready.textContent = step.readyToContinue;
     takeaway.textContent = step.takeaway;
+    renderChoices(step);
 
     if (step.examplePrompt) {
       promptBox.hidden = false;
@@ -114,7 +169,7 @@ const encodedSteps = JSON.stringify(steps);
     back.disabled = current === 0;
     next.textContent = current === steps.length - 1 ? 'Finish journey' : 'I have done this, continue';
     window.localStorage.setItem(storageKey, String(current));
-    title.focus?.();
+    title.focus();
   }
 
   back.addEventListener('click', () => {
