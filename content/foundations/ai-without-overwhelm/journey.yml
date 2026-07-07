@@ -1,0 +1,39 @@
+id: ai-without-overwhelm
+title: AI Without Overwhelm
+collection: foundations
+difficulty: beginner
+estimated_time: 30 minutes
+platform: generic
+personas:
+  - Margaret
+  - David
+  - Aisha
+status: draft
+lessons:
+  - id: 01-welcome
+    title: Welcome
+    time: 2 minutes
+  - id: 02-what-is-ai
+    title: What is AI?
+    time: 3 minutes
+  - id: 03-ai-around-you
+    title: AI is already around you
+    time: 3 minutes
+  - id: 04-ai-helper
+    title: AI as a helper
+    time: 3 minutes
+  - id: 05-first-conversation
+    title: Your first conversation
+    time: 4 minutes
+  - id: 06-first-prompt
+    title: Writing your first prompt
+    time: 4 minutes
+  - id: 07-checking-answers
+    title: Checking answers
+    time: 4 minutes
+  - id: 08-confidence-check
+    title: Confidence check
+    time: 3 minutes
+  - id: 09-next-steps
+    title: Next steps
+    time: 3 minutes
