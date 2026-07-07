@@ -1,11 +1,8 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Hero from '../components/Hero.astro';
+import Dashboard from '../components/Dashboard.astro';
 import FeatureGrid from '../components/FeatureGrid.astro';
 import SectionHeader from '../components/SectionHeader.astro';
-import Callout from '../components/Callout.astro';
-import ProgressResume from '../components/ProgressResume.astro';
-import { aiWithoutOverwhelm } from '../data/aiWithoutOverwhelm';
 
 const approachFeatures = [
   {
@@ -21,41 +18,13 @@ const approachFeatures = [
     text: 'Progress is measured by whether the learner feels clearer, calmer and able to try the next step.'
   }
 ];
-
-const platformFeatures = [
-  {
-    title: 'Accessible by design',
-    text: 'The site uses semantic structure, visible focus states, clear contrast and calm layouts from the start.'
-  },
-  {
-    title: 'Reusable components',
-    text: 'Lessons, callouts, cards and progress patterns are being built as reusable Astro components.'
-  },
-  {
-    title: 'Ready to scale',
-    text: 'The framework, design system and prompt engine sit alongside the app so future journeys remain consistent.'
-  }
-];
 ---
 
 <BaseLayout
   title="KeepCalmAI | Calm Today. Confident Tomorrow."
   description="A calm, accessible way to learn AI one small step at a time."
 >
-  <Hero
-    eyebrow="AI learning without overwhelm"
-    title="Calm Today. Confident Tomorrow."
-    text="KeepCalmAI helps people understand and use AI through short, practical learning journeys that build confidence one step at a time."
-    ctaText="Start with AI Without Overwhelm"
-    ctaHref="/journeys/ai-without-overwhelm/"
-  />
-
-  <ProgressResume
-    journeyId="ai-without-overwhelm"
-    title="AI Without Overwhelm"
-    totalSteps={aiWithoutOverwhelm.length}
-    href="/journeys/ai-without-overwhelm/"
-  />
+  <Dashboard />
 
   <section class="panel" aria-labelledby="why-title">
     <SectionHeader
@@ -72,29 +41,5 @@ const platformFeatures = [
       text="The learning experience is designed around short journeys, practical tasks and visible progress."
     />
     <FeatureGrid features={approachFeatures} />
-  </section>
-
-  <section class="panel" aria-labelledby="platform-title">
-    <SectionHeader
-      eyebrow="Platform foundation"
-      title="A product structure, not just course notes"
-      text="KeepCalmAI now has a working Astro foundation with reusable layout, navigation, footer, styling and component patterns."
-    />
-    <FeatureGrid features={platformFeatures} />
-  </section>
-
-  <section id="start" class="lesson-card" aria-labelledby="journey-title">
-    <p class="eyebrow">First journey</p>
-    <h2 id="journey-title">AI Without Overwhelm</h2>
-    <p>This first journey introduces AI through 35 micro-steps. It explains what AI is, where it may already appear in everyday life, how to ask a first question, how to follow up, and why checking answers matters.</p>
-    <Callout
-      variant="try"
-      title="Designed to feel manageable"
-      text="The journey is built as one focused screen at a time, with progress saved locally on the learner's device."
-    />
-    <Callout
-      title="Current product direction"
-      text="KeepCalmAI is becoming a guided learning experience, not a traditional course library."
-    />
   </section>
 </BaseLayout>
