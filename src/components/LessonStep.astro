@@ -1,0 +1,28 @@
+---
+import Callout from './Callout.astro';
+import ProgressBar from './ProgressBar.astro';
+
+interface Props {
+  title: string;
+  time: string;
+  body: string[];
+  activityTitle: string;
+  activityText: string;
+  takeaway: string;
+  current: number;
+  total: number;
+}
+
+const { title, time, body, activityTitle, activityText, takeaway, current, total } = Astro.props;
+---
+
+<article class="lesson-card">
+  <ProgressBar current={current} total={total} />
+  <p class="lesson-time">{time}</p>
+  <h1>{title}</h1>
+  <div class="lesson-body">
+    {body.map((paragraph) => <p>{paragraph}</p>)}
+  </div>
+  <Callout variant="try" title={activityTitle} text={activityText} />
+  <Callout title="Key takeaway" text={takeaway} />
+</article>
