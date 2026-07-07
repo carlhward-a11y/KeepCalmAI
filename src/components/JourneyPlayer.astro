@@ -39,6 +39,7 @@ const encodedSteps = JSON.stringify(steps);
       <span id="player-visual-icon">K</span>
     </div>
 
+    <p id="player-platform" class="platform-note"></p>
     <p id="player-time" class="lesson-time"></p>
     <h1 id="player-title" tabindex="-1"></h1>
     <div id="player-body" class="lesson-body"></div>
@@ -56,7 +57,7 @@ const encodedSteps = JSON.stringify(steps);
         <div id="player-choices" class="choice-grid"></div>
       </fieldset>
       <div id="player-prompt" class="prompt-box" hidden>
-        <h3>Ask your AI this</h3>
+        <h3 id="prompt-heading">Ask your AI this</h3>
         <p id="player-prompt-text"></p>
         <button id="copy-prompt" class="button" type="button">Copy prompt</button>
         <p id="copy-status" class="copy-status" role="status"></p>
@@ -83,6 +84,8 @@ const encodedSteps = JSON.stringify(steps);
 
 <script define:vars={{ encodedSteps, journeyId, completeHref }}>
   const steps = JSON.parse(encodedSteps);
+  const onboarding = JSON.parse(window.localStorage.getItem('keepcalmai:onboarding') || '{}');
+  const platformName = onboarding.platform || 'your AI assistant';
   const storageKey = `keepcalmai:${journeyId}:current-step`;
   const answerKey = `keepcalmai:${journeyId}:answers`;
   const completeKey = `keepcalmai:${journeyId}:complete`;
@@ -94,6 +97,7 @@ const encodedSteps = JSON.stringify(steps);
   const saveStatus = document.querySelector('#player-save-status');
   const reset = document.querySelector('#player-reset');
   const visualIcon = document.querySelector('#player-visual-icon');
+  const platformNote = document.querySelector('#player-platform');
   const time = document.querySelector('#player-time');
   const title = document.querySelector('#player-title');
   const body = document.querySelector('#player-body');
@@ -103,6 +107,7 @@ const encodedSteps = JSON.stringify(steps);
   const choiceField = document.querySelector('#player-choice-field');
   const choiceGrid = document.querySelector('#player-choices');
   const promptBox = document.querySelector('#player-prompt');
+  const promptHeading = document.querySelector('#prompt-heading');
   const promptText = document.querySelector('#player-prompt-text');
   const copyButton = document.querySelector('#copy-prompt');
   const copyStatus = document.querySelector('#copy-status');
@@ -111,6 +116,13 @@ const encodedSteps = JSON.stringify(steps);
   const takeaway = document.querySelector('#player-takeaway');
   const back = document.querySelector('#player-back');
   const next = document.querySelector('#player-next');
+
+  function personalise(text) {
+    return String(text)
+      .replaceAll('your AI assistant', platformName)
+      .replaceAll('AI assistant', platformName)
+      .replaceAll('Ask your AI this', `Ask ${platformName} this`);
+  }
 
   function getStepIcon(step) {
     if (step.choices?.length) return '✓';
@@ -156,7 +168,7 @@ const encodedSteps = JSON.stringify(steps);
       input.checked = selected === choice;
 
       const span = document.createElement('span');
-      span.textContent = choice;
+      span.textContent = personalise(choice);
 
       input.addEventListener('change', () => {
         answers[step.id] = choice;
@@ -176,19 +188,21 @@ const encodedSteps = JSON.stringify(steps);
     progressLabel.textContent = `Step ${current + 1} of ${steps.length}`;
     progressBar.style.width = `${progress}%`;
     visualIcon.textContent = getStepIcon(step);
+    platformNote.textContent = platformName === 'your AI assistant' ? '' : `Using: ${platformName}`;
     time.textContent = step.time;
-    title.textContent = step.title;
-    body.innerHTML = step.body.map((paragraph) => `<p>${paragraph}</p>`).join('');
-    why.textContent = step.whyItMatters;
-    actionTitle.textContent = step.actionTitle;
-    actionList.innerHTML = step.actionSteps.map((item) => `<li>${item}</li>`).join('');
-    ready.textContent = step.readyToContinue;
-    takeaway.textContent = step.takeaway;
+    title.textContent = personalise(step.title);
+    body.innerHTML = step.body.map((paragraph) => `<p>${personalise(paragraph)}</p>`).join('');
+    why.textContent = personalise(step.whyItMatters);
+    actionTitle.textContent = personalise(step.actionTitle);
+    actionList.innerHTML = step.actionSteps.map((item) => `<li>${personalise(item)}</li>`).join('');
+    ready.textContent = personalise(step.readyToContinue);
+    takeaway.textContent = personalise(step.takeaway);
     renderChoices(step);
 
     if (step.examplePrompt) {
       promptBox.hidden = false;
-      promptText.textContent = step.examplePrompt;
+      promptHeading.textContent = `Ask ${platformName} this`;
+      promptText.textContent = personalise(step.examplePrompt);
       copyStatus.textContent = '';
     } else {
       promptBox.hidden = true;
