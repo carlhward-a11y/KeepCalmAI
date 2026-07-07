@@ -1,0 +1,84 @@
+---
+const nodes = [
+  {
+    id: 'ai-without-overwhelm',
+    title: 'AI Without Overwhelm',
+    description: 'Your first calm introduction to AI.',
+    href: '/journeys/ai-without-overwhelm/',
+    available: true
+  },
+  {
+    id: 'writing-better-prompts',
+    title: 'Writing Better Prompts',
+    description: 'Learn how to ask clearer, more useful questions.',
+    href: '#',
+    available: false
+  },
+  {
+    id: 'everyday-ai',
+    title: 'Everyday AI Tasks',
+    description: 'Use AI for simple daily planning, notes and explanations.',
+    href: '#',
+    available: false
+  },
+  {
+    id: 'checking-ai-answers',
+    title: 'Checking AI Answers',
+    description: 'Build safe habits for checking important information.',
+    href: '#',
+    available: false
+  }
+];
+---
+
+<section class="journey-map" aria-labelledby="journey-map-title">
+  <div class="section-header">
+    <p class="eyebrow">Learning map</p>
+    <h2 id="journey-map-title">Getting started with AI</h2>
+    <p class="lead">Follow the map one calm journey at a time. New journeys will unlock as the platform grows.</p>
+  </div>
+
+  <ol class="map-list">
+    {nodes.map((node, index) => (
+      <li class="map-node" data-journey={node.id} data-available={node.available ? 'true' : 'false'}>
+        <div class="map-marker" aria-hidden="true">{index + 1}</div>
+        <div class="map-content">
+          <p class="map-status">Not started</p>
+          <h3>{node.title}</h3>
+          <p>{node.description}</p>
+          {node.available ? (
+            <a class="button" href={node.href}>Open journey</a>
+          ) : (
+            <span class="button button-secondary map-locked" aria-disabled="true">Coming soon</span>
+          )}
+        </div>
+      </li>
+    ))}
+  </ol>
+</section>
+
+<script>
+  document.querySelectorAll('.map-node').forEach((node) => {
+    const journeyId = node.getAttribute('data-journey');
+    const status = node.querySelector('.map-status');
+    const marker = node.querySelector('.map-marker');
+    const available = node.getAttribute('data-available') === 'true';
+
+    if (!journeyId || !status || !marker) return;
+
+    const current = Number(window.localStorage.getItem(`keepcalmai:${journeyId}:current-step`) || 0);
+    const complete = window.localStorage.getItem(`keepcalmai:${journeyId}:complete`) === 'true';
+
+    if (complete) {
+      status.textContent = 'Complete';
+      marker.textContent = '✓';
+      node.classList.add('is-complete');
+    } else if (current > 0) {
+      status.textContent = 'In progress';
+      node.classList.add('is-current');
+    } else if (!available) {
+      status.textContent = 'Coming soon';
+      node.classList.add('is-locked');
+    }
+  });
+</script>
