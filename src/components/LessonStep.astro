@@ -6,14 +6,29 @@ interface Props {
   title: string;
   time: string;
   body: string[];
-  activityTitle: string;
-  activityText: string;
+  whyItMatters: string;
+  actionTitle: string;
+  actionSteps: string[];
+  examplePrompt?: string;
+  readyToContinue: string;
   takeaway: string;
   current: number;
   total: number;
 }
 
-const { title, time, body, activityTitle, activityText, takeaway, current, total } = Astro.props;
+const {
+  title,
+  time,
+  body,
+  whyItMatters,
+  actionTitle,
+  actionSteps,
+  examplePrompt,
+  readyToContinue,
+  takeaway,
+  current,
+  total
+} = Astro.props;
 ---
 
 <article class="lesson-card">
@@ -23,6 +38,22 @@ const { title, time, body, activityTitle, activityText, takeaway, current, total
   <div class="lesson-body">
     {body.map((paragraph) => <p>{paragraph}</p>)}
   </div>
-  <Callout variant="try" title={activityTitle} text={activityText} />
+
+  <Callout title="Why this matters" text={whyItMatters} />
+
+  <div class="try-box">
+    <h2>{actionTitle}</h2>
+    <ol class="action-list">
+      {actionSteps.map((step) => <li>{step}</li>)}
+    </ol>
+    {examplePrompt && (
+      <div class="prompt-box">
+        <h3>Example prompt</h3>
+        <p>{examplePrompt}</p>
+      </div>
+    )}
+  </div>
+
+  <Callout title="Ready to continue?" text={readyToContinue} />
   <Callout title="Key takeaway" text={takeaway} />
 </article>
