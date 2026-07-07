@@ -1,0 +1,36 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import SectionHeader from '../../../components/SectionHeader.astro';
+import Callout from '../../../components/Callout.astro';
+---
+
+<BaseLayout
+  title="Journey Complete | KeepCalmAI"
+  description="Completion screen for the AI Without Overwhelm journey."
+>
+  <section class="panel success-panel" aria-labelledby="complete-title">
+    <SectionHeader
+      eyebrow="Journey complete"
+      title="You have completed AI Without Overwhelm"
+      text="You have taken the first calm steps towards understanding and using AI. That is enough for today."
+    />
+
+    <div class="success-mark" aria-hidden="true">✓</div>
+
+    <Callout
+      title="What you have done"
+      text="You have explored what AI is, tried example prompts, practised follow-up questions and considered why checking answers matters."
+    />
+
+    <Callout
+      title="One small next step"
+      text="Use AI once this week for a simple, low-risk task such as drafting a note, making a list or explaining something in plain English."
+      variant="try"
+    />
+
+    <div class="completion-actions">
+      <a class="button" href="/journeys/">Choose another journey</a>
+      <a class="button button-secondary" href="/journeys/ai-without-overwhelm/">Repeat this journey</a>
+    </div>
+  </section>
+</BaseLayout>
