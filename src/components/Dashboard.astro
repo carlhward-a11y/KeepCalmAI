@@ -1,0 +1,91 @@
+---
+import ProgressResume from './ProgressResume.astro';
+import { aiWithoutOverwhelm } from '../data/aiWithoutOverwhelm';
+---
+
+<section class="dashboard" aria-labelledby="dashboard-title">
+  <div class="dashboard-hero">
+    <p id="dashboard-greeting" class="eyebrow">Welcome back</p>
+    <h1 id="dashboard-title">Your calm AI learning space</h1>
+    <p id="dashboard-intro" class="lead">Continue where you left off, or start with the first guided journey.</p>
+    <div class="dashboard-actions">
+      <a class="button" href="/start/">Start setup</a>
+      <a class="button button-secondary" href="/journeys/">View journeys</a>
+    </div>
+  </div>
+
+  <ProgressResume
+    journeyId="ai-without-overwhelm"
+    title="AI Without Overwhelm"
+    totalSteps={aiWithoutOverwhelm.length}
+    href="/journeys/ai-without-overwhelm/"
+  />
+
+  <div class="dashboard-grid">
+    <article class="metric-card">
+      <p class="eyebrow">Current journey</p>
+      <h2>AI Without Overwhelm</h2>
+      <p id="dashboard-current-status">Ready to begin.</p>
+    </article>
+
+    <article class="metric-card">
+      <p class="eyebrow">Confidence</p>
+      <h2 id="dashboard-confidence">Starting gently</h2>
+      <p id="dashboard-confidence-text">Confidence grows through repeated small steps.</p>
+    </article>
+
+    <article class="metric-card">
+      <p class="eyebrow">Next recommended step</p>
+      <h2>Writing Better Prompts</h2>
+      <p>This will unlock after the first journey is complete.</p>
+    </article>
+  </div>
+</section>
+
+<script>
+  const onboarding = JSON.parse(window.localStorage.getItem('keepcalmai:onboarding') || '{}');
+  const current = Number(window.localStorage.getItem('keepcalmai:ai-without-overwhelm:current-step') || 0);
+  const complete = window.localStorage.getItem('keepcalmai:ai-without-overwhelm:complete') === 'true';
+  const total = 35;
+
+  const greeting = document.querySelector('#dashboard-greeting');
+  const intro = document.querySelector('#dashboard-intro');
+  const status = document.querySelector('#dashboard-current-status');
+  const confidence = document.querySelector('#dashboard-confidence');
+  const confidenceText = document.querySelector('#dashboard-confidence-text');
+
+  if (onboarding.platform && greeting) {
+    greeting.textContent = `Welcome back, ${onboarding.platform} learner`;
+  }
+
+  if (onboarding.goal && intro) {
+    const goalMap = {
+      everyday: 'Everyday AI can feel manageable when you learn one small action at a time.',
+      work: 'Workplace AI feels easier when each step is practical and relevant.',
+      study: 'Study with AI works best when you build calm habits first.',
+      curious: 'Curiosity is a good enough reason to start.'
+    };
+    intro.textContent = goalMap[onboarding.goal] || intro.textContent;
+  }
+
+  if (status) {
+    status.textContent = complete
+      ? 'Completed. You can repeat it or move to the next journey when available.'
+      : current > 0
+        ? `In progress. You are on step ${current + 1} of ${total}.`
+        : 'Ready to begin.';
+  }
+
+  if (confidence && confidenceText) {
+    if (complete) {
+      confidence.textContent = 'Journey complete';
+      confidenceText.textContent = 'You have completed the first confidence-building journey.';
+    } else if (current > 20) {
+      confidence.textContent = 'Growing steadily';
+      confidenceText.textContent = 'You have already completed more than half of the first journey.';
+    } else if (current > 0) {
+      confidence.textContent = 'In progress';
+      confidenceText.textContent = 'You have started. That is the most important step.';
+    }
+  }
+</script>
