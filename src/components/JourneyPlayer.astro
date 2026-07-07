@@ -1,0 +1,147 @@
+---
+interface Step {
+  id: string;
+  title: string;
+  time: string;
+  body: string[];
+  whyItMatters: string;
+  actionTitle: string;
+  actionSteps: string[];
+  examplePrompt?: string;
+  readyToContinue: string;
+  takeaway: string;
+}
+
+interface Props {
+  journeyId: string;
+  steps: Step[];
+}
+
+const { journeyId, steps } = Astro.props;
+const encodedSteps = JSON.stringify(steps);
+---
+
+<section class="player" data-journey={journeyId}>
+  <div class="progress-wrap">
+    <p id="player-progress-label" class="progress-label">Step 1 of {steps.length}</p>
+    <div class="progress" aria-hidden="true"><span id="player-progress-bar" style="width: 1%"></span></div>
+  </div>
+
+  <article class="player-card" aria-live="polite">
+    <p id="player-time" class="lesson-time"></p>
+    <h1 id="player-title"></h1>
+    <div id="player-body" class="lesson-body"></div>
+
+    <div class="summary-box">
+      <h2>Why this matters</h2>
+      <p id="player-why"></p>
+    </div>
+
+    <div class="try-box">
+      <h2 id="player-action-title"></h2>
+      <ol id="player-action-list" class="action-list"></ol>
+      <div id="player-prompt" class="prompt-box" hidden>
+        <h3>Ask your AI this</h3>
+        <p id="player-prompt-text"></p>
+        <button id="copy-prompt" class="button" type="button">Copy prompt</button>
+        <p id="copy-status" class="copy-status" role="status"></p>
+      </div>
+    </div>
+
+    <div class="summary-box">
+      <h2>Ready to continue?</h2>
+      <p id="player-ready"></p>
+    </div>
+
+    <div class="summary-box">
+      <h2>Key takeaway</h2>
+      <p id="player-takeaway"></p>
+    </div>
+  </article>
+
+  <nav class="lesson-nav" aria-label="Journey controls">
+    <button id="player-back" class="button button-secondary" type="button">Back</button>
+    <button id="player-next" class="button" type="button">I have done this, continue</button>
+  </nav>
+</section>
+
+<script define:vars={{ encodedSteps, journeyId }}>
+  const steps = JSON.parse(encodedSteps);
+  const storageKey = `keepcalmai:${journeyId}:current-step`;
+  let current = Number(window.localStorage.getItem(storageKey) || 0);
+
+  const progressLabel = document.querySelector('#player-progress-label');
+  const progressBar = document.querySelector('#player-progress-bar');
+  const time = document.querySelector('#player-time');
+  const title = document.querySelector('#player-title');
+  const body = document.querySelector('#player-body');
+  const why = document.querySelector('#player-why');
+  const actionTitle = document.querySelector('#player-action-title');
+  const actionList = document.querySelector('#player-action-list');
+  const promptBox = document.querySelector('#player-prompt');
+  const promptText = document.querySelector('#player-prompt-text');
+  const copyButton = document.querySelector('#copy-prompt');
+  const copyStatus = document.querySelector('#copy-status');
+  const ready = document.querySelector('#player-ready');
+  const takeaway = document.querySelector('#player-takeaway');
+  const back = document.querySelector('#player-back');
+  const next = document.querySelector('#player-next');
+
+  function render() {
+    const step = steps[current];
+    const progress = Math.round(((current + 1) / steps.length) * 100);
+
+    progressLabel.textContent = `Step ${current + 1} of ${steps.length}`;
+    progressBar.style.width = `${progress}%`;
+    time.textContent = step.time;
+    title.textContent = step.title;
+    body.innerHTML = step.body.map((paragraph) => `<p>${paragraph}</p>`).join('');
+    why.textContent = step.whyItMatters;
+    actionTitle.textContent = step.actionTitle;
+    actionList.innerHTML = step.actionSteps.map((item) => `<li>${item}</li>`).join('');
+    ready.textContent = step.readyToContinue;
+    takeaway.textContent = step.takeaway;
+
+    if (step.examplePrompt) {
+      promptBox.hidden = false;
+      promptText.textContent = step.examplePrompt;
+      copyStatus.textContent = '';
+    } else {
+      promptBox.hidden = true;
+      promptText.textContent = '';
+    }
+
+    back.disabled = current === 0;
+    next.textContent = current === steps.length - 1 ? 'Finish journey' : 'I have done this, continue';
+    window.localStorage.setItem(storageKey, String(current));
+    title.focus?.();
+  }
+
+  back.addEventListener('click', () => {
+    if (current > 0) {
+      current -= 1;
+      render();
+    }
+  });
+
+  next.addEventListener('click', () => {
+    if (current < steps.length - 1) {
+      current += 1;
+      render();
+    } else {
+      window.localStorage.setItem(`keepcalmai:${journeyId}:complete`, 'true');
+      window.location.href = '/journeys/';
+    }
+  });
+
+  copyButton.addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(promptText.textContent || '');
+      copyStatus.textContent = 'Prompt copied.';
+    } catch {
+      copyStatus.textContent = 'Copy was not available. Select the prompt text manually.';
+    }
+  });
+
+  render();
+</script>
