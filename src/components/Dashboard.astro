@@ -1,6 +1,7 @@
 ---
 import ProgressResume from './ProgressResume.astro';
 import { aiWithoutOverwhelm } from '../data/aiWithoutOverwhelm';
+import { writingBetterPrompts } from '../data/writingBetterPrompts';
 ---
 
 <section class="dashboard" aria-labelledby="dashboard-title">
@@ -21,10 +22,17 @@ import { aiWithoutOverwhelm } from '../data/aiWithoutOverwhelm';
     href="/journeys/ai-without-overwhelm/"
   />
 
+  <ProgressResume
+    journeyId="writing-better-prompts"
+    title="Writing Better Prompts"
+    totalSteps={writingBetterPrompts.length}
+    href="/journeys/writing-better-prompts/"
+  />
+
   <div class="dashboard-grid">
     <article class="metric-card">
       <p class="eyebrow">Current journey</p>
-      <h2>AI Without Overwhelm</h2>
+      <h2 id="dashboard-current-title">AI Without Overwhelm</h2>
       <p id="dashboard-current-status">Ready to begin.</p>
     </article>
 
@@ -36,23 +44,31 @@ import { aiWithoutOverwhelm } from '../data/aiWithoutOverwhelm';
 
     <article class="metric-card">
       <p class="eyebrow">Next recommended step</p>
-      <h2>Writing Better Prompts</h2>
-      <p>This will unlock after the first journey is complete.</p>
+      <h2 id="dashboard-next-title">Writing Better Prompts</h2>
+      <p id="dashboard-next-text">Build on the first journey by learning a simple prompt structure.</p>
+      <a id="dashboard-next-link" class="button" href="/journeys/writing-better-prompts/">Open next journey</a>
     </article>
   </div>
 </section>
 
 <script>
   const onboarding = JSON.parse(window.localStorage.getItem('keepcalmai:onboarding') || '{}');
-  const current = Number(window.localStorage.getItem('keepcalmai:ai-without-overwhelm:current-step') || 0);
-  const complete = window.localStorage.getItem('keepcalmai:ai-without-overwhelm:complete') === 'true';
-  const total = 35;
+  const firstCurrent = Number(window.localStorage.getItem('keepcalmai:ai-without-overwhelm:current-step') || 0);
+  const firstComplete = window.localStorage.getItem('keepcalmai:ai-without-overwhelm:complete') === 'true';
+  const promptCurrent = Number(window.localStorage.getItem('keepcalmai:writing-better-prompts:current-step') || 0);
+  const promptComplete = window.localStorage.getItem('keepcalmai:writing-better-prompts:complete') === 'true';
+  const firstTotal = 35;
+  const promptTotal = 17;
 
   const greeting = document.querySelector('#dashboard-greeting');
   const intro = document.querySelector('#dashboard-intro');
+  const currentTitle = document.querySelector('#dashboard-current-title');
   const status = document.querySelector('#dashboard-current-status');
   const confidence = document.querySelector('#dashboard-confidence');
   const confidenceText = document.querySelector('#dashboard-confidence-text');
+  const nextTitle = document.querySelector('#dashboard-next-title');
+  const nextText = document.querySelector('#dashboard-next-text');
+  const nextLink = document.querySelector('#dashboard-next-link');
 
   if (onboarding.platform && greeting) {
     greeting.textContent = `Welcome back, ${onboarding.platform} learner`;
@@ -68,24 +84,50 @@ import { aiWithoutOverwhelm } from '../data/aiWithoutOverwhelm';
     intro.textContent = goalMap[onboarding.goal] || intro.textContent;
   }
 
-  if (status) {
-    status.textContent = complete
-      ? 'Completed. You can repeat it or move to the next journey when available.'
-      : current > 0
-        ? `In progress. You are on step ${current + 1} of ${total}.`
+  if (currentTitle && status) {
+    if (promptComplete) {
+      currentTitle.textContent = 'Writing Better Prompts';
+      status.textContent = 'Completed. You have finished the first two journeys.';
+    } else if (promptCurrent > 0 || firstComplete) {
+      currentTitle.textContent = 'Writing Better Prompts';
+      status.textContent = promptCurrent > 0
+        ? `In progress. You are on step ${promptCurrent + 1} of ${promptTotal}.`
+        : 'Recommended next. Ready to begin.';
+    } else {
+      currentTitle.textContent = 'AI Without Overwhelm';
+      status.textContent = firstCurrent > 0
+        ? `In progress. You are on step ${firstCurrent + 1} of ${firstTotal}.`
         : 'Ready to begin.';
+    }
   }
 
   if (confidence && confidenceText) {
-    if (complete) {
-      confidence.textContent = 'Journey complete';
+    if (promptComplete) {
+      confidence.textContent = 'Two journeys complete';
+      confidenceText.textContent = 'You have completed the foundations and prompt skills journeys.';
+    } else if (firstComplete) {
+      confidence.textContent = 'Foundation complete';
       confidenceText.textContent = 'You have completed the first confidence-building journey.';
-    } else if (current > 20) {
+    } else if (firstCurrent > 20) {
       confidence.textContent = 'Growing steadily';
       confidenceText.textContent = 'You have already completed more than half of the first journey.';
-    } else if (current > 0) {
+    } else if (firstCurrent > 0) {
       confidence.textContent = 'In progress';
       confidenceText.textContent = 'You have started. That is the most important step.';
+    }
+  }
+
+  if (nextTitle && nextText && nextLink) {
+    if (promptComplete) {
+      nextTitle.textContent = 'Everyday AI Tasks';
+      nextText.textContent = 'Coming next: using AI for simple daily planning, notes and explanations.';
+      nextLink.textContent = 'Coming soon';
+      nextLink.setAttribute('href', '/journeys/');
+    } else if (!firstComplete) {
+      nextTitle.textContent = 'AI Without Overwhelm';
+      nextText.textContent = 'Start here before moving into prompt skills.';
+      nextLink.textContent = 'Open first journey';
+      nextLink.setAttribute('href', '/journeys/ai-without-overwhelm/');
     }
   }
 </script>
