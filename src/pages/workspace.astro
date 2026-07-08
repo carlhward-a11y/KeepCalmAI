@@ -103,12 +103,17 @@ import Callout from '../components/Callout.astro';
   });
 
   save?.addEventListener('click', () => {
+    if (!generatedPrompt) {
+      if (status) status.textContent = 'There is no prompt to save yet.';
+      return;
+    }
+
     const before = getLearnerProfile().notebook.length;
     saveCurrentPromptToNotebook('writing-better-prompts');
     const after = getLearnerProfile().notebook.length;
 
     if (status) {
-      status.textContent = after > before ? 'Prompt saved to notebook.' : 'There is no prompt to save yet.';
+      status.textContent = after > before ? 'Prompt saved to notebook.' : 'This prompt is already in your notebook.';
     }
   });
 
