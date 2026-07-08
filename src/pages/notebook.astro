@@ -11,12 +11,20 @@ import SectionHeader from '../components/SectionHeader.astro';
     <SectionHeader
       eyebrow="Your AI notebook"
       title="Saved prompts and reflections"
-      text="This notebook will collect useful prompts, learning notes and reflections as you move through KeepCalmAI. Items are currently saved on this device."
+      text="This notebook collects useful prompts, learning notes and reflections as you move through KeepCalmAI. Items are currently saved on this device."
     />
+
+    <div class="notebook-toolbar" aria-label="Notebook filters">
+      <button class="button button-secondary button-small" type="button" data-filter="all">All</button>
+      <button class="button button-secondary button-small" type="button" data-filter="prompt">Prompts</button>
+      <button class="button button-secondary button-small" type="button" data-filter="reflection">Reflections</button>
+      <button class="button button-secondary button-small" type="button" data-filter="achievement">Achievements</button>
+    </div>
 
     <div id="notebook-empty" class="summary-box">
       <h2>No notebook entries yet</h2>
       <p>As you build prompts and complete reflections, useful items will appear here.</p>
+      <a class="button" href="/workspace/">Open Prompt Workspace</a>
     </div>
 
     <div id="notebook-list" class="notebook-list" aria-live="polite"></div>
@@ -24,20 +32,60 @@ import SectionHeader from '../components/SectionHeader.astro';
 </BaseLayout>
 
 <script>
-  const profile = JSON.parse(window.localStorage.getItem('keepcalmai:learner-profile') || '{}');
+  function getLearnerProfile() {
+    const defaultProfile = { notebook: [] };
+    const raw = window.localStorage.getItem('keepcalmai:learner-profile');
+
+    try {
+      return raw ? { ...defaultProfile, ...JSON.parse(raw) } : defaultProfile;
+    } catch {
+      return defaultProfile;
+    }
+  }
+
+  const profile = getLearnerProfile();
   const entries = profile.notebook || [];
   const list = document.querySelector('#notebook-list');
   const empty = document.querySelector('#notebook-empty');
+  const filters = document.querySelectorAll('[data-filter]');
 
-  if (entries.length && list && empty) {
+  function escapeHtml(value) {
+    return String(value)
+      .replaceAll('&', '&amp;')
+      .replaceAll('<', '&lt;')
+      .replaceAll('>', '&gt;')
+      .replaceAll('"', '&quot;')
+      .replaceAll("'", '&#039;');
+  }
+
+  function renderEntries(filter = 'all') {
+    const visibleEntries = filter === 'all' ? entries : entries.filter((entry) => entry.type === filter);
+
+    if (!list || !empty) return;
+
+    if (!visibleEntries.length) {
+      empty.hidden = false;
+      list.innerHTML = '';
+      return;
+    }
+
     empty.hidden = true;
-    list.innerHTML = entries.map((entry) => `
+    list.innerHTML = visibleEntries.map((entry) => `
       <article class="notebook-entry">
-        <p class="eyebrow">${entry.type}</p>
-        <h2>${entry.title}</h2>
-        <p>${entry.content}</p>
+        <p class="eyebrow">${escapeHtml(entry.type)}</p>
+        <h2>${escapeHtml(entry.title)}</h2>
+        <p>${escapeHtml(entry.content)}</p>
         <p class="notebook-date">${new Date(entry.createdAt).toLocaleDateString('en-GB')}</p>
       </article>
     `).join('');
   }
+
+  filters.forEach((button) => {
+    button.addEventListener('click', () => {
+      const filter = button.getAttribute('data-filter') || 'all';
+      renderEntries(filter);
+    });
+  });
+
+  renderEntries();
 </script>
