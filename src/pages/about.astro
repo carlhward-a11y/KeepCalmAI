@@ -1,0 +1,51 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionHeader from '../components/SectionHeader.astro';
+import Callout from '../components/Callout.astro';
+---
+
+<BaseLayout
+  title="About | KeepCalmAI"
+  description="About KeepCalmAI, a calm and accessible AI learning platform."
+>
+  <section class="panel" aria-labelledby="about-title">
+    <SectionHeader
+      eyebrow="About KeepCalmAI"
+      title="The calmest way to learn AI"
+      text="KeepCalmAI helps people who feel overwhelmed, excluded or behind with AI build confidence through small practical steps."
+    />
+
+    <p>
+      KeepCalmAI is not designed as a traditional course library. It is a guided learning space where each journey gives the learner one idea, one action and one small success at a time.
+    </p>
+
+    <Callout
+      title="Our promise"
+      text="Calm Today. Confident Tomorrow. Every journey, prompt and feature should reduce pressure before adding knowledge."
+      variant="try"
+    />
+  </section>
+
+  <section class="panel" aria-labelledby="how-title">
+    <SectionHeader
+      eyebrow="How it works"
+      title="Guided journeys, not information overload"
+      text="The Journey Player presents one focused screen at a time, saves progress on this device and adapts small details based on the learner's preferences."
+    />
+
+    <div class="grid">
+      <article class="card">
+        <h2>One screen</h2>
+        <p>Each step focuses on one idea so the learner does not have to process too much at once.</p>
+      </article>
+      <article class="card">
+        <h2>One action</h2>
+        <p>Every step asks for a small practical action, such as choosing, copying, asking or reflecting.</p>
+      </article>
+      <article class="card">
+        <h2>One success</h2>
+        <p>The aim is calm confidence, not testing, grading or pressure to become an expert.</p>
+      </article>
+    </div>
+  </section>
+</BaseLayout>
