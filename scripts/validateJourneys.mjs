@@ -98,8 +98,17 @@ function validateChoices(file, stepId, objectSource) {
   }
 }
 
+function looksLikeJourneyStepData(source) {
+  return requiredStepFields.every((field) => source.includes(`${field}:`));
+}
+
 async function validateFile(file) {
   const source = await readFile(join(dataDir, file), 'utf8');
+
+  if (!looksLikeJourneyStepData(source)) {
+    return;
+  }
+
   const exports = extractExportedArrays(source);
   const steps = extractStepObjects(source);
 
