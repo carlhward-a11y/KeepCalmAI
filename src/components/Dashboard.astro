@@ -51,12 +51,50 @@ import { writingBetterPrompts } from '../data/writingBetterPrompts';
     </article>
   </div>
 
+  <section class="dna-panel" aria-labelledby="dna-title">
+    <div class="section-header">
+      <p class="eyebrow">Learning DNA</p>
+      <h2 id="dna-title">Your confidence picture</h2>
+      <p class="lead">These are gentle indicators, not scores or tests. They help KeepCalmAI understand what support may be useful next.</p>
+    </div>
+    <div class="dna-grid">
+      <article class="dna-card">
+        <span>Understanding AI</span>
+        <strong id="dna-understanding">1 / 10</strong>
+      </article>
+      <article class="dna-card">
+        <span>Prompt skills</span>
+        <strong id="dna-prompts">1 / 10</strong>
+      </article>
+      <article class="dna-card">
+        <span>Safety awareness</span>
+        <strong id="dna-safety">1 / 10</strong>
+      </article>
+      <article class="dna-card">
+        <span>Confidence</span>
+        <strong id="dna-confidence">1 / 10</strong>
+      </article>
+    </div>
+    <p id="dna-preferences" class="platform-note"></p>
+  </section>
+
   <Achievements />
 </section>
 
 <script>
   function getLearnerProfile() {
-    const defaultProfile = { onboarding: {}, journeys: {} };
+    const defaultProfile = {
+      onboarding: {},
+      journeys: {},
+      learningDNA: {
+        understandingAI: 1,
+        promptSkills: 1,
+        safetyAwareness: 1,
+        confidence: 1,
+        prefersBullets: false,
+        needsReassurance: true
+      }
+    };
     const raw = window.localStorage.getItem('keepcalmai:learner-profile');
 
     try {
@@ -68,6 +106,15 @@ import { writingBetterPrompts } from '../data/writingBetterPrompts';
 
   const profile = getLearnerProfile();
   const onboarding = profile.onboarding || {};
+  const dna = {
+    understandingAI: 1,
+    promptSkills: 1,
+    safetyAwareness: 1,
+    confidence: 1,
+    prefersBullets: false,
+    needsReassurance: true,
+    ...(profile.learningDNA || {})
+  };
   const first = profile.journeys?.['ai-without-overwhelm'];
   const prompts = profile.journeys?.['writing-better-prompts'];
   const firstCurrent = Number(first?.currentStep || 0);
@@ -86,6 +133,11 @@ import { writingBetterPrompts } from '../data/writingBetterPrompts';
   const nextTitle = document.querySelector('#dashboard-next-title');
   const nextText = document.querySelector('#dashboard-next-text');
   const nextLink = document.querySelector('#dashboard-next-link');
+  const dnaUnderstanding = document.querySelector('#dna-understanding');
+  const dnaPrompts = document.querySelector('#dna-prompts');
+  const dnaSafety = document.querySelector('#dna-safety');
+  const dnaConfidence = document.querySelector('#dna-confidence');
+  const dnaPreferences = document.querySelector('#dna-preferences');
 
   if (onboarding.platform && greeting) {
     greeting.textContent = `Welcome back, ${onboarding.platform} learner`;
@@ -146,5 +198,17 @@ import { writingBetterPrompts } from '../data/writingBetterPrompts';
       nextLink.textContent = 'Open first journey';
       nextLink.setAttribute('href', '/journeys/ai-without-overwhelm/');
     }
+  }
+
+  if (dnaUnderstanding) dnaUnderstanding.textContent = `${dna.understandingAI} / 10`;
+  if (dnaPrompts) dnaPrompts.textContent = `${dna.promptSkills} / 10`;
+  if (dnaSafety) dnaSafety.textContent = `${dna.safetyAwareness} / 10`;
+  if (dnaConfidence) dnaConfidence.textContent = `${dna.confidence} / 10`;
+
+  if (dnaPreferences) {
+    const preferences = [];
+    if (dna.prefersBullets) preferences.push('prefers bullet points');
+    if (dna.needsReassurance) preferences.push('benefits from reassurance');
+    dnaPreferences.textContent = preferences.length ? `Current preferences: ${preferences.join(', ')}.` : '';
   }
 </script>
