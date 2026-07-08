@@ -1,3 +1,9 @@
+export interface ChoiceOption {
+  label: string;
+  feedback?: string;
+  isBest?: boolean;
+}
+
 export interface LessonStep {
   id: string;
   title: string;
@@ -6,10 +12,173 @@ export interface LessonStep {
   whyItMatters: string;
   actionTitle: string;
   actionSteps: string[];
-  choices?: string[];
+  choices?: Array<string | ChoiceOption>;
   examplePrompt?: string;
   readyToContinue: string;
   takeaway: string;
+}
+
+const tryAnotherOption = ' Try another option if you would like to compare, or continue when you are ready.';
+
+const choiceFeedback: Record<string, Record<string, ChoiceOption>> = {
+  'read-answer': {
+    'It made sense.': {
+      label: 'It made sense.',
+      isBest: true,
+      feedback: 'Good. If the first answer made sense, you can treat that as a useful start. You can still ask a follow-up if you want it shorter, simpler or more practical.'
+    },
+    'It partly made sense.': {
+      label: 'It partly made sense.',
+      isBest: false,
+      feedback: `That is a very normal response. A partly clear answer is a good reason to ask AI to explain it again in simpler words.${tryAnotherOption}`
+    },
+    'It was too technical.': {
+      label: 'It was too technical.',
+      isBest: false,
+      feedback: `That is useful to notice. If an answer feels too technical, you can ask for plain English or a simple example.${tryAnotherOption}`
+    },
+    'I am not sure yet.': {
+      label: 'I am not sure yet.',
+      isBest: false,
+      feedback: `That is fine. You do not have to judge the answer straight away. The next steps will show how to shape it gently.${tryAnotherOption}`
+    }
+  },
+  'did-it-surprise-you': {
+    'Yes, it was easier than expected.': {
+      label: 'Yes, it was easier than expected.',
+      isBest: true,
+      feedback: 'Good. Noticing that it felt easier than expected can be an early confidence step.'
+    },
+    'A little.': {
+      label: 'A little.',
+      isBest: true,
+      feedback: 'Good. A small shift still counts. Confidence often grows in small, practical moments.'
+    },
+    'Not really.': {
+      label: 'Not really.',
+      isBest: false,
+      feedback: `That is okay. The aim is not to be impressed. The aim is to understand what AI can and cannot help with.${tryAnotherOption}`
+    },
+    'I am still unsure.': {
+      label: 'I am still unsure.',
+      isBest: false,
+      feedback: `That is a valid place to be. Keep going one step at a time and use the guidance rather than trying to feel confident immediately.${tryAnotherOption}`
+    }
+  },
+  'notice-improvement': {
+    'Making it shorter helped most.': {
+      label: 'Making it shorter helped most.',
+      isBest: true,
+      feedback: 'Good. Asking for a shorter answer is a practical way to reduce overwhelm.'
+    },
+    'Making it simpler helped most.': {
+      label: 'Making it simpler helped most.',
+      isBest: true,
+      feedback: 'Good. Asking for simpler wording is a useful skill, especially when a topic feels new.'
+    },
+    'Asking for an example helped most.': {
+      label: 'Asking for an example helped most.',
+      isBest: true,
+      feedback: 'Good. Examples often make abstract explanations easier to understand and use.'
+    },
+    'I am still working it out.': {
+      label: 'I am still working it out.',
+      isBest: false,
+      feedback: `That is fine. You are still learning the pattern. The useful point is that you can ask AI to change its answer.${tryAnotherOption}`
+    }
+  },
+  'compare-prompts': {
+    'Help me write something.': {
+      label: 'Help me write something.',
+      isBest: false,
+      feedback: `This is a start, but it leaves AI guessing what you want, who it is for and how it should sound.${tryAnotherOption}`
+    },
+    'Help me write a short, friendly note to a neighbour about a parcel delivery.': {
+      label: 'Help me write a short, friendly note to a neighbour about a parcel delivery.',
+      isBest: true,
+      feedback: 'Yes. This gives AI a clear task, tone, length and situation, so it is more likely to produce a useful answer.'
+    },
+    'Make this better.': {
+      label: 'Make this better.',
+      isBest: false,
+      feedback: `This can work as a follow-up, but on its own it does not say what better means. Shorter, clearer or friendlier would give more direction.${tryAnotherOption}`
+    },
+    'What do I do?': {
+      label: 'What do I do?',
+      isBest: false,
+      feedback: `This is understandable, but too broad. AI will usually help more if you add the situation and the kind of help you need.${tryAnotherOption}`
+    }
+  },
+  'when-to-check': {
+    'Ideas for a birthday card message.': {
+      label: 'Ideas for a birthday card message.',
+      isBest: false,
+      feedback: `This is usually low risk. You might edit the wording, but it does not normally need careful fact-checking.${tryAnotherOption}`
+    },
+    'A summary of a public webpage.': {
+      label: 'A summary of a public webpage.',
+      isBest: false,
+      feedback: `This may be useful, but it is still worth checking against the webpage if accuracy matters.${tryAnotherOption}`
+    },
+    'Advice about a medical symptom.': {
+      label: 'Advice about a medical symptom.',
+      isBest: true,
+      feedback: 'Yes. Medical information should be checked carefully with a reliable source or a qualified professional.'
+    },
+    'A list of possible meal ideas.': {
+      label: 'A list of possible meal ideas.',
+      isBest: false,
+      feedback: `This is usually low risk, although allergies, medical needs or dietary requirements would still need care.${tryAnotherOption}`
+    }
+  },
+  'confidence-now': {
+    'I am still unsure.': {
+      label: 'I am still unsure.',
+      isBest: false,
+      feedback: `That is okay. Being unsure does not mean you have failed. It simply means repetition and small practice will help.${tryAnotherOption}`
+    },
+    'I am starting to understand.': {
+      label: 'I am starting to understand.',
+      isBest: true,
+      feedback: 'Good. Starting to understand is exactly the kind of progress this journey is designed to support.'
+    },
+    'I feel more confident.': {
+      label: 'I feel more confident.',
+      isBest: true,
+      feedback: 'Good. Confidence grows when the tool starts to feel usable rather than mysterious.'
+    },
+    'I could show someone else one thing.': {
+      label: 'I could show someone else one thing.',
+      isBest: true,
+      feedback: 'Excellent. Being able to show one small thing is a strong sign that the learning is becoming practical.'
+    }
+  },
+  'journey-complete': {
+    'I will try one simple prompt this week.': {
+      label: 'I will try one simple prompt this week.',
+      isBest: true,
+      feedback: 'Good. One simple prompt is a realistic next step.'
+    },
+    'I will repeat this journey later.': {
+      label: 'I will repeat this journey later.',
+      isBest: true,
+      feedback: 'Good. Repeating the journey is a sensible way to build confidence without pressure.'
+    },
+    'I will move to another beginner journey.': {
+      label: 'I will move to another beginner journey.',
+      isBest: true,
+      feedback: 'Good. Moving on gently can help you keep momentum.'
+    },
+    'I will show someone else one thing I learnt.': {
+      label: 'I will show someone else one thing I learnt.',
+      isBest: true,
+      feedback: 'Good. Sharing one small thing can help make the learning feel more real.'
+    }
+  }
+};
+
+function withFeedback(stepId: string, labels: string[]): ChoiceOption[] {
+  return labels.map((label) => choiceFeedback[stepId]?.[label] || { label });
 }
 
 export const aiWithoutOverwhelm: LessonStep[] = [
@@ -275,12 +444,12 @@ export const aiWithoutOverwhelm: LessonStep[] = [
       'Do not worry if some parts are unclear.',
       'Choose the option that best describes it.'
     ],
-    choices: [
+    choices: withFeedback('read-answer', [
       'It made sense.',
       'It partly made sense.',
       'It was too technical.',
       'I am not sure yet.'
-    ],
+    ]),
     readyToContinue: 'Continue when you have chosen how the answer felt.',
     takeaway: 'It is normal if the first answer is not perfect.'
   },
@@ -299,12 +468,12 @@ export const aiWithoutOverwhelm: LessonStep[] = [
       'Choose the option closest to how you felt.',
       'There is no need to analyse it deeply.'
     ],
-    choices: [
+    choices: withFeedback('did-it-surprise-you', [
       'Yes, it was easier than expected.',
       'A little.',
       'Not really.',
       'I am still unsure.'
-    ],
+    ]),
     readyToContinue: 'Continue when you have noticed your reaction.',
     takeaway: 'Noticing your reaction is part of learning.'
   },
@@ -417,12 +586,12 @@ export const aiWithoutOverwhelm: LessonStep[] = [
       'Choose the one that helped most.',
       'Remember it for future use.'
     ],
-    choices: [
+    choices: withFeedback('notice-improvement', [
       'Making it shorter helped most.',
       'Making it simpler helped most.',
       'Asking for an example helped most.',
       'I am still working it out.'
-    ],
+    ]),
     readyToContinue: 'Continue when you have chosen the most useful change.',
     takeaway: 'Good AI use is often a conversation, not a single question.'
   },
@@ -497,12 +666,12 @@ export const aiWithoutOverwhelm: LessonStep[] = [
       'Choose the prompt that is more likely to give a useful answer.',
       'Do not overthink it.'
     ],
-    choices: [
+    choices: withFeedback('compare-prompts', [
       'Help me write something.',
       'Help me write a short, friendly note to a neighbour about a parcel delivery.',
       'Make this better.',
       'What do I do?'
-    ],
+    ]),
     readyToContinue: 'Continue when you have selected the stronger prompt.',
     takeaway: 'Specific usually beats vague.'
   },
@@ -558,12 +727,12 @@ export const aiWithoutOverwhelm: LessonStep[] = [
       'Choose the one that most clearly needs checking.',
       'Think about why it matters.'
     ],
-    choices: [
+    choices: withFeedback('when-to-check', [
       'Ideas for a birthday card message.',
       'A summary of a public webpage.',
       'Advice about a medical symptom.',
       'A list of possible meal ideas.'
-    ],
+    ]),
     readyToContinue: 'Continue when you have selected the option that needs checking most.',
     takeaway: 'The more important the decision, the more carefully you should check.'
   },
@@ -643,12 +812,12 @@ export const aiWithoutOverwhelm: LessonStep[] = [
       'Be honest rather than optimistic.',
       'Any answer is acceptable.'
     ],
-    choices: [
+    choices: withFeedback('confidence-now', [
       'I am still unsure.',
       'I am starting to understand.',
       'I feel more confident.',
       'I could show someone else one thing.'
-    ],
+    ]),
     readyToContinue: 'Continue when you have selected your current confidence level.',
     takeaway: 'Noticing progress is part of building confidence.'
   },
@@ -709,12 +878,12 @@ export const aiWithoutOverwhelm: LessonStep[] = [
       'Choose one small way to use AI again.',
       'Finish without adding more pressure.'
     ],
-    choices: [
+    choices: withFeedback('journey-complete', [
       'I will try one simple prompt this week.',
       'I will repeat this journey later.',
       'I will move to another beginner journey.',
       'I will show someone else one thing I learnt.'
-    ],
+    ]),
     readyToContinue: 'Select Finish journey when you are ready to close this journey.',
     takeaway: 'Calm today. Confident tomorrow.'
   }
