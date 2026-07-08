@@ -1,0 +1,36 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import SectionHeader from '../../../components/SectionHeader.astro';
+import Callout from '../../../components/Callout.astro';
+---
+
+<BaseLayout
+  title="Writing Better Prompts Complete | KeepCalmAI"
+  description="Completion screen for Writing Better Prompts."
+>
+  <section class="panel success-panel" aria-labelledby="complete-title">
+    <SectionHeader
+      eyebrow="Journey complete"
+      title="You have completed Writing Better Prompts"
+      text="You now have a simple structure for asking AI for clearer, more useful help."
+    />
+
+    <div class="success-mark" aria-hidden="true">✓</div>
+
+    <Callout
+      title="What you have practised"
+      text="You have used task, context, format and tone to build clearer prompts, and you have practised using follow-up prompts to improve an answer."
+    />
+
+    <Callout
+      title="One small next step"
+      text="Use the four-part prompt structure once this week for a simple, low-risk task."
+      variant="try"
+    />
+
+    <div class="completion-actions">
+      <a class="button" href="/journeys/">Back to journeys</a>
+      <a class="button button-secondary" href="/journeys/writing-better-prompts/">Repeat this journey</a>
+    </div>
+  </section>
+</BaseLayout>
