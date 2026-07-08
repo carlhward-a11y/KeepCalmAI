@@ -21,7 +21,7 @@ function fail(file, message) {
 }
 
 function extractExportedArrays(source) {
-  const matches = [...source.matchAll(/export const (\w+) = \[/g)];
+  const matches = [...source.matchAll(/export const (\w+)(?:\s*:[^=]+)?\s*=\s*\[/g)];
   return matches.map((match) => match[1]);
 }
 
