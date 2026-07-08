@@ -108,13 +108,56 @@ const encodedSteps = JSON.stringify(steps);
 
 <script define:vars={{ encodedSteps, journeyId, completeHref }}>
   const steps = JSON.parse(encodedSteps);
-  const onboarding = JSON.parse(window.localStorage.getItem('keepcalmai:onboarding') || '{}');
+
+  function getLearnerProfile() {
+    const defaultProfile = {
+      onboarding: {},
+      journeys: {},
+      promptWorkspace: {},
+      notebook: [],
+      learningDNA: {
+        understandingAI: 1,
+        promptSkills: 1,
+        safetyAwareness: 1,
+        confidence: 1,
+        prefersBullets: false,
+        needsReassurance: true
+      }
+    };
+    const raw = window.localStorage.getItem('keepcalmai:learner-profile');
+
+    try {
+      return raw ? { ...defaultProfile, ...JSON.parse(raw) } : defaultProfile;
+    } catch {
+      return defaultProfile;
+    }
+  }
+
+  function saveLearnerProfile(profile) {
+    window.localStorage.setItem('keepcalmai:learner-profile', JSON.stringify(profile));
+  }
+
+  function updateJourneyProgress(patch) {
+    const profile = getLearnerProfile();
+    const existing = profile.journeys?.[journeyId] || { currentStep: 0, complete: false, answers: {} };
+    const nextProgress = { ...existing, ...patch };
+    const nextProfile = {
+      ...profile,
+      journeys: {
+        ...(profile.journeys || {}),
+        [journeyId]: nextProgress
+      }
+    };
+    saveLearnerProfile(nextProfile);
+    return nextProgress;
+  }
+
+  const profile = getLearnerProfile();
+  const onboarding = profile.onboarding || {};
   const platformName = onboarding.platform || 'your AI assistant';
-  const storageKey = `keepcalmai:${journeyId}:current-step`;
-  const answerKey = `keepcalmai:${journeyId}:answers`;
-  const completeKey = `keepcalmai:${journeyId}:complete`;
-  let current = Number(window.localStorage.getItem(storageKey) || 0);
-  let answers = JSON.parse(window.localStorage.getItem(answerKey) || '{}');
+  const initialProgress = profile.journeys?.[journeyId] || { currentStep: 0, complete: false, answers: {} };
+  let current = Number(initialProgress.currentStep || 0);
+  let answers = initialProgress.answers || {};
 
   const progressLabel = document.querySelector('#player-progress-label');
   const progressBar = document.querySelector('#player-progress-bar');
@@ -201,12 +244,12 @@ const encodedSteps = JSON.stringify(steps);
   }
 
   function saveAnswers() {
-    window.localStorage.setItem(answerKey, JSON.stringify(answers));
+    updateJourneyProgress({ currentStep: current, answers });
     saveStatus.textContent = 'Choice saved on this device.';
   }
 
   function saveProgress() {
-    window.localStorage.setItem(storageKey, String(current));
+    updateJourneyProgress({ currentStep: current, answers });
     saveStatus.textContent = current === 0 ? 'Progress is saved on this device.' : `Progress saved: step ${current + 1}.`;
   }
 
@@ -333,7 +376,7 @@ const encodedSteps = JSON.stringify(steps);
       current += 1;
       render();
     } else {
-      window.localStorage.setItem(completeKey, 'true');
+      updateJourneyProgress({ currentStep: current, answers, complete: true });
       window.location.href = completeHref;
     }
   });
@@ -341,9 +384,7 @@ const encodedSteps = JSON.stringify(steps);
   reset.addEventListener('click', () => {
     current = 0;
     answers = {};
-    window.localStorage.removeItem(storageKey);
-    window.localStorage.removeItem(answerKey);
-    window.localStorage.removeItem(completeKey);
+    updateJourneyProgress({ currentStep: 0, complete: false, answers: {} });
     render();
   });
 
