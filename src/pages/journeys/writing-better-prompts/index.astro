@@ -1,0 +1,36 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Hero from '../../../components/Hero.astro';
+import SectionHeader from '../../../components/SectionHeader.astro';
+import JourneyPlayer from '../../../components/JourneyPlayer.astro';
+import { writingBetterPrompts } from '../../../data/writingBetterPrompts';
+---
+
+<BaseLayout
+  title="Writing Better Prompts | KeepCalmAI"
+  description="A calm journey for learning how to write clearer AI prompts."
+>
+  <Hero
+    eyebrow="Prompt skills"
+    title="Writing Better Prompts"
+    text="Learn a simple structure for asking AI for clearer, more useful help without needing technical prompt engineering."
+    ctaText="Begin the journey"
+    ctaHref="#player"
+  />
+
+  <section class="panel" aria-labelledby="journey-intro-title">
+    <SectionHeader
+      eyebrow="Journey player"
+      title="Clear prompts, calm structure"
+      text="This journey introduces task, context, format and tone as a simple way to write better prompts."
+    />
+  </section>
+
+  <div id="player">
+    <JourneyPlayer
+      journeyId="writing-better-prompts"
+      steps={writingBetterPrompts}
+      completeHref="/journeys/writing-better-prompts/complete/"
+    />
+  </div>
+</BaseLayout>
