@@ -30,7 +30,7 @@ const { journeyId, steps, completeHref = '/journeys/' } = Astro.props;
 const encodedSteps = JSON.stringify(steps);
 ---
 
-<section class="player" data-journey={journeyId}>
+<section class="player" data-journey={journeyId} data-steps={encodedSteps} data-complete-href={completeHref}>
   <div class="player-toolbar">
     <p id="player-save-status" class="save-status">Progress is saved on this device.</p>
     <button id="player-reset" class="button button-secondary button-small" type="button">Start again</button>
@@ -69,6 +69,8 @@ const encodedSteps = JSON.stringify(steps);
         <div id="builder-summary" class="builder-summary" hidden>
           <h3>Your prompt so far</h3>
           <p id="builder-prompt"></p>
+          <button id="save-builder-prompt" class="button button-secondary button-small" type="button">Save prompt to notebook</button>
+          <p id="builder-save-status" class="copy-status" role="status"></p>
         </div>
         <div id="player-prompt" class="prompt-box" hidden>
           <h3 id="prompt-heading">Ask your AI this</h3>
@@ -107,8 +109,13 @@ const encodedSteps = JSON.stringify(steps);
   </nav>
 </section>
 
-<script define:vars={{ encodedSteps, journeyId, completeHref }}>
-  const steps = JSON.parse(encodedSteps);
+<script>
+  import { saveCurrentPromptToNotebook } from '../lib/promptWorkspace';
+
+  const player = document.querySelector('.player');
+  const steps = JSON.parse(player?.getAttribute('data-steps') || '[]');
+  const journeyId = player?.getAttribute('data-journey') || '';
+  const completeHref = player?.getAttribute('data-complete-href') || '/journeys/';
 
   function getLearnerProfile() {
     const defaultProfile = {
@@ -282,6 +289,8 @@ const encodedSteps = JSON.stringify(steps);
   const choiceFeedback = document.querySelector('#choice-feedback');
   const builderSummary = document.querySelector('#builder-summary');
   const builderPrompt = document.querySelector('#builder-prompt');
+  const saveBuilderPrompt = document.querySelector('#save-builder-prompt');
+  const builderSaveStatus = document.querySelector('#builder-save-status');
   const promptBox = document.querySelector('#player-prompt');
   const promptHeading = document.querySelector('#prompt-heading');
   const promptText = document.querySelector('#player-prompt-text');
@@ -445,6 +454,7 @@ const encodedSteps = JSON.stringify(steps);
     if (!parts.length || !['build-prompt', 'personal-prompt', 'summary'].includes(steps[current].id)) {
       builderSummary.hidden = true;
       builderPrompt.textContent = '';
+      if (builderSaveStatus) builderSaveStatus.textContent = '';
       return;
     }
 
@@ -566,6 +576,19 @@ const encodedSteps = JSON.stringify(steps);
       copyStatus.textContent = 'Prompt copied.';
     } catch {
       copyStatus.textContent = 'Copy was not available. Select the prompt text manually.';
+    }
+  });
+
+  saveBuilderPrompt.addEventListener('click', () => {
+    updatePromptWorkspaceFromAnswers();
+    const before = getLearnerProfile().notebook?.length || 0;
+    saveCurrentPromptToNotebook(journeyId, steps[current]?.id);
+    const after = getLearnerProfile().notebook?.length || 0;
+
+    if (builderSaveStatus) {
+      builderSaveStatus.textContent = after > before
+        ? 'Prompt saved to notebook.'
+        : 'This prompt is already in your notebook.';
     }
   });
 
