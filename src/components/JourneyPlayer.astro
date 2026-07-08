@@ -48,6 +48,7 @@ const encodedSteps = JSON.stringify(steps);
       </div>
 
       <p id="player-platform" class="platform-note"></p>
+      <p id="player-adaptation" class="platform-note"></p>
       <p id="player-time" class="lesson-time"></p>
       <h1 id="player-title" tabindex="-1"></h1>
       <div id="player-body" class="lesson-body"></div>
@@ -115,13 +116,22 @@ const encodedSteps = JSON.stringify(steps);
       journeys: {},
       promptWorkspace: {},
       notebook: [],
+      accessibility: {
+        dyslexia: false,
+        adhd: false,
+        screenReader: false,
+        lowVision: false,
+        cognitiveFatigue: false,
+        technologyAnxiety: true
+      },
       learningDNA: {
         understandingAI: 1,
         promptSkills: 1,
         safetyAwareness: 1,
         confidence: 1,
         prefersBullets: false,
-        needsReassurance: true
+        needsReassurance: true,
+        shorterSteps: false
       }
     };
     const raw = window.localStorage.getItem('keepcalmai:learner-profile');
@@ -150,6 +160,7 @@ const encodedSteps = JSON.stringify(steps);
       confidence: 1,
       prefersBullets: false,
       needsReassurance: true,
+      shorterSteps: false,
       ...(profile.learningDNA || {})
     };
     const nextDNA = updater(currentDNA);
@@ -246,6 +257,8 @@ const encodedSteps = JSON.stringify(steps);
 
   const profile = getLearnerProfile();
   const onboarding = profile.onboarding || {};
+  const accessibility = profile.accessibility || {};
+  const learningDNA = profile.learningDNA || {};
   const platformName = onboarding.platform || 'your AI assistant';
   const initialProgress = profile.journeys?.[journeyId] || { currentStep: 0, complete: false, answers: {} };
   let current = Number(initialProgress.currentStep || 0);
@@ -257,6 +270,7 @@ const encodedSteps = JSON.stringify(steps);
   const reset = document.querySelector('#player-reset');
   const visualIcon = document.querySelector('#player-visual-icon');
   const platformNote = document.querySelector('#player-platform');
+  const adaptationNote = document.querySelector('#player-adaptation');
   const time = document.querySelector('#player-time');
   const title = document.querySelector('#player-title');
   const body = document.querySelector('#player-body');
@@ -280,6 +294,24 @@ const encodedSteps = JSON.stringify(steps);
   const next = document.querySelector('#player-next');
   const mentorMessage = document.querySelector('#mentor-message');
   const mentorExtra = document.querySelector('#mentor-extra');
+
+  function applyPresentationPreferences() {
+    const root = document.querySelector('.player');
+    if (!root) return;
+
+    root.classList.toggle('prefers-shorter-steps', learningDNA.shorterSteps === true || accessibility.cognitiveFatigue === true || accessibility.adhd === true);
+    root.classList.toggle('prefers-clear-visuals', accessibility.lowVision === true || accessibility.dyslexia === true);
+    root.classList.toggle('prefers-screen-reader', accessibility.screenReader === true);
+
+    const notes = [];
+    if (learningDNA.shorterSteps || accessibility.cognitiveFatigue || accessibility.adhd) notes.push('shorter-step support is on');
+    if (accessibility.lowVision || accessibility.dyslexia) notes.push('clearer visual spacing is on');
+    if (accessibility.screenReader) notes.push('screen reader friendly mode is on');
+
+    if (adaptationNote) {
+      adaptationNote.textContent = notes.length ? `Support: ${notes.join(', ')}.` : '';
+    }
+  }
 
   function normaliseChoice(choice) {
     return typeof choice === 'string' ? { label: choice } : choice;
@@ -310,7 +342,9 @@ const encodedSteps = JSON.stringify(steps);
 
     if (step.choices?.length) {
       return {
-        message: 'Choose the option that feels closest. If there is a stronger answer, I will explain why after you select it.',
+        message: learningDNA.needsReassurance === false
+          ? 'Choose the strongest option. I will show guidance after you select it.'
+          : 'Choose the option that feels closest. If there is a stronger answer, I will explain why after you select it.',
         extra: 'Some choices are reflective. Others are practice choices. In both cases, the aim is learning, not judgement.'
       };
     }
@@ -329,8 +363,17 @@ const encodedSteps = JSON.stringify(steps);
       };
     }
 
+    if (accessibility.cognitiveFatigue && current > 0 && current % 10 === 0) {
+      return {
+        message: 'You have reached a sensible pause point. It is fine to stop here and return later.',
+        extra: 'Progress is saved automatically on this device.'
+      };
+    }
+
     return {
-      message: 'Take this screen slowly. Read the main idea, do the one action, then continue when it feels clear enough.',
+      message: learningDNA.shorterSteps || accessibility.adhd
+        ? 'Focus on the action for this screen. That is enough for now.'
+        : 'Take this screen slowly. Read the main idea, do the one action, then continue when it feels clear enough.',
       extra: 'You do not need to remember every word. KeepCalmAI is designed so the next step carries you forward.'
     };
   }
@@ -491,5 +534,6 @@ const encodedSteps = JSON.stringify(steps);
     }
   });
 
+  applyPresentationPreferences();
   render();
 </script>
