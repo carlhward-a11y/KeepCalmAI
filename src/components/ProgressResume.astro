@@ -20,11 +20,24 @@ const { journeyId, title, totalSteps, href } = Astro.props;
 </section>
 
 <script>
+  function getLearnerProfile() {
+    const defaultProfile = { journeys: {} };
+    const raw = window.localStorage.getItem('keepcalmai:learner-profile');
+
+    try {
+      return raw ? { ...defaultProfile, ...JSON.parse(raw) } : defaultProfile;
+    } catch {
+      return defaultProfile;
+    }
+  }
+
   document.querySelectorAll('.resume-card').forEach((card) => {
     const journeyId = card.getAttribute('data-journey');
     const total = Number(card.getAttribute('data-total'));
-    const current = Number(window.localStorage.getItem(`keepcalmai:${journeyId}:current-step`) || 0);
-    const complete = window.localStorage.getItem(`keepcalmai:${journeyId}:complete`) === 'true';
+    const profile = getLearnerProfile();
+    const progress = journeyId ? profile.journeys?.[journeyId] : undefined;
+    const current = Number(progress?.currentStep || 0);
+    const complete = progress?.complete === true;
 
     if (!journeyId || total === 0 || (current === 0 && !complete)) {
       return;
