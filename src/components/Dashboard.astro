@@ -3,6 +3,9 @@ import ProgressResume from './ProgressResume.astro';
 import Achievements from './Achievements.astro';
 import { aiWithoutOverwhelm } from '../data/aiWithoutOverwhelm';
 import { writingBetterPrompts } from '../data/writingBetterPrompts';
+
+const firstJourneyTotal = aiWithoutOverwhelm.length;
+const promptJourneyTotal = writingBetterPrompts.length;
 ---
 
 <section class="dashboard" aria-labelledby="dashboard-title">
@@ -19,14 +22,14 @@ import { writingBetterPrompts } from '../data/writingBetterPrompts';
   <ProgressResume
     journeyId="ai-without-overwhelm"
     title="AI Without Overwhelm"
-    totalSteps={aiWithoutOverwhelm.length}
+    totalSteps={firstJourneyTotal}
     href="/journeys/ai-without-overwhelm/"
   />
 
   <ProgressResume
     journeyId="writing-better-prompts"
     title="Writing Better Prompts"
-    totalSteps={writingBetterPrompts.length}
+    totalSteps={promptJourneyTotal}
     href="/journeys/writing-better-prompts/"
   />
 
@@ -81,7 +84,7 @@ import { writingBetterPrompts } from '../data/writingBetterPrompts';
   <Achievements />
 </section>
 
-<script>
+<script define:vars={{ firstJourneyTotal, promptJourneyTotal }}>
   function getLearnerProfile() {
     const defaultProfile = {
       onboarding: {},
@@ -92,7 +95,8 @@ import { writingBetterPrompts } from '../data/writingBetterPrompts';
         safetyAwareness: 1,
         confidence: 1,
         prefersBullets: false,
-        needsReassurance: true
+        needsReassurance: true,
+        shorterSteps: false
       }
     };
     const raw = window.localStorage.getItem('keepcalmai:learner-profile');
@@ -113,6 +117,7 @@ import { writingBetterPrompts } from '../data/writingBetterPrompts';
     confidence: 1,
     prefersBullets: false,
     needsReassurance: true,
+    shorterSteps: false,
     ...(profile.learningDNA || {})
   };
   const first = profile.journeys?.['ai-without-overwhelm'];
@@ -121,8 +126,6 @@ import { writingBetterPrompts } from '../data/writingBetterPrompts';
   const firstComplete = first?.complete === true;
   const promptCurrent = Number(prompts?.currentStep || 0);
   const promptComplete = prompts?.complete === true;
-  const firstTotal = 35;
-  const promptTotal = 17;
 
   const greeting = document.querySelector('#dashboard-greeting');
   const intro = document.querySelector('#dashboard-intro');
@@ -160,12 +163,12 @@ import { writingBetterPrompts } from '../data/writingBetterPrompts';
     } else if (promptCurrent > 0 || firstComplete) {
       currentTitle.textContent = 'Writing Better Prompts';
       status.textContent = promptCurrent > 0
-        ? `In progress. You are on step ${promptCurrent + 1} of ${promptTotal}.`
+        ? `In progress. You are on step ${promptCurrent + 1} of ${promptJourneyTotal}.`
         : 'Recommended next. Ready to begin.';
     } else {
       currentTitle.textContent = 'AI Without Overwhelm';
       status.textContent = firstCurrent > 0
-        ? `In progress. You are on step ${firstCurrent + 1} of ${firstTotal}.`
+        ? `In progress. You are on step ${firstCurrent + 1} of ${firstJourneyTotal}.`
         : 'Ready to begin.';
     }
   }
@@ -177,7 +180,7 @@ import { writingBetterPrompts } from '../data/writingBetterPrompts';
     } else if (firstComplete) {
       confidence.textContent = 'Foundation complete';
       confidenceText.textContent = 'You have completed the first confidence-building journey.';
-    } else if (firstCurrent > 20) {
+    } else if (firstCurrent > Math.floor(firstJourneyTotal / 2)) {
       confidence.textContent = 'Growing steadily';
       confidenceText.textContent = 'You have already completed more than half of the first journey.';
     } else if (firstCurrent > 0) {
@@ -208,6 +211,7 @@ import { writingBetterPrompts } from '../data/writingBetterPrompts';
   if (dnaPreferences) {
     const preferences = [];
     if (dna.prefersBullets) preferences.push('prefers bullet points');
+    if (dna.shorterSteps) preferences.push('prefers shorter steps');
     if (dna.needsReassurance) preferences.push('benefits from reassurance');
     dnaPreferences.textContent = preferences.length ? `Current preferences: ${preferences.join(', ')}.` : '';
   }
