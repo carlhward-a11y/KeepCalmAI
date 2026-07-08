@@ -79,7 +79,8 @@ function hasField(objectSource, field) {
 }
 
 function extractStringField(objectSource, field) {
-  const match = objectSource.match(new RegExp(`${field}\\s*:\\s*['\"`]([^'\"`]+)['\"`]`));
+  const pattern = `${field}\\s*:\\s*['"\`]([^'"\`]+)['"\`]`;
+  const match = objectSource.match(new RegExp(pattern));
   return match?.[1];
 }
 
