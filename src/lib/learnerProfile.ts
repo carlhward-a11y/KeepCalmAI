@@ -5,6 +5,7 @@ export interface LearningDNA {
   confidence: number;
   prefersBullets: boolean;
   needsReassurance: boolean;
+  shorterSteps: boolean;
 }
 
 export interface JourneyProgress {
@@ -65,7 +66,8 @@ export const defaultLearnerProfile: LearnerProfile = {
     safetyAwareness: 1,
     confidence: 1,
     prefersBullets: false,
-    needsReassurance: true
+    needsReassurance: true,
+    shorterSteps: false
   },
   accessibility: {
     dyslexia: false,
@@ -82,6 +84,17 @@ export const defaultLearnerProfile: LearnerProfile = {
 
 function hasWindow() {
   return typeof window !== 'undefined' && typeof window.localStorage !== 'undefined';
+}
+
+function readJsonFromStorage<T>(key: string, fallback: T): T {
+  if (!hasWindow()) return fallback;
+
+  try {
+    const raw = window.localStorage.getItem(key);
+    return raw ? JSON.parse(raw) as T : fallback;
+  } catch {
+    return fallback;
+  }
 }
 
 export function getLearnerProfile(): LearnerProfile {
@@ -179,14 +192,14 @@ export function updatePromptWorkspace(workspace: Partial<PromptWorkspace>): Lear
 export function migrateLegacyProfile(profile: LearnerProfile): LearnerProfile {
   if (!hasWindow()) return profile;
 
-  const legacyOnboarding = JSON.parse(window.localStorage.getItem('keepcalmai:onboarding') || '{}');
+  const legacyOnboarding = readJsonFromStorage('keepcalmai:onboarding', {} as LearnerProfile['onboarding']);
   const journeyIds = ['ai-without-overwhelm', 'writing-better-prompts'];
   const journeys = { ...profile.journeys };
 
   journeyIds.forEach((journeyId) => {
     const currentStep = Number(window.localStorage.getItem(`keepcalmai:${journeyId}:current-step`) || journeys[journeyId]?.currentStep || 0);
     const complete = window.localStorage.getItem(`keepcalmai:${journeyId}:complete`) === 'true' || journeys[journeyId]?.complete || false;
-    const answers = JSON.parse(window.localStorage.getItem(`keepcalmai:${journeyId}:answers`) || JSON.stringify(journeys[journeyId]?.answers || {}));
+    const answers = readJsonFromStorage(`keepcalmai:${journeyId}:answers`, journeys[journeyId]?.answers || {});
     journeys[journeyId] = { currentStep, complete, answers };
   });
 
