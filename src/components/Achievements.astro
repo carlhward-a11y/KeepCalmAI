@@ -1,0 +1,64 @@
+---
+const achievements = [
+  {
+    id: 'first-start',
+    title: 'First Step',
+    text: 'Started your first KeepCalmAI journey.'
+  },
+  {
+    id: 'first-journey',
+    title: 'AI Foundations',
+    text: 'Completed AI Without Overwhelm.'
+  },
+  {
+    id: 'prompt-skills',
+    title: 'Prompt Builder',
+    text: 'Completed Writing Better Prompts.'
+  }
+];
+---
+
+<section class="achievements" aria-labelledby="achievements-title">
+  <div class="section-header">
+    <p class="eyebrow">Progress markers</p>
+    <h2 id="achievements-title">Small wins</h2>
+    <p class="lead">These are not scores. They simply mark useful steps you have taken.</p>
+  </div>
+
+  <div class="achievement-grid">
+    {achievements.map((achievement) => (
+      <article class="achievement-card" data-achievement={achievement.id}>
+        <div class="achievement-icon" aria-hidden="true">○</div>
+        <div>
+          <h3>{achievement.title}</h3>
+          <p>{achievement.text}</p>
+          <p class="achievement-status">Not yet</p>
+        </div>
+      </article>
+    ))}
+  </div>
+</section>
+
+<script>
+  const firstStarted = Number(window.localStorage.getItem('keepcalmai:ai-without-overwhelm:current-step') || 0) > 0;
+  const firstComplete = window.localStorage.getItem('keepcalmai:ai-without-overwhelm:complete') === 'true';
+  const promptsComplete = window.localStorage.getItem('keepcalmai:writing-better-prompts:complete') === 'true';
+
+  const states = {
+    'first-start': firstStarted || firstComplete,
+    'first-journey': firstComplete,
+    'prompt-skills': promptsComplete
+  };
+
+  document.querySelectorAll('.achievement-card').forEach((card) => {
+    const id = card.getAttribute('data-achievement');
+    const icon = card.querySelector('.achievement-icon');
+    const status = card.querySelector('.achievement-status');
+
+    if (!id || !states[id]) return;
+
+    card.classList.add('is-earned');
+    if (icon) icon.textContent = '✓';
+    if (status) status.textContent = 'Achieved';
+  });
+</script>
