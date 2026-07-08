@@ -32,16 +32,7 @@ import SectionHeader from '../components/SectionHeader.astro';
 </BaseLayout>
 
 <script>
-  function getLearnerProfile() {
-    const defaultProfile = { notebook: [] };
-    const raw = window.localStorage.getItem('keepcalmai:learner-profile');
-
-    try {
-      return raw ? { ...defaultProfile, ...JSON.parse(raw) } : defaultProfile;
-    } catch {
-      return defaultProfile;
-    }
-  }
+  import { getLearnerProfile } from '../lib/learnerProfile';
 
   const profile = getLearnerProfile();
   const entries = profile.notebook || [];
