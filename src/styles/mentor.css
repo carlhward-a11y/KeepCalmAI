@@ -1,0 +1,47 @@
+.player-shell {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 280px;
+  gap: var(--space-xl);
+  align-items: start;
+}
+
+.mentor-panel {
+  position: sticky;
+  top: 6rem;
+  background: linear-gradient(135deg, var(--colour-surface), var(--colour-soft-yellow));
+  border: 1px solid var(--colour-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  box-shadow: var(--shadow-card);
+}
+
+.mentor-panel h2 {
+  margin-top: 0;
+  line-height: 1.1;
+}
+
+.mentor-detail {
+  margin-top: var(--space-md);
+  border-top: 1px solid var(--colour-border);
+  padding-top: var(--space-md);
+}
+
+.mentor-detail summary {
+  cursor: pointer;
+  font-weight: 900;
+  color: var(--colour-primary);
+}
+
+.mentor-detail p {
+  margin-bottom: 0;
+}
+
+@media (max-width: 980px) {
+  .player-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .mentor-panel {
+    position: static;
+  }
+}
