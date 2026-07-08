@@ -63,77 +63,13 @@ import Callout from '../components/Callout.astro';
 </BaseLayout>
 
 <script>
-  function getLearnerProfile() {
-    const defaultProfile = { journeys: {}, promptWorkspace: {}, notebook: [] };
-    const raw = window.localStorage.getItem('keepcalmai:learner-profile');
-
-    try {
-      return raw ? { ...defaultProfile, ...JSON.parse(raw) } : defaultProfile;
-    } catch {
-      return defaultProfile;
-    }
-  }
-
-  function saveLearnerProfile(profile) {
-    window.localStorage.setItem('keepcalmai:learner-profile', JSON.stringify(profile));
-  }
-
-  function getPromptPart(answer) {
-    return answer?.promptPart || answer?.label || answer || '';
-  }
-
-  function buildWorkspaceFromPromptJourney(profile) {
-    const answers = profile.journeys?.['writing-better-prompts']?.answers || {};
-    const promptWorkspace = {
-      ...profile.promptWorkspace,
-      task: profile.promptWorkspace?.task || getPromptPart(answers.task),
-      context: profile.promptWorkspace?.context || getPromptPart(answers.context),
-      format: profile.promptWorkspace?.format || getPromptPart(answers.format),
-      tone: profile.promptWorkspace?.tone || getPromptPart(answers.tone)
-    };
-
-    const generatedPrompt = [
-      promptWorkspace.task,
-      promptWorkspace.context,
-      promptWorkspace.format,
-      promptWorkspace.tone
-    ].filter(Boolean).join(' ').trim();
-
-    return {
-      ...promptWorkspace,
-      generatedPrompt
-    };
-  }
-
-  function savePromptToNotebook(promptText) {
-    if (!promptText) return false;
-    const latestProfile = getLearnerProfile();
-    const existing = latestProfile.notebook || [];
-    const alreadySaved = existing.some((entry) => entry.type === 'prompt' && entry.content === promptText);
-
-    if (alreadySaved) return false;
-
-    saveLearnerProfile({
-      ...latestProfile,
-      notebook: [
-        {
-          id: `entry-${Date.now()}`,
-          type: 'prompt',
-          title: 'Prompt Workspace prompt',
-          content: promptText,
-          createdAt: new Date().toISOString(),
-          journeyId: 'writing-better-prompts'
-        },
-        ...existing
-      ].slice(0, 100)
-    });
-
-    return true;
-  }
+  import { getLearnerProfile } from '../lib/learnerProfile';
+  import { buildPromptFromWorkspace, clearPromptWorkspace, saveCurrentPromptToNotebook } from '../lib/promptWorkspace';
 
   const profile = getLearnerProfile();
-  const workspace = buildWorkspaceFromPromptJourney(profile);
-  const hasWorkspace = Boolean(workspace.generatedPrompt);
+  const workspace = profile.promptWorkspace || {};
+  const generatedPrompt = workspace.generatedPrompt || buildPromptFromWorkspace();
+  const hasWorkspace = Boolean(generatedPrompt);
 
   const empty = document.querySelector('#workspace-empty');
   const content = document.querySelector('#workspace-content');
@@ -148,19 +84,18 @@ import Callout from '../components/Callout.astro';
   const status = document.querySelector('#workspace-status');
 
   if (hasWorkspace) {
-    saveLearnerProfile({ ...profile, promptWorkspace: workspace });
     if (empty) empty.hidden = true;
     if (content) content.hidden = false;
     if (task) task.textContent = workspace.task || 'Not set yet';
     if (context) context.textContent = workspace.context || 'Not set yet';
     if (format) format.textContent = workspace.format || 'Not set yet';
     if (tone) tone.textContent = workspace.tone || 'Not set yet';
-    if (prompt) prompt.textContent = workspace.generatedPrompt;
+    if (prompt) prompt.textContent = generatedPrompt;
   }
 
   copy?.addEventListener('click', async () => {
     try {
-      await navigator.clipboard.writeText(workspace.generatedPrompt || '');
+      await navigator.clipboard.writeText(generatedPrompt || '');
       if (status) status.textContent = 'Prompt copied.';
     } catch {
       if (status) status.textContent = 'Copy was not available. Select the prompt text manually.';
@@ -168,18 +103,17 @@ import Callout from '../components/Callout.astro';
   });
 
   save?.addEventListener('click', () => {
-    const saved = savePromptToNotebook(workspace.generatedPrompt || '');
+    const before = getLearnerProfile().notebook.length;
+    saveCurrentPromptToNotebook('writing-better-prompts');
+    const after = getLearnerProfile().notebook.length;
+
     if (status) {
-      status.textContent = saved ? 'Prompt saved to notebook.' : 'This prompt is already in your notebook.';
+      status.textContent = after > before ? 'Prompt saved to notebook.' : 'There is no prompt to save yet.';
     }
   });
 
   clear?.addEventListener('click', () => {
-    const latestProfile = getLearnerProfile();
-    saveLearnerProfile({
-      ...latestProfile,
-      promptWorkspace: {}
-    });
+    clearPromptWorkspace();
     window.location.reload();
   });
 </script>
