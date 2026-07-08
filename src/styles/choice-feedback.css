@@ -1,0 +1,33 @@
+.choice-feedback,
+.builder-summary {
+  margin-top: var(--space-md);
+  padding: var(--space-md);
+  border-radius: var(--radius-md);
+  border: 2px solid var(--colour-border);
+  background: var(--colour-surface);
+  font-weight: 700;
+}
+
+.choice-feedback.is-best {
+  border-color: var(--colour-primary);
+  background: var(--colour-soft-blue);
+}
+
+.choice-feedback.is-developing {
+  border-color: var(--colour-accent);
+  background: var(--colour-soft-yellow);
+}
+
+.builder-summary {
+  border-color: var(--colour-primary);
+  background: var(--colour-soft-blue);
+}
+
+.builder-summary h3 {
+  margin-top: 0;
+}
+
+.builder-summary p {
+  margin-bottom: 0;
+  font-weight: 800;
+}
