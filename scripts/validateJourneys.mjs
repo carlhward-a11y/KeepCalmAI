@@ -20,32 +20,36 @@ function fail(file, message) {
   errors.push(`${file}: ${message}`);
 }
 
+function findJourneyArrayStart(source) {
+  const exportMatch = source.match(/export const \w+(?:\s*:[^=]+)?\s*=/);
+  if (!exportMatch || exportMatch.index === undefined) return -1;
+
+  const afterAssignment = exportMatch.index + exportMatch[0].length;
+  return source.indexOf('[', afterAssignment);
+}
+
 function extractExportedArrays(source) {
   const matches = [...source.matchAll(/export const (\w+)(?:\s*:[^=]+)?\s*=\s*\[/g)];
   return matches.map((match) => match[1]);
 }
 
 function extractStepObjects(source) {
-  const marker = 'export const ';
-  const start = source.indexOf(marker);
-  if (start === -1) return [];
-
-  const arrayStart = source.indexOf('[', start);
+  const arrayStart = findJourneyArrayStart(source);
   const arrayEnd = source.lastIndexOf('];');
-  if (arrayStart === -1 || arrayEnd === -1) return [];
+  if (arrayStart === -1 || arrayEnd === -1 || arrayEnd <= arrayStart) return [];
 
   const body = source.slice(arrayStart + 1, arrayEnd);
   const objects = [];
   let depth = 0;
   let current = '';
+  let collecting = false;
   let inString = false;
   let stringChar = '';
   let escaped = false;
 
   for (const char of body) {
-    current += char;
-
     if (inString) {
+      current += char;
       if (escaped) {
         escaped = false;
       } else if (char === '\\') {
@@ -57,17 +61,30 @@ function extractStepObjects(source) {
     }
 
     if (char === '"' || char === "'" || char === '`') {
+      if (collecting) current += char;
       inString = true;
       stringChar = char;
       continue;
     }
 
-    if (char === '{') depth += 1;
-    if (char === '}') depth -= 1;
+    if (char === '{') {
+      collecting = true;
+      depth += 1;
+      current += char;
+      continue;
+    }
 
-    if (depth === 0 && current.trim().startsWith('{')) {
-      objects.push(current.trim().replace(/,$/, ''));
-      current = '';
+    if (!collecting) continue;
+
+    current += char;
+
+    if (char === '}') {
+      depth -= 1;
+      if (depth === 0) {
+        objects.push(current.trim().replace(/,$/, ''));
+        current = '';
+        collecting = false;
+      }
     }
   }
 
