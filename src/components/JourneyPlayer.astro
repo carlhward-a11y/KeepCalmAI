@@ -137,6 +137,98 @@ const encodedSteps = JSON.stringify(steps);
     window.localStorage.setItem('keepcalmai:learner-profile', JSON.stringify(profile));
   }
 
+  function clampScore(value) {
+    return Math.max(1, Math.min(10, Number(value || 1)));
+  }
+
+  function updateLearningDNA(updater) {
+    const profile = getLearnerProfile();
+    const currentDNA = {
+      understandingAI: 1,
+      promptSkills: 1,
+      safetyAwareness: 1,
+      confidence: 1,
+      prefersBullets: false,
+      needsReassurance: true,
+      ...(profile.learningDNA || {})
+    };
+    const nextDNA = updater(currentDNA);
+    saveLearnerProfile({
+      ...profile,
+      learningDNA: {
+        ...currentDNA,
+        ...nextDNA,
+        understandingAI: clampScore(nextDNA.understandingAI ?? currentDNA.understandingAI),
+        promptSkills: clampScore(nextDNA.promptSkills ?? currentDNA.promptSkills),
+        safetyAwareness: clampScore(nextDNA.safetyAwareness ?? currentDNA.safetyAwareness),
+        confidence: clampScore(nextDNA.confidence ?? currentDNA.confidence)
+      }
+    });
+  }
+
+  function updateLearningDNAForChoice(step, choice) {
+    updateLearningDNA((dna) => {
+      const nextDNA = { ...dna };
+      const label = String(choice?.label || '').toLowerCase();
+
+      if (choice?.isBest === true) {
+        nextDNA.confidence = dna.confidence + 1;
+      }
+
+      if (choice?.isBest === false) {
+        nextDNA.needsReassurance = true;
+      }
+
+      if (choice?.promptPart) {
+        nextDNA.promptSkills = dna.promptSkills + 1;
+      }
+
+      if (step.id.includes('safe') || step.id.includes('privacy') || step.id.includes('check')) {
+        nextDNA.safetyAwareness = dna.safetyAwareness + (choice?.isBest === true ? 2 : 0);
+      }
+
+      if (label.includes('bullet')) {
+        nextDNA.prefersBullets = true;
+      }
+
+      if (label.includes('still unsure')) {
+        nextDNA.needsReassurance = true;
+      }
+
+      if (label.includes('help someone else') || label.includes('could help')) {
+        nextDNA.needsReassurance = false;
+        nextDNA.confidence = dna.confidence + 2;
+      }
+
+      return nextDNA;
+    });
+  }
+
+  function updateLearningDNAForCompletion() {
+    updateLearningDNA((dna) => {
+      if (journeyId === 'ai-without-overwhelm') {
+        return {
+          ...dna,
+          understandingAI: dna.understandingAI + 2,
+          confidence: dna.confidence + 2
+        };
+      }
+
+      if (journeyId === 'writing-better-prompts') {
+        return {
+          ...dna,
+          promptSkills: dna.promptSkills + 2,
+          confidence: dna.confidence + 1
+        };
+      }
+
+      return {
+        ...dna,
+        confidence: dna.confidence + 1
+      };
+    });
+  }
+
   function updateJourneyProgress(patch) {
     const profile = getLearnerProfile();
     const existing = profile.journeys?.[journeyId] || { currentStep: 0, complete: false, answers: {} };
@@ -316,6 +408,7 @@ const encodedSteps = JSON.stringify(steps);
       input.addEventListener('change', () => {
         answers[step.id] = choice;
         saveAnswers();
+        updateLearningDNAForChoice(step, choice);
         updateChoiceFeedback(choice);
         updateBuilderSummary();
         choiceStatus.textContent = choice.isBest === false ? 'Choice saved. Read the guidance above before continuing.' : 'Choice saved.';
@@ -377,6 +470,7 @@ const encodedSteps = JSON.stringify(steps);
       render();
     } else {
       updateJourneyProgress({ currentStep: current, answers, complete: true });
+      updateLearningDNAForCompletion();
       window.location.href = completeHref;
     }
   });
