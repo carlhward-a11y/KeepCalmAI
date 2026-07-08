@@ -34,47 +34,59 @@ const encodedSteps = JSON.stringify(steps);
     <div class="progress" aria-hidden="true"><span id="player-progress-bar" style="width: 1%"></span></div>
   </div>
 
-  <article class="player-card" aria-live="polite">
-    <div class="step-visual" aria-hidden="true">
-      <span id="player-visual-icon">K</span>
-    </div>
-
-    <p id="player-platform" class="platform-note"></p>
-    <p id="player-time" class="lesson-time"></p>
-    <h1 id="player-title" tabindex="-1"></h1>
-    <div id="player-body" class="lesson-body"></div>
-
-    <details id="player-why-wrap" class="detail-box">
-      <summary>Why this matters</summary>
-      <p id="player-why"></p>
-    </details>
-
-    <div class="try-box action-box">
-      <h2 id="player-action-title"></h2>
-      <ol id="player-action-list" class="action-list"></ol>
-      <fieldset id="player-choice-field" class="choice-field" hidden>
-        <legend>Choose one option</legend>
-        <div id="player-choices" class="choice-grid"></div>
-      </fieldset>
-      <div id="player-prompt" class="prompt-box" hidden>
-        <h3 id="prompt-heading">Ask your AI this</h3>
-        <p id="player-prompt-text"></p>
-        <button id="copy-prompt" class="button" type="button">Copy prompt</button>
-        <p id="copy-status" class="copy-status" role="status"></p>
+  <div class="player-shell">
+    <article class="player-card" aria-live="polite">
+      <div class="step-visual" aria-hidden="true">
+        <span id="player-visual-icon">K</span>
       </div>
-    </div>
 
-    <details class="detail-box">
-      <summary>Ready to continue?</summary>
-      <p id="player-ready"></p>
-      <p id="choice-status" class="copy-status" role="status"></p>
-    </details>
+      <p id="player-platform" class="platform-note"></p>
+      <p id="player-time" class="lesson-time"></p>
+      <h1 id="player-title" tabindex="-1"></h1>
+      <div id="player-body" class="lesson-body"></div>
 
-    <div class="takeaway-box">
-      <h2>Key takeaway</h2>
-      <p id="player-takeaway"></p>
-    </div>
-  </article>
+      <details id="player-why-wrap" class="detail-box">
+        <summary>Why this matters</summary>
+        <p id="player-why"></p>
+      </details>
+
+      <div class="try-box action-box">
+        <h2 id="player-action-title"></h2>
+        <ol id="player-action-list" class="action-list"></ol>
+        <fieldset id="player-choice-field" class="choice-field" hidden>
+          <legend>Choose one option</legend>
+          <div id="player-choices" class="choice-grid"></div>
+        </fieldset>
+        <div id="player-prompt" class="prompt-box" hidden>
+          <h3 id="prompt-heading">Ask your AI this</h3>
+          <p id="player-prompt-text"></p>
+          <button id="copy-prompt" class="button" type="button">Copy prompt</button>
+          <p id="copy-status" class="copy-status" role="status"></p>
+        </div>
+      </div>
+
+      <details class="detail-box">
+        <summary>Ready to continue?</summary>
+        <p id="player-ready"></p>
+        <p id="choice-status" class="copy-status" role="status"></p>
+      </details>
+
+      <div class="takeaway-box">
+        <h2>Key takeaway</h2>
+        <p id="player-takeaway"></p>
+      </div>
+    </article>
+
+    <aside class="mentor-panel" aria-labelledby="mentor-title">
+      <p class="eyebrow">Calm coach</p>
+      <h2 id="mentor-title">Need a hand?</h2>
+      <p id="mentor-message">I’ll offer a simple prompt or reassurance for this step.</p>
+      <details class="mentor-detail">
+        <summary>Another way to think about it</summary>
+        <p id="mentor-extra">Take this one step at a time. You do not need to remember everything.</p>
+      </details>
+    </aside>
+  </div>
 
   <nav class="lesson-nav" aria-label="Journey controls">
     <button id="player-back" class="button button-secondary" type="button">Back</button>
@@ -116,6 +128,8 @@ const encodedSteps = JSON.stringify(steps);
   const takeaway = document.querySelector('#player-takeaway');
   const back = document.querySelector('#player-back');
   const next = document.querySelector('#player-next');
+  const mentorMessage = document.querySelector('#mentor-message');
+  const mentorExtra = document.querySelector('#mentor-extra');
 
   function personalise(text) {
     return String(text)
@@ -130,6 +144,41 @@ const encodedSteps = JSON.stringify(steps);
     if (step.id.includes('check') || step.id.includes('safe') || step.id.includes('wrong')) return '?';
     if (step.id.includes('complete') || step.id.includes('summary')) return '★';
     return 'K';
+  }
+
+  function getMentorText(step) {
+    if (step.examplePrompt) {
+      return {
+        message: `You can copy the prompt and paste it into ${platformName}. You do not need to improve it first.`,
+        extra: 'A copied prompt is a perfectly valid starting point. The skill comes from noticing the answer and asking a follow-up.'
+      };
+    }
+
+    if (step.choices?.length) {
+      return {
+        message: 'Choose the option that feels closest. This is not a test, and there is no penalty for changing your mind later.',
+        extra: 'These choices help you reflect. They are here to reduce uncertainty, not to judge you.'
+      };
+    }
+
+    if (step.id.includes('check') || step.id.includes('safe') || step.id.includes('wrong')) {
+      return {
+        message: 'This step is about safe confidence. AI can be useful, but important answers still need checking.',
+        extra: 'A calm safety habit is simple: use AI to help you think, then check anything important before acting on it.'
+      };
+    }
+
+    if (step.id.includes('complete') || step.id.includes('summary')) {
+      return {
+        message: 'You have done enough for this journey. The aim is not perfection, it is a small useful step forward.',
+        extra: 'Confidence grows when you repeat small actions. One practical use this week is enough.'
+      };
+    }
+
+    return {
+      message: 'Take this screen slowly. Read the main idea, do the one action, then continue when it feels clear enough.',
+      extra: 'You do not need to remember every word. KeepCalmAI is designed so the next step carries you forward.'
+    };
   }
 
   function saveAnswers() {
@@ -184,6 +233,7 @@ const encodedSteps = JSON.stringify(steps);
   function render() {
     const step = steps[current];
     const progress = Math.round(((current + 1) / steps.length) * 100);
+    const mentor = getMentorText(step);
 
     progressLabel.textContent = `Step ${current + 1} of ${steps.length}`;
     progressBar.style.width = `${progress}%`;
@@ -197,6 +247,8 @@ const encodedSteps = JSON.stringify(steps);
     actionList.innerHTML = step.actionSteps.map((item) => `<li>${personalise(item)}</li>`).join('');
     ready.textContent = personalise(step.readyToContinue);
     takeaway.textContent = personalise(step.takeaway);
+    mentorMessage.textContent = personalise(mentor.message);
+    mentorExtra.textContent = personalise(mentor.extra);
     renderChoices(step);
 
     if (step.examplePrompt) {
