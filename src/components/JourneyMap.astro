@@ -58,6 +58,19 @@ const nodes = [
 </section>
 
 <script>
+  function getLearnerProfile() {
+    const defaultProfile = { journeys: {} };
+    const raw = window.localStorage.getItem('keepcalmai:learner-profile');
+
+    try {
+      return raw ? { ...defaultProfile, ...JSON.parse(raw) } : defaultProfile;
+    } catch {
+      return defaultProfile;
+    }
+  }
+
+  const profile = getLearnerProfile();
+
   document.querySelectorAll('.map-node').forEach((node) => {
     const journeyId = node.getAttribute('data-journey');
     const status = node.querySelector('.map-status');
@@ -66,8 +79,9 @@ const nodes = [
 
     if (!journeyId || !status || !marker) return;
 
-    const current = Number(window.localStorage.getItem(`keepcalmai:${journeyId}:current-step`) || 0);
-    const complete = window.localStorage.getItem(`keepcalmai:${journeyId}:complete`) === 'true';
+    const progress = profile.journeys?.[journeyId];
+    const current = Number(progress?.currentStep || 0);
+    const complete = progress?.complete === true;
 
     if (complete) {
       status.textContent = 'Complete';
