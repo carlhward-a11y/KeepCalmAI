@@ -40,9 +40,23 @@ const achievements = [
 </section>
 
 <script>
-  const firstStarted = Number(window.localStorage.getItem('keepcalmai:ai-without-overwhelm:current-step') || 0) > 0;
-  const firstComplete = window.localStorage.getItem('keepcalmai:ai-without-overwhelm:complete') === 'true';
-  const promptsComplete = window.localStorage.getItem('keepcalmai:writing-better-prompts:complete') === 'true';
+  function getLearnerProfile() {
+    const defaultProfile = { journeys: {} };
+    const raw = window.localStorage.getItem('keepcalmai:learner-profile');
+
+    try {
+      return raw ? { ...defaultProfile, ...JSON.parse(raw) } : defaultProfile;
+    } catch {
+      return defaultProfile;
+    }
+  }
+
+  const profile = getLearnerProfile();
+  const first = profile.journeys?.['ai-without-overwhelm'];
+  const prompts = profile.journeys?.['writing-better-prompts'];
+  const firstStarted = Number(first?.currentStep || 0) > 0;
+  const firstComplete = first?.complete === true;
+  const promptsComplete = prompts?.complete === true;
 
   const states = {
     'first-start': firstStarted || firstComplete,
