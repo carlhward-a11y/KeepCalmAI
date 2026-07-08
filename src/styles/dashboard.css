@@ -6,7 +6,8 @@
 
 .dashboard-hero,
 .metric-card,
-.journey-map {
+.journey-map,
+.achievements {
   background: var(--colour-surface);
   border: 1px solid var(--colour-border);
   border-radius: var(--radius-lg);
@@ -39,6 +40,58 @@
 
 .metric-card h2 {
   margin-top: 0;
+}
+
+.achievement-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--space-lg);
+}
+
+.achievement-card {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--space-md);
+  align-items: start;
+  border: 1px solid var(--colour-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-lg);
+  background: var(--colour-surface);
+}
+
+.achievement-icon {
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  border: 2px solid var(--colour-border);
+  color: var(--colour-muted);
+  font-weight: 900;
+}
+
+.achievement-card h3 {
+  margin: 0;
+}
+
+.achievement-card p {
+  margin-bottom: 0;
+}
+
+.achievement-status {
+  color: var(--colour-muted);
+  font-weight: 800;
+}
+
+.achievement-card.is-earned {
+  border-color: var(--colour-primary);
+  background: var(--colour-soft-blue);
+}
+
+.achievement-card.is-earned .achievement-icon {
+  background: var(--colour-primary);
+  border-color: var(--colour-primary);
+  color: var(--colour-surface);
 }
 
 .journey-map {
@@ -111,7 +164,8 @@
 @media (max-width: 760px) {
   .dashboard-hero,
   .metric-card,
-  .journey-map {
+  .journey-map,
+  .achievements {
     padding: var(--space-lg);
   }
 
