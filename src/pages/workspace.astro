@@ -1,0 +1,150 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionHeader from '../components/SectionHeader.astro';
+import Callout from '../components/Callout.astro';
+---
+
+<BaseLayout
+  title="Prompt Workspace | KeepCalmAI"
+  description="Your KeepCalmAI Prompt Workspace for building, copying and saving useful AI prompts."
+>
+  <section class="panel workspace" aria-labelledby="workspace-title">
+    <SectionHeader
+      eyebrow="Prompt Workspace"
+      title="Build a useful prompt"
+      text="Your choices from KeepCalmAI journeys can be brought together here as a prompt you can copy, adjust and use."
+    />
+
+    <div id="workspace-empty" class="summary-box">
+      <h2>No prompt parts yet</h2>
+      <p>Complete the task, context, format and tone steps in Writing Better Prompts to build a prompt here.</p>
+      <a class="button" href="/journeys/writing-better-prompts/">Open Writing Better Prompts</a>
+    </div>
+
+    <div id="workspace-content" class="workspace-content" hidden>
+      <div class="workspace-grid">
+        <article class="workspace-card">
+          <p class="eyebrow">Task</p>
+          <h2 id="workspace-task">Not set yet</h2>
+        </article>
+        <article class="workspace-card">
+          <p class="eyebrow">Context</p>
+          <h2 id="workspace-context">Not set yet</h2>
+        </article>
+        <article class="workspace-card">
+          <p class="eyebrow">Format</p>
+          <h2 id="workspace-format">Not set yet</h2>
+        </article>
+        <article class="workspace-card">
+          <p class="eyebrow">Tone</p>
+          <h2 id="workspace-tone">Not set yet</h2>
+        </article>
+      </div>
+
+      <article class="workspace-preview" aria-labelledby="generated-prompt-title">
+        <p class="eyebrow">Generated prompt</p>
+        <h2 id="generated-prompt-title">Your prompt</h2>
+        <p id="workspace-prompt" class="generated-prompt"></p>
+        <div class="workspace-actions">
+          <button id="copy-workspace-prompt" class="button" type="button">Copy prompt</button>
+          <button id="clear-workspace" class="button button-secondary" type="button">Clear workspace</button>
+          <a class="button button-secondary" href="/notebook/">Open notebook</a>
+        </div>
+        <p id="workspace-status" class="copy-status" role="status"></p>
+      </article>
+    </div>
+
+    <Callout
+      title="How this helps"
+      text="The workspace turns learning choices into something practical. Instead of only learning about prompts, you gradually build one you can use."
+    />
+  </section>
+</BaseLayout>
+
+<script>
+  function getLearnerProfile() {
+    const defaultProfile = { journeys: {}, promptWorkspace: {} };
+    const raw = window.localStorage.getItem('keepcalmai:learner-profile');
+
+    try {
+      return raw ? { ...defaultProfile, ...JSON.parse(raw) } : defaultProfile;
+    } catch {
+      return defaultProfile;
+    }
+  }
+
+  function saveLearnerProfile(profile) {
+    window.localStorage.setItem('keepcalmai:learner-profile', JSON.stringify(profile));
+  }
+
+  function getPromptPart(answer) {
+    return answer?.promptPart || answer?.label || answer || '';
+  }
+
+  function buildWorkspaceFromPromptJourney(profile) {
+    const answers = profile.journeys?.['writing-better-prompts']?.answers || {};
+    const promptWorkspace = {
+      ...profile.promptWorkspace,
+      task: profile.promptWorkspace?.task || getPromptPart(answers.task),
+      context: profile.promptWorkspace?.context || getPromptPart(answers.context),
+      format: profile.promptWorkspace?.format || getPromptPart(answers.format),
+      tone: profile.promptWorkspace?.tone || getPromptPart(answers.tone)
+    };
+
+    const generatedPrompt = [
+      promptWorkspace.task,
+      promptWorkspace.context,
+      promptWorkspace.format,
+      promptWorkspace.tone
+    ].filter(Boolean).join(' ').trim();
+
+    return {
+      ...promptWorkspace,
+      generatedPrompt
+    };
+  }
+
+  const profile = getLearnerProfile();
+  const workspace = buildWorkspaceFromPromptJourney(profile);
+  const hasWorkspace = Boolean(workspace.generatedPrompt);
+
+  const empty = document.querySelector('#workspace-empty');
+  const content = document.querySelector('#workspace-content');
+  const task = document.querySelector('#workspace-task');
+  const context = document.querySelector('#workspace-context');
+  const format = document.querySelector('#workspace-format');
+  const tone = document.querySelector('#workspace-tone');
+  const prompt = document.querySelector('#workspace-prompt');
+  const copy = document.querySelector('#copy-workspace-prompt');
+  const clear = document.querySelector('#clear-workspace');
+  const status = document.querySelector('#workspace-status');
+
+  if (hasWorkspace) {
+    saveLearnerProfile({ ...profile, promptWorkspace: workspace });
+    if (empty) empty.hidden = true;
+    if (content) content.hidden = false;
+    if (task) task.textContent = workspace.task || 'Not set yet';
+    if (context) context.textContent = workspace.context || 'Not set yet';
+    if (format) format.textContent = workspace.format || 'Not set yet';
+    if (tone) tone.textContent = workspace.tone || 'Not set yet';
+    if (prompt) prompt.textContent = workspace.generatedPrompt;
+  }
+
+  copy?.addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(workspace.generatedPrompt || '');
+      if (status) status.textContent = 'Prompt copied.';
+    } catch {
+      if (status) status.textContent = 'Copy was not available. Select the prompt text manually.';
+    }
+  });
+
+  clear?.addEventListener('click', () => {
+    const latestProfile = getLearnerProfile();
+    saveLearnerProfile({
+      ...latestProfile,
+      promptWorkspace: {}
+    });
+    window.location.reload();
+  });
+</script>
