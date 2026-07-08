@@ -36,6 +36,25 @@
   margin-bottom: 0;
 }
 
+.player.prefers-clear-visuals .player-card,
+.player.prefers-clear-visuals .mentor-panel {
+  border-width: 2px;
+}
+
+.player.prefers-clear-visuals .lesson-body p,
+.player.prefers-clear-visuals .action-list li,
+.player.prefers-clear-visuals .detail-box p {
+  line-height: 1.75;
+}
+
+.player.prefers-shorter-steps .mentor-detail {
+  display: none;
+}
+
+.player.prefers-screen-reader .step-visual {
+  display: none;
+}
+
 @media (max-width: 980px) {
   .player-shell {
     grid-template-columns: 1fr;
