@@ -90,6 +90,15 @@ const encodedSteps = JSON.stringify(steps);
         <h2>Key takeaway</h2>
         <p id="player-takeaway"></p>
       </div>
+
+      <div id="reflection-box" class="takeaway-box" hidden>
+        <h2>Optional reflection</h2>
+        <p id="reflection-help">You can save one thought from this step if it would be useful later. This is optional.</p>
+        <label for="reflection-text">A thought to keep</label>
+        <textarea id="reflection-text" rows="4" aria-describedby="reflection-help"></textarea>
+        <button id="save-reflection" class="button button-secondary button-small" type="button">Save reflection to notebook</button>
+        <p id="reflection-status" class="copy-status" role="status"></p>
+      </div>
     </article>
 
     <aside class="mentor-panel" aria-labelledby="mentor-title">
@@ -110,6 +119,7 @@ const encodedSteps = JSON.stringify(steps);
 </section>
 
 <script>
+  import { addNotebookEntry } from '../lib/learnerProfile';
   import { saveCurrentPromptToNotebook } from '../lib/promptWorkspace';
 
   const player = document.querySelector('.player');
@@ -299,6 +309,10 @@ const encodedSteps = JSON.stringify(steps);
   const ready = document.querySelector('#player-ready');
   const choiceStatus = document.querySelector('#choice-status');
   const takeaway = document.querySelector('#player-takeaway');
+  const reflectionBox = document.querySelector('#reflection-box');
+  const reflectionText = document.querySelector('#reflection-text');
+  const saveReflection = document.querySelector('#save-reflection');
+  const reflectionStatus = document.querySelector('#reflection-status');
   const back = document.querySelector('#player-back');
   const next = document.querySelector('#player-next');
   const mentorMessage = document.querySelector('#mentor-message');
@@ -373,6 +387,10 @@ const encodedSteps = JSON.stringify(steps);
     if (step.id.includes('check') || step.id.includes('safe') || step.id.includes('wrong')) return '?';
     if (step.id.includes('complete') || step.id.includes('summary')) return '★';
     return 'K';
+  }
+
+  function shouldShowReflection(step) {
+    return current === steps.length - 1 || step.id.includes('summary') || step.id.includes('complete');
   }
 
   function getMentorText(step) {
@@ -462,6 +480,17 @@ const encodedSteps = JSON.stringify(steps);
     builderPrompt.textContent = personalise(parts.join(' '));
   }
 
+  function updateReflectionBox(step) {
+    if (!reflectionBox || !reflectionText || !reflectionStatus) return;
+
+    reflectionBox.hidden = !shouldShowReflection(step);
+    reflectionStatus.textContent = '';
+
+    if (reflectionText instanceof HTMLTextAreaElement) {
+      reflectionText.value = '';
+    }
+  }
+
   function renderChoices(step) {
     choiceGrid.innerHTML = '';
     choiceStatus.textContent = '';
@@ -528,6 +557,7 @@ const encodedSteps = JSON.stringify(steps);
     mentorExtra.textContent = personalise(mentor.extra);
     renderChoices(step);
     updateBuilderSummary();
+    updateReflectionBox(step);
 
     if (step.examplePrompt) {
       promptBox.hidden = false;
@@ -590,6 +620,27 @@ const encodedSteps = JSON.stringify(steps);
         ? 'Prompt saved to notebook.'
         : 'This prompt is already in your notebook.';
     }
+  });
+
+  saveReflection.addEventListener('click', () => {
+    if (!(reflectionText instanceof HTMLTextAreaElement) || !reflectionStatus) return;
+
+    const content = reflectionText.value.trim();
+    if (!content) {
+      reflectionStatus.textContent = 'Nothing has been saved yet. Add a short thought if you would like to keep one.';
+      return;
+    }
+
+    addNotebookEntry({
+      type: 'reflection',
+      title: 'Learning reflection',
+      content,
+      journeyId,
+      stepId: steps[current]?.id
+    });
+
+    reflectionText.value = '';
+    reflectionStatus.textContent = 'Reflection saved to notebook.';
   });
 
   applyPresentationPreferences();
