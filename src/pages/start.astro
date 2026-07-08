@@ -12,7 +12,7 @@ import Callout from '../components/Callout.astro';
     <SectionHeader
       eyebrow="Start calmly"
       title="Tell us what would help most"
-      text="Answer three quick questions. Your answers stay on this device and help KeepCalmAI use more relevant wording."
+      text="Answer a few quick questions. Your answers stay on this device and help KeepCalmAI use more relevant wording and support."
     />
 
     <form id="onboarding-form" class="onboarding-form">
@@ -41,13 +41,31 @@ import Callout from '../components/Callout.astro';
         <label><input type="radio" name="platform" value="your AI assistant" /> I am not sure yet</label>
       </fieldset>
 
+      <fieldset>
+        <legend>Would any of these make learning easier?</legend>
+        <p class="field-help">Optional. Choose anything that feels useful. You do not need to explain why.</p>
+        <label><input type="checkbox" name="support" value="dyslexia" /> Shorter text and clearer spacing</label>
+        <label><input type="checkbox" name="support" value="adhd" /> Smaller steps with fewer distractions</label>
+        <label><input type="checkbox" name="support" value="screenReader" /> Screen reader friendly layout</label>
+        <label><input type="checkbox" name="support" value="lowVision" /> Larger, clearer visual presentation</label>
+        <label><input type="checkbox" name="support" value="cognitiveFatigue" /> Lower cognitive load and break reminders</label>
+        <label><input type="checkbox" name="support" value="technologyAnxiety" /> Extra reassurance and plain language</label>
+      </fieldset>
+
+      <fieldset>
+        <legend>How would you prefer information to be presented?</legend>
+        <label><input type="checkbox" name="preference" value="prefersBullets" /> Bullet points where possible</label>
+        <label><input type="checkbox" name="preference" value="shorterSteps" /> Shorter learning steps</label>
+        <label><input type="checkbox" name="preference" value="needsReassurance" /> Reassuring guidance when I make a choice</label>
+      </fieldset>
+
       <button class="button" type="submit">Continue to recommended journey</button>
       <p id="onboarding-status" class="copy-status" role="status"></p>
     </form>
 
     <Callout
       title="Why these questions matter"
-      text="KeepCalmAI can adapt small wording details, such as saying 'Open ChatGPT' or 'Open Microsoft Copilot', while keeping the same calm learning route."
+      text="KeepCalmAI can adapt small wording and support details while keeping the same calm learning route. You can change these choices later by returning to this page."
     />
   </section>
 </BaseLayout>
@@ -55,8 +73,50 @@ import Callout from '../components/Callout.astro';
 <script>
   const form = document.querySelector('#onboarding-form');
   const status = document.querySelector('#onboarding-status');
-  const storageKey = 'keepcalmai:onboarding';
-  const saved = JSON.parse(window.localStorage.getItem(storageKey) || '{}');
+  const legacyStorageKey = 'keepcalmai:onboarding';
+
+  function getLearnerProfile() {
+    const defaultProfile = {
+      onboarding: {},
+      journeys: {},
+      promptWorkspace: {},
+      notebook: [],
+      accessibility: {
+        dyslexia: false,
+        adhd: false,
+        screenReader: false,
+        lowVision: false,
+        cognitiveFatigue: false,
+        technologyAnxiety: true
+      },
+      learningDNA: {
+        understandingAI: 1,
+        promptSkills: 1,
+        safetyAwareness: 1,
+        confidence: 1,
+        prefersBullets: false,
+        needsReassurance: true,
+        shorterSteps: false
+      }
+    };
+    const raw = window.localStorage.getItem('keepcalmai:learner-profile');
+
+    try {
+      return raw ? { ...defaultProfile, ...JSON.parse(raw) } : defaultProfile;
+    } catch {
+      return defaultProfile;
+    }
+  }
+
+  function saveLearnerProfile(profile) {
+    window.localStorage.setItem('keepcalmai:learner-profile', JSON.stringify(profile));
+  }
+
+  const profile = getLearnerProfile();
+  const saved = {
+    ...JSON.parse(window.localStorage.getItem(legacyStorageKey) || '{}'),
+    ...(profile.onboarding || {})
+  };
 
   Object.entries(saved).forEach(([name, value]) => {
     const input = form?.querySelector(`input[name="${name}"][value="${value}"]`);
@@ -65,16 +125,54 @@ import Callout from '../components/Callout.astro';
     }
   });
 
+  Object.entries(profile.accessibility || {}).forEach(([name, value]) => {
+    const input = form?.querySelector(`input[name="support"][value="${name}"]`);
+    if (input instanceof HTMLInputElement) {
+      input.checked = value === true;
+    }
+  });
+
+  ['prefersBullets', 'shorterSteps', 'needsReassurance'].forEach((name) => {
+    const input = form?.querySelector(`input[name="preference"][value="${name}"]`);
+    if (input instanceof HTMLInputElement) {
+      input.checked = profile.learningDNA?.[name] === true;
+    }
+  });
+
   form?.addEventListener('submit', (event) => {
     event.preventDefault();
     const data = new FormData(form);
+    const support = data.getAll('support');
+    const preferences = data.getAll('preference');
     const onboarding = {
       goal: data.get('goal'),
       confidence: data.get('confidence'),
       platform: data.get('platform')
     };
 
-    window.localStorage.setItem(storageKey, JSON.stringify(onboarding));
+    const latestProfile = getLearnerProfile();
+    const nextProfile = {
+      ...latestProfile,
+      onboarding,
+      accessibility: {
+        dyslexia: support.includes('dyslexia'),
+        adhd: support.includes('adhd'),
+        screenReader: support.includes('screenReader'),
+        lowVision: support.includes('lowVision'),
+        cognitiveFatigue: support.includes('cognitiveFatigue'),
+        technologyAnxiety: support.includes('technologyAnxiety')
+      },
+      learningDNA: {
+        ...(latestProfile.learningDNA || {}),
+        prefersBullets: preferences.includes('prefersBullets'),
+        shorterSteps: preferences.includes('shorterSteps'),
+        needsReassurance: preferences.includes('needsReassurance') || support.includes('technologyAnxiety')
+      }
+    };
+
+    window.localStorage.setItem(legacyStorageKey, JSON.stringify(onboarding));
+    saveLearnerProfile(nextProfile);
+
     if (status) {
       status.textContent = 'Preferences saved. Opening your recommended journey.';
     }
