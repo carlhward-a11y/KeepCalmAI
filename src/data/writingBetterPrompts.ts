@@ -1,3 +1,10 @@
+export interface ChoiceOption {
+  label: string;
+  feedback?: string;
+  isBest?: boolean;
+  promptPart?: string;
+}
+
 export interface LessonStep {
   id: string;
   title: string;
@@ -6,7 +13,7 @@ export interface LessonStep {
   whyItMatters: string;
   actionTitle: string;
   actionSteps: string[];
-  choices?: string[];
+  choices?: Array<string | ChoiceOption>;
   examplePrompt?: string;
   readyToContinue: string;
   takeaway: string;
@@ -44,15 +51,31 @@ export const writingBetterPrompts: LessonStep[] = [
     actionSteps: [
       'Read the choices below.',
       'Choose the one that best describes a prompt.',
-      'Do not worry about technical terms.'
+      'Read the guidance that appears after your choice.'
     ],
     choices: [
-      'A prompt is an instruction or question.',
-      'A prompt is a password.',
-      'A prompt is always technical code.',
-      'A prompt is a file attachment.'
+      {
+        label: 'A prompt is an instruction or question.',
+        isBest: true,
+        feedback: 'Yes. This is the best answer. A prompt is simply the instruction or question you give to AI.'
+      },
+      {
+        label: 'A prompt is a password.',
+        isBest: false,
+        feedback: 'Not quite. A password lets you into an account. A prompt is the message or instruction you give to AI once you are using it.'
+      },
+      {
+        label: 'A prompt is always technical code.',
+        isBest: false,
+        feedback: 'Not quite. A prompt can be plain English. You do not need to write code to use AI well.'
+      },
+      {
+        label: 'A prompt is a file attachment.',
+        isBest: false,
+        feedback: 'Not quite. You can sometimes attach files to AI tools, but the prompt is the instruction or question you give.'
+      }
     ],
-    readyToContinue: 'Continue when you have selected the best description.',
+    readyToContinue: 'Continue when the meaning of prompt feels clear enough.',
     takeaway: 'A prompt is your instruction to AI.'
   },
   {
@@ -86,13 +109,13 @@ export const writingBetterPrompts: LessonStep[] = [
     actionSteps: [
       'Pick one task word from the options below.',
       'Choose the one most useful for your own situation.',
-      'You can use it in a prompt later.'
+      'This choice will help build your prompt later.'
     ],
     choices: [
-      'Explain',
-      'Summarise',
-      'Draft',
-      'Plan'
+      { label: 'Explain', feedback: 'Good choice. Explain is useful when you want to understand something more clearly.', promptPart: 'Explain' },
+      { label: 'Summarise', feedback: 'Good choice. Summarise is useful when you have too much information and want the main points.', promptPart: 'Summarise' },
+      { label: 'Draft', feedback: 'Good choice. Draft is useful when you want AI to help you start a message or document.', promptPart: 'Draft' },
+      { label: 'Plan', feedback: 'Good choice. Plan is useful when you want steps, options or a structure.', promptPart: 'Plan' }
     ],
     readyToContinue: 'Continue when you have chosen one task word.',
     takeaway: 'Start by saying what you want AI to do.'
@@ -106,14 +129,19 @@ export const writingBetterPrompts: LessonStep[] = [
       'It might include who the message is for, what the situation is, or what you are trying to achieve.'
     ],
     whyItMatters: 'Context helps AI avoid guessing. A little background can make the answer much more relevant.',
-    actionTitle: 'Add one piece of context',
+    actionTitle: 'Choose a context',
     actionSteps: [
-      'Think about your task.',
-      'Add one helpful piece of background.',
-      'Keep it short.'
+      'Choose one context option below.',
+      'This is only a practice context.',
+      'It will help build your prompt later.'
     ],
-    examplePrompt: 'Help me write a short email to my manager explaining that I need to rearrange a meeting.',
-    readyToContinue: 'Continue when you can identify the context in the example.',
+    choices: [
+      { label: 'for someone who is new to the topic', feedback: 'Good. This tells AI to pitch the answer at beginner level.', promptPart: 'for someone who is new to the topic' },
+      { label: 'for a colleague at work', feedback: 'Good. This gives AI a workplace audience and helps shape the wording.', promptPart: 'for a colleague at work' },
+      { label: 'for a short everyday task', feedback: 'Good. This keeps the answer practical and low pressure.', promptPart: 'for a short everyday task' },
+      { label: 'for me to use as a checklist', feedback: 'Good. This gives AI a clear purpose for the output.', promptPart: 'for me to use as a checklist' }
+    ],
+    readyToContinue: 'Continue when you have chosen one piece of context.',
     takeaway: 'A little context helps AI give a better answer.'
   },
   {
@@ -129,13 +157,13 @@ export const writingBetterPrompts: LessonStep[] = [
     actionSteps: [
       'Look at the formats below.',
       'Choose the one you would find easiest to use.',
-      'Remember it for future prompts.'
+      'This will become part of your prompt.'
     ],
     choices: [
-      'Bullet points',
-      'Short paragraph',
-      'Checklist',
-      'Step-by-step guide'
+      { label: 'Bullet points', feedback: 'Good. Bullet points are useful when you want something easy to scan.', promptPart: 'Use bullet points.' },
+      { label: 'Short paragraph', feedback: 'Good. A short paragraph is useful when you want something more natural to read.', promptPart: 'Use one short paragraph.' },
+      { label: 'Checklist', feedback: 'Good. A checklist is useful when you need practical actions.', promptPart: 'Make it a checklist.' },
+      { label: 'Step-by-step guide', feedback: 'Good. Step-by-step is useful when you want a process to follow.', promptPart: 'Make it step by step.' }
     ],
     readyToContinue: 'Continue when you have chosen a preferred format.',
     takeaway: 'You can ask AI to present information in a useful shape.'
@@ -153,13 +181,13 @@ export const writingBetterPrompts: LessonStep[] = [
     actionSteps: [
       'Think about who will read the output.',
       'Choose a tone from the options below.',
-      'Notice how the tone changes the likely answer.'
+      'This will also become part of your prompt.'
     ],
     choices: [
-      'Friendly',
-      'Professional',
-      'Reassuring',
-      'Plain English'
+      { label: 'Friendly', feedback: 'Good. Friendly works well for informal messages and approachable explanations.', promptPart: 'Keep the tone friendly.' },
+      { label: 'Professional', feedback: 'Good. Professional works well for work messages and formal situations.', promptPart: 'Keep the tone professional.' },
+      { label: 'Reassuring', feedback: 'Good. Reassuring works well when someone may feel unsure or anxious.', promptPart: 'Keep the tone reassuring.' },
+      { label: 'Plain English', feedback: 'Good. Plain English helps keep the answer clear and accessible.', promptPart: 'Use plain English.' }
     ],
     readyToContinue: 'Continue when you have chosen a tone.',
     takeaway: 'You can tell AI how the answer should sound.'
@@ -170,17 +198,17 @@ export const writingBetterPrompts: LessonStep[] = [
     time: 'About 2 minutes',
     body: [
       'Now we will put the four parts together.',
-      'The aim is not to write a perfect prompt. The aim is to write a useful starting prompt.'
+      'If you made choices in the previous steps, you should see a prompt beginning to form below.'
     ],
-    whyItMatters: 'Writing one complete prompt helps turn the structure into a practical skill.',
-    actionTitle: 'Use this model',
+    whyItMatters: 'This turns separate choices into something practical you can use.',
+    actionTitle: 'Review your prompt so far',
     actionSteps: [
-      'Say the task.',
-      'Add context.',
-      'Choose format and tone.'
+      'Read the prompt summary if it appears.',
+      'Notice how the choices created a clearer instruction.',
+      'Use the model prompt below if you want another example.'
     ],
     examplePrompt: 'Draft a short, professional email to a colleague asking to rearrange a meeting. Keep it friendly and no more than five sentences.',
-    readyToContinue: 'Continue when you have read the model prompt and can see the four parts.',
+    readyToContinue: 'Continue when you can see how the four parts combine.',
     takeaway: 'A useful prompt gives AI enough direction to help.'
   },
   {
@@ -196,15 +224,15 @@ export const writingBetterPrompts: LessonStep[] = [
     actionSteps: [
       'Read the options below.',
       'Choose the prompt that gives clearer direction.',
-      'Notice what extra information it includes.'
+      'Read the guidance that appears after your choice.'
     ],
     choices: [
-      'Write something for work.',
-      'Draft a short professional message to my team about a changed meeting time.',
-      'Make it better.',
-      'Help please.'
+      { label: 'Write something for work.', isBest: false, feedback: 'This is a start, but it is still quite vague. AI does not know what kind of work writing you need, who it is for, or how it should sound.' },
+      { label: 'Draft a short professional message to my team about a changed meeting time.', isBest: true, feedback: 'Yes. This is the strongest option because it includes the task, audience, topic and tone.' },
+      { label: 'Make it better.', isBest: false, feedback: 'This is too vague on its own. AI needs to know what “better” means, such as shorter, clearer, friendlier or more professional.' },
+      { label: 'Help please.', isBest: false, feedback: 'This does not give AI enough direction. A useful prompt says what help you need.' }
     ],
-    readyToContinue: 'Continue when you have selected the clearer prompt.',
+    readyToContinue: 'Continue when the clearer prompt makes sense.',
     takeaway: 'Specific prompts usually get more useful answers.'
   },
   {
@@ -277,15 +305,15 @@ export const writingBetterPrompts: LessonStep[] = [
     actionSteps: [
       'Read the options below.',
       'Choose the one that should not be pasted into a public AI tool without approval.',
-      'Use this as a simple privacy habit.'
+      'Read the guidance that appears after your choice.'
     ],
     choices: [
-      'A made-up practice email.',
-      'A generic shopping list.',
-      'A client report with personal details.',
-      'A public recipe.'
+      { label: 'A made-up practice email.', isBest: false, feedback: 'This is usually low risk because it is made up. It is useful for practice.' },
+      { label: 'A generic shopping list.', isBest: false, feedback: 'This is usually low risk because it does not contain sensitive personal or work information.' },
+      { label: 'A client report with personal details.', isBest: true, feedback: 'Yes. This needs most care. Personal, client or confidential details should not be pasted into an AI tool unless that tool is approved for that use.' },
+      { label: 'A public recipe.', isBest: false, feedback: 'This is usually low risk because the information is public and not personal.' }
     ],
-    readyToContinue: 'Continue when you have selected the option that needs most care.',
+    readyToContinue: 'Continue when the privacy point feels clear.',
     takeaway: 'Do not paste sensitive information into AI without knowing it is appropriate.'
   },
   {
@@ -294,14 +322,14 @@ export const writingBetterPrompts: LessonStep[] = [
     time: 'About 2 minutes',
     body: [
       'Now write one prompt for something real but low risk.',
-      'Use the four-part structure: task, context, format and tone.'
+      'Use the four-part structure: task, context, format and tone. If you made earlier choices, your prompt so far will appear below.'
     ],
     whyItMatters: 'The skill becomes useful when you apply it to your own task.',
     actionTitle: 'Create your prompt',
     actionSteps: [
-      'Choose a small task.',
-      'Add one piece of context.',
-      'Ask for a format and tone.'
+      'Use the prompt summary if it appears.',
+      'Change any part that does not fit your real task.',
+      'Ask one follow-up if the first answer is not quite right.'
     ],
     examplePrompt: 'Help me create a simple checklist for tidying my workspace. Keep it friendly, practical and no more than eight bullet points.',
     readyToContinue: 'Continue when you have written or adapted one prompt.',
@@ -323,10 +351,10 @@ export const writingBetterPrompts: LessonStep[] = [
       'Any answer is fine.'
     ],
     choices: [
-      'I am still unsure.',
-      'I understand the four-part structure.',
-      'I can write a simple prompt.',
-      'I could help someone else improve a prompt.'
+      { label: 'I am still unsure.', feedback: 'That is fine. Repeat the four-part pattern: task, context, format and tone. You do not need to remember everything at once.' },
+      { label: 'I understand the four-part structure.', feedback: 'Good. Understanding the structure is a strong first step.' },
+      { label: 'I can write a simple prompt.', feedback: 'Good. A simple prompt is exactly what we are aiming for.' },
+      { label: 'I could help someone else improve a prompt.', feedback: 'Excellent. Explaining it to someone else is a sign that the pattern is becoming familiar.' }
     ],
     readyToContinue: 'Continue when you have selected your current confidence level.',
     takeaway: 'Prompt confidence grows through practice.'
@@ -347,10 +375,10 @@ export const writingBetterPrompts: LessonStep[] = [
       'Keep it simple.'
     ],
     choices: [
-      'I will say the task clearly.',
-      'I will add a little context.',
-      'I will ask for a useful format.',
-      'I will use follow-up prompts.'
+      { label: 'I will say the task clearly.', feedback: 'Good habit. A clear task gives AI a clear direction.' },
+      { label: 'I will add a little context.', feedback: 'Good habit. Context helps AI avoid guessing.' },
+      { label: 'I will ask for a useful format.', feedback: 'Good habit. Format can make an answer easier to use.' },
+      { label: 'I will use follow-up prompts.', feedback: 'Good habit. Follow-ups are often where the answer becomes genuinely useful.' }
     ],
     readyToContinue: 'Continue when you have selected one habit to keep.',
     takeaway: 'Better prompts are clear, not complicated.'
