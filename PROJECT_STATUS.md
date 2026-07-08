@@ -1,10 +1,10 @@
 # KeepCalmAI Project Status
 
-Current version: v0.4 Development
+Current version: v0.5 Development
 
-Current milestone: M1, Core Platform
+Current milestone: M2, Learning Engine
 
-Overall Version 1 completion estimate: 45%
+Overall Version 1 completion estimate: 58%
 
 Last updated: 8 July 2026
 
@@ -16,11 +16,11 @@ Deliver a polished personal AI learning platform that helps people build confide
 
 | Milestone | Description | Status | Progress |
 |---|---|---|---:|
-| M1 | Core Platform | In progress | 80% |
-| M2 | Learning Engine | In progress | 30% |
-| M3 | Journey Polish | Not started | 15% |
-| M4 | Documentation | In progress | 35% |
-| M5 | Accessibility and QA | Not started | 10% |
+| M1 | Core Platform | Mostly complete | 92% |
+| M2 | Learning Engine | In progress | 48% |
+| M3 | Journey Polish | Not started | 20% |
+| M4 | Documentation | In progress | 50% |
+| M5 | Accessibility and QA | In progress | 25% |
 | M6 | Release Candidate | Not started | 0% |
 
 ## Completed
@@ -37,6 +37,8 @@ Deliver a polished personal AI learning platform that helps people build confide
 - Progress resume component created.
 - Achievement component created.
 - Calm Mentor panel added to the Journey Player.
+- Prompt Workspace page created.
+- Notebook page improved with filtering.
 
 ### Journeys
 
@@ -48,61 +50,67 @@ Deliver a polished personal AI learning platform that helps people build confide
 ### State and services
 
 - Learner Profile service created.
+- Progress-aware components migrated to the shared learner profile object.
 - Recommendation service created.
 - Prompt Workspace service created.
 - Notebook page foundation created.
-- Legacy localStorage migration started.
+- Workspace prompt saving to Notebook added.
+- Learning DNA updates introduced from choices and journey completion.
+- Accessibility and learning preferences added to onboarding.
+- Light presentation adaptations added to the Journey Player.
 
-### Documentation
+### Documentation and validation
 
 - Learning Experience Bible created.
 - Journey Authoring Guide created.
 - Architecture Handbook created.
 - Design Decisions Log created.
 - Phase 3 Codex Backlog created.
+- Root project control files created.
+- Developer Guide created.
+- Journey validation script created.
 
 ## In progress
 
-### Core platform
-
-- Learner Profile migration.
-- Prompt Workspace visibility.
-- Notebook integration.
-- Learning DNA integration.
-
 ### Learning engine
 
+- Prompt Workspace integration inside Journey Player.
+- Notebook saving directly from journeys.
 - Adaptive choice feedback.
-- Prompt-building integration.
 - Mentor guidance refinement.
+- Learning DNA use in recommendations.
 
 ### Documentation
 
-- Root project documentation.
-- Developer guide.
 - Component catalogue.
-- Release plan.
+- Release checklist.
+- Accessibility checklist.
+
+### Accessibility and QA
+
+- Keyboard testing.
+- Screen reader review.
+- Responsive review.
+- Journey validation.
 
 ## Remaining for M1, Core Platform
 
-- Complete Learner Profile migration across JourneyPlayer, Dashboard, ProgressResume, JourneyMap and Achievements.
-- Build visible Prompt Workspace page.
-- Add Prompt Workspace navigation.
-- Integrate prompt saving into Notebook.
-- Improve Notebook display and filtering.
-- Expand onboarding to include accessibility profile.
+- Complete any remaining legacy localStorage migration.
+- Ensure Prompt Workspace is updated directly from journey choices.
+- Add direct save-to-notebook behaviour inside Journey Player.
+- Confirm dashboard, journey map, achievements, notebook and workspace all reflect shared learner profile state.
 
 ## Known risks
 
-- Several components still read directly from legacy localStorage keys.
-- Prompt Workspace is implemented as a service but is not yet a visible learner tool.
-- Notebook exists as a page but is not yet fully integrated into journeys.
-- Learning DNA exists as a model but does not yet drive recommendations or mentor behaviour.
-- Accessibility profile exists in the model but is not yet exposed in onboarding or applied to the UI.
+- JourneyPlayer has grown large and should be refactored after the current behaviour stabilises.
+- Prompt Workspace currently derives much of its prompt from saved journey answers rather than being updated directly on every prompt choice.
+- Notebook supports saved prompts but reflection entries are not yet implemented.
+- Learning DNA is visible and updated but does not yet drive recommendations strongly.
+- Accessibility adaptations are light-touch and need manual review.
 
 ## Current next task
 
-Complete Learner Profile migration across all progress-aware components.
+Integrate Prompt Workspace and Notebook saving directly into Journey Player, then refactor JourneyPlayer into smaller services or helper modules.
 
 ## Version 1 scope, locked
 
