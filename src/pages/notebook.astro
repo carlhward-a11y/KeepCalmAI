@@ -1,0 +1,43 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionHeader from '../components/SectionHeader.astro';
+---
+
+<BaseLayout
+  title="Notebook | KeepCalmAI"
+  description="Your KeepCalmAI notebook for saved prompts, reflections and useful learning notes."
+>
+  <section class="panel notebook" aria-labelledby="notebook-title">
+    <SectionHeader
+      eyebrow="Your AI notebook"
+      title="Saved prompts and reflections"
+      text="This notebook will collect useful prompts, learning notes and reflections as you move through KeepCalmAI. Items are currently saved on this device."
+    />
+
+    <div id="notebook-empty" class="summary-box">
+      <h2>No notebook entries yet</h2>
+      <p>As you build prompts and complete reflections, useful items will appear here.</p>
+    </div>
+
+    <div id="notebook-list" class="notebook-list" aria-live="polite"></div>
+  </section>
+</BaseLayout>
+
+<script>
+  const profile = JSON.parse(window.localStorage.getItem('keepcalmai:learner-profile') || '{}');
+  const entries = profile.notebook || [];
+  const list = document.querySelector('#notebook-list');
+  const empty = document.querySelector('#notebook-empty');
+
+  if (entries.length && list && empty) {
+    empty.hidden = true;
+    list.innerHTML = entries.map((entry) => `
+      <article class="notebook-entry">
+        <p class="eyebrow">${entry.type}</p>
+        <h2>${entry.title}</h2>
+        <p>${entry.content}</p>
+        <p class="notebook-date">${new Date(entry.createdAt).toLocaleDateString('en-GB')}</p>
+      </article>
+    `).join('');
+  }
+</script>
