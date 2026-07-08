@@ -47,6 +47,7 @@ import Callout from '../components/Callout.astro';
         <p id="workspace-prompt" class="generated-prompt"></p>
         <div class="workspace-actions">
           <button id="copy-workspace-prompt" class="button" type="button">Copy prompt</button>
+          <button id="save-workspace-prompt" class="button button-secondary" type="button">Save to notebook</button>
           <button id="clear-workspace" class="button button-secondary" type="button">Clear workspace</button>
           <a class="button button-secondary" href="/notebook/">Open notebook</a>
         </div>
@@ -63,7 +64,7 @@ import Callout from '../components/Callout.astro';
 
 <script>
   function getLearnerProfile() {
-    const defaultProfile = { journeys: {}, promptWorkspace: {} };
+    const defaultProfile = { journeys: {}, promptWorkspace: {}, notebook: [] };
     const raw = window.localStorage.getItem('keepcalmai:learner-profile');
 
     try {
@@ -104,6 +105,32 @@ import Callout from '../components/Callout.astro';
     };
   }
 
+  function savePromptToNotebook(promptText) {
+    if (!promptText) return false;
+    const latestProfile = getLearnerProfile();
+    const existing = latestProfile.notebook || [];
+    const alreadySaved = existing.some((entry) => entry.type === 'prompt' && entry.content === promptText);
+
+    if (alreadySaved) return false;
+
+    saveLearnerProfile({
+      ...latestProfile,
+      notebook: [
+        {
+          id: `entry-${Date.now()}`,
+          type: 'prompt',
+          title: 'Prompt Workspace prompt',
+          content: promptText,
+          createdAt: new Date().toISOString(),
+          journeyId: 'writing-better-prompts'
+        },
+        ...existing
+      ].slice(0, 100)
+    });
+
+    return true;
+  }
+
   const profile = getLearnerProfile();
   const workspace = buildWorkspaceFromPromptJourney(profile);
   const hasWorkspace = Boolean(workspace.generatedPrompt);
@@ -116,6 +143,7 @@ import Callout from '../components/Callout.astro';
   const tone = document.querySelector('#workspace-tone');
   const prompt = document.querySelector('#workspace-prompt');
   const copy = document.querySelector('#copy-workspace-prompt');
+  const save = document.querySelector('#save-workspace-prompt');
   const clear = document.querySelector('#clear-workspace');
   const status = document.querySelector('#workspace-status');
 
@@ -136,6 +164,13 @@ import Callout from '../components/Callout.astro';
       if (status) status.textContent = 'Prompt copied.';
     } catch {
       if (status) status.textContent = 'Copy was not available. Select the prompt text manually.';
+    }
+  });
+
+  save?.addEventListener('click', () => {
+    const saved = savePromptToNotebook(workspace.generatedPrompt || '');
+    if (status) {
+      status.textContent = saved ? 'Prompt saved to notebook.' : 'This prompt is already in your notebook.';
     }
   });
 
