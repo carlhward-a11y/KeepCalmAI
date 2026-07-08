@@ -21,7 +21,12 @@ export function setPromptPart(part: 'task' | 'context' | 'format' | 'tone', valu
 
 export function saveCurrentPromptToNotebook(journeyId?: string, stepId?: string) {
   const prompt = buildPromptFromWorkspace();
-  if (!prompt) return getLearnerProfile();
+  const profile = getLearnerProfile();
+
+  if (!prompt) return profile;
+
+  const alreadySaved = profile.notebook.some((entry) => entry.type === 'prompt' && entry.content === prompt);
+  if (alreadySaved) return profile;
 
   return addNotebookEntry({
     type: 'prompt',
