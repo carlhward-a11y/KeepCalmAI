@@ -1,0 +1,44 @@
+.workspace-content {
+  display: grid;
+  gap: var(--space-xl);
+}
+
+.workspace-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--space-lg);
+}
+
+.workspace-card,
+.workspace-preview {
+  border: 1px solid var(--colour-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-lg);
+  background: var(--colour-surface);
+}
+
+.workspace-card h2,
+.workspace-preview h2 {
+  margin-top: 0;
+}
+
+.generated-prompt {
+  font-size: 1.15rem;
+  font-weight: 800;
+  background: var(--colour-soft-blue);
+  border-radius: var(--radius-md);
+  padding: var(--space-lg);
+}
+
+.workspace-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+}
+
+@media (max-width: 760px) {
+  .workspace-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+}
