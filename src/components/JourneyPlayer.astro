@@ -1,4 +1,11 @@
 ---
+interface ChoiceOption {
+  label: string;
+  feedback?: string;
+  isBest?: boolean;
+  promptPart?: string;
+}
+
 interface Step {
   id: string;
   title: string;
@@ -7,7 +14,7 @@ interface Step {
   whyItMatters: string;
   actionTitle: string;
   actionSteps: string[];
-  choices?: string[];
+  choices?: Array<string | ChoiceOption>;
   examplePrompt?: string;
   readyToContinue: string;
   takeaway: string;
@@ -57,6 +64,11 @@ const encodedSteps = JSON.stringify(steps);
           <legend>Choose one option</legend>
           <div id="player-choices" class="choice-grid"></div>
         </fieldset>
+        <div id="choice-feedback" class="choice-feedback" role="status" hidden></div>
+        <div id="builder-summary" class="builder-summary" hidden>
+          <h3>Your prompt so far</h3>
+          <p id="builder-prompt"></p>
+        </div>
         <div id="player-prompt" class="prompt-box" hidden>
           <h3 id="prompt-heading">Ask your AI this</h3>
           <p id="player-prompt-text"></p>
@@ -118,6 +130,9 @@ const encodedSteps = JSON.stringify(steps);
   const actionList = document.querySelector('#player-action-list');
   const choiceField = document.querySelector('#player-choice-field');
   const choiceGrid = document.querySelector('#player-choices');
+  const choiceFeedback = document.querySelector('#choice-feedback');
+  const builderSummary = document.querySelector('#builder-summary');
+  const builderPrompt = document.querySelector('#builder-prompt');
   const promptBox = document.querySelector('#player-prompt');
   const promptHeading = document.querySelector('#prompt-heading');
   const promptText = document.querySelector('#player-prompt-text');
@@ -130,6 +145,10 @@ const encodedSteps = JSON.stringify(steps);
   const next = document.querySelector('#player-next');
   const mentorMessage = document.querySelector('#mentor-message');
   const mentorExtra = document.querySelector('#mentor-extra');
+
+  function normaliseChoice(choice) {
+    return typeof choice === 'string' ? { label: choice } : choice;
+  }
 
   function personalise(text) {
     return String(text)
@@ -156,8 +175,8 @@ const encodedSteps = JSON.stringify(steps);
 
     if (step.choices?.length) {
       return {
-        message: 'Choose the option that feels closest. This is not a test, and there is no penalty for changing your mind later.',
-        extra: 'These choices help you reflect. They are here to reduce uncertainty, not to judge you.'
+        message: 'Choose the option that feels closest. If there is a stronger answer, I will explain why after you select it.',
+        extra: 'Some choices are reflective. Others are practice choices. In both cases, the aim is learning, not judgement.'
       };
     }
 
@@ -191,19 +210,51 @@ const encodedSteps = JSON.stringify(steps);
     saveStatus.textContent = current === 0 ? 'Progress is saved on this device.' : `Progress saved: step ${current + 1}.`;
   }
 
+  function updateChoiceFeedback(choice) {
+    if (!choice || !choice.feedback) {
+      choiceFeedback.hidden = true;
+      choiceFeedback.textContent = '';
+      choiceFeedback.classList.remove('is-best', 'is-developing');
+      return;
+    }
+
+    choiceFeedback.hidden = false;
+    choiceFeedback.textContent = personalise(choice.feedback);
+    choiceFeedback.classList.toggle('is-best', choice.isBest === true);
+    choiceFeedback.classList.toggle('is-developing', choice.isBest !== true);
+  }
+
+  function updateBuilderSummary() {
+    const parts = [answers.task, answers.context, answers.format, answers.tone]
+      .map((answer) => answer?.promptPart || answer?.label || answer)
+      .filter(Boolean);
+
+    if (!parts.length || !['build-prompt', 'personal-prompt', 'summary'].includes(steps[current].id)) {
+      builderSummary.hidden = true;
+      builderPrompt.textContent = '';
+      return;
+    }
+
+    builderSummary.hidden = false;
+    builderPrompt.textContent = personalise(parts.join(' '));
+  }
+
   function renderChoices(step) {
     choiceGrid.innerHTML = '';
     choiceStatus.textContent = '';
 
     if (!step.choices || step.choices.length === 0) {
       choiceField.hidden = true;
+      updateChoiceFeedback(null);
       return;
     }
 
     choiceField.hidden = false;
-    const selected = answers[step.id];
+    const selected = answers[step.id]?.label || answers[step.id];
+    const selectedChoice = step.choices.map(normaliseChoice).find((choice) => choice.label === selected);
+    updateChoiceFeedback(selectedChoice);
 
-    step.choices.forEach((choice, index) => {
+    step.choices.map(normaliseChoice).forEach((choice, index) => {
       const id = `choice-${step.id}-${index}`;
       const label = document.createElement('label');
       label.className = 'choice-card';
@@ -213,16 +264,18 @@ const encodedSteps = JSON.stringify(steps);
       input.type = 'radio';
       input.id = id;
       input.name = `choice-${step.id}`;
-      input.value = choice;
-      input.checked = selected === choice;
+      input.value = choice.label;
+      input.checked = selected === choice.label;
 
       const span = document.createElement('span');
-      span.textContent = personalise(choice);
+      span.textContent = personalise(choice.label);
 
       input.addEventListener('change', () => {
         answers[step.id] = choice;
         saveAnswers();
-        choiceStatus.textContent = 'Choice saved.';
+        updateChoiceFeedback(choice);
+        updateBuilderSummary();
+        choiceStatus.textContent = choice.isBest === false ? 'Choice saved. Read the guidance above before continuing.' : 'Choice saved.';
       });
 
       label.append(input, span);
@@ -250,6 +303,7 @@ const encodedSteps = JSON.stringify(steps);
     mentorMessage.textContent = personalise(mentor.message);
     mentorExtra.textContent = personalise(mentor.extra);
     renderChoices(step);
+    updateBuilderSummary();
 
     if (step.examplePrompt) {
       promptBox.hidden = false;
