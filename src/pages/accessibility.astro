@@ -1,0 +1,51 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionHeader from '../components/SectionHeader.astro';
+import Callout from '../components/Callout.astro';
+---
+
+<BaseLayout
+  title="Accessibility | KeepCalmAI"
+  description="Accessibility approach for KeepCalmAI."
+>
+  <section class="panel" aria-labelledby="accessibility-title">
+    <SectionHeader
+      eyebrow="Accessibility"
+      title="Accessibility is part of the product architecture"
+      text="KeepCalmAI is designed for people who may benefit from calm structure, clear language, keyboard access and lower cognitive load."
+    />
+
+    <p>
+      The platform aims to support learners using keyboards, screen readers, magnification, low-vision settings and assistive technology, as well as people who prefer shorter steps, clearer spacing or extra reassurance.
+    </p>
+
+    <Callout
+      title="Current approach"
+      text="Onboarding lets learners choose optional support preferences. The Journey Player can then adapt small presentation and guidance details while keeping the same learning route."
+      variant="try"
+    />
+  </section>
+
+  <section class="panel" aria-labelledby="principles-title">
+    <SectionHeader
+      eyebrow="Principles"
+      title="Built to reduce pressure"
+      text="Accessibility here means more than compliance. It means making the learning experience easier to start, follow and return to."
+    />
+
+    <div class="grid">
+      <article class="card">
+        <h2>Plain language</h2>
+        <p>KeepCalmAI avoids hype, jargon and unnecessary technical wording.</p>
+      </article>
+      <article class="card">
+        <h2>Keyboard access</h2>
+        <p>Controls should remain usable without a mouse, with visible focus states.</p>
+      </article>
+      <article class="card">
+        <h2>Cognitive accessibility</h2>
+        <p>Journeys use micro-steps, visible progress and optional detail to avoid overload.</p>
+      </article>
+    </div>
+  </section>
+</BaseLayout>
