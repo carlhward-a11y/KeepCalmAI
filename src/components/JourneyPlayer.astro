@@ -318,10 +318,44 @@ const encodedSteps = JSON.stringify(steps);
   }
 
   function personalise(text) {
-    return String(text)
+    const value = String(text);
+
+    if (platformName === 'your AI assistant') {
+      return value.replaceAll('Ask your AI this', 'Ask your AI assistant this');
+    }
+
+    return value
       .replaceAll('your AI assistant', platformName)
       .replaceAll('AI assistant', platformName)
       .replaceAll('Ask your AI this', `Ask ${platformName} this`);
+  }
+
+  function getPromptPart(answer) {
+    return answer?.promptPart || answer?.label || answer || '';
+  }
+
+  function updatePromptWorkspaceFromAnswers() {
+    if (journeyId !== 'writing-better-prompts') return;
+
+    const profile = getLearnerProfile();
+    const promptWorkspace = { ...(profile.promptWorkspace || {}) };
+
+    ['task', 'context', 'format', 'tone'].forEach((part) => {
+      const value = getPromptPart(answers[part]);
+      if (value) promptWorkspace[part] = value;
+    });
+
+    promptWorkspace.generatedPrompt = [
+      promptWorkspace.task,
+      promptWorkspace.context,
+      promptWorkspace.format,
+      promptWorkspace.tone
+    ].filter(Boolean).join(' ').trim();
+
+    saveLearnerProfile({
+      ...profile,
+      promptWorkspace
+    });
   }
 
   function getStepIcon(step) {
@@ -380,6 +414,7 @@ const encodedSteps = JSON.stringify(steps);
 
   function saveAnswers() {
     updateJourneyProgress({ currentStep: current, answers });
+    updatePromptWorkspaceFromAnswers();
     saveStatus.textContent = 'Choice saved on this device.';
   }
 
