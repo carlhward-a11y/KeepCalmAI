@@ -1,0 +1,36 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Hero from '../../../components/Hero.astro';
+import SectionHeader from '../../../components/SectionHeader.astro';
+import JourneyPlayer from '../../../components/JourneyPlayer.astro';
+import { checkingAiAnswers } from '../../../data/checkingAiAnswers';
+---
+
+<BaseLayout
+  title="Checking AI Answers | KeepCalmAI"
+  description="A calm beginner journey for checking AI answers before relying on them."
+>
+  <Hero
+    eyebrow="Safe confidence"
+    title="Checking AI Answers"
+    text="Build calm habits for checking AI answers before you rely on them for important information."
+    ctaText="Begin the journey"
+    ctaHref="#player"
+  />
+
+  <section class="panel" aria-labelledby="journey-intro-title">
+    <SectionHeader
+      eyebrow="Journey player"
+      title="Check calmly, not fearfully"
+      text="This journey helps you keep AI useful while knowing when to pause, check and use a reliable source."
+    />
+  </section>
+
+  <div id="player">
+    <JourneyPlayer
+      journeyId="checking-ai-answers"
+      steps={checkingAiAnswers}
+      completeHref="/journeys/checking-ai-answers/complete/"
+    />
+  </div>
+</BaseLayout>
