@@ -1,0 +1,36 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import SectionHeader from '../../../components/SectionHeader.astro';
+import Callout from '../../../components/Callout.astro';
+---
+
+<BaseLayout
+  title="Everyday AI Tasks Complete | KeepCalmAI"
+  description="Completion screen for Everyday AI Tasks."
+>
+  <section class="panel success-panel" aria-labelledby="complete-title">
+    <SectionHeader
+      eyebrow="Journey complete"
+      title="You have completed Everyday AI Tasks"
+      text="You have practised using AI for simple lists, steps, short messages, simpler answers and safe checking."
+    />
+
+    <div class="success-mark" aria-hidden="true">✓</div>
+
+    <Callout
+      title="What you have practised"
+      text="You have used AI for small everyday tasks and practised checking when an answer should not be relied on without care."
+    />
+
+    <Callout
+      title="One small next step"
+      text="Use one everyday prompt this week for a low-risk task, such as making a short list or turning a task into steps."
+      variant="try"
+    />
+
+    <div class="completion-actions">
+      <a class="button" href="/journeys/">Back to journeys</a>
+      <a class="button button-secondary" href="/journeys/everyday-ai-tasks/">Repeat this journey</a>
+    </div>
+  </section>
+</BaseLayout>
