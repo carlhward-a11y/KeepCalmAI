@@ -11,6 +11,7 @@ export function getNextRecommendation(): Recommendation {
   const profile = getLearnerProfile();
   const first = profile.journeys['ai-without-overwhelm'];
   const prompts = profile.journeys['writing-better-prompts'];
+  const everyday = profile.journeys['everyday-ai-tasks'];
 
   if (!first?.complete) {
     return {
@@ -30,11 +31,20 @@ export function getNextRecommendation(): Recommendation {
     };
   }
 
+  if (!everyday?.complete) {
+    return {
+      title: 'Everyday AI Tasks',
+      text: 'Use AI for simple daily lists, steps, messages and safer checking habits.',
+      href: '/journeys/everyday-ai-tasks/',
+      cta: 'Open next journey'
+    };
+  }
+
   return {
-    title: 'Everyday AI Tasks',
-    text: 'Coming next: using AI for simple daily planning, notes and explanations.',
-    href: '/journeys/',
-    cta: 'Coming soon'
+    title: 'Review your notebook',
+    text: 'You have completed the current journeys. Review your saved prompts and reflections, or repeat a journey when it would be useful.',
+    href: '/notebook/',
+    cta: 'Open notebook'
   };
 }
 
@@ -42,6 +52,14 @@ export function getConfidenceLabel(): { title: string; text: string } {
   const profile = getLearnerProfile();
   const first = profile.journeys['ai-without-overwhelm'];
   const prompts = profile.journeys['writing-better-prompts'];
+  const everyday = profile.journeys['everyday-ai-tasks'];
+
+  if (everyday?.complete) {
+    return {
+      title: 'Three journeys complete',
+      text: 'You have completed the current beginner journey set.'
+    };
+  }
 
   if (prompts?.complete) {
     return {
