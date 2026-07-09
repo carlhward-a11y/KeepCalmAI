@@ -1,0 +1,36 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Hero from '../../../components/Hero.astro';
+import SectionHeader from '../../../components/SectionHeader.astro';
+import JourneyPlayer from '../../../components/JourneyPlayer.astro';
+import { everydayAiTasks } from '../../../data/everydayAiTasks';
+---
+
+<BaseLayout
+  title="Everyday AI Tasks | KeepCalmAI"
+  description="A calm beginner journey for using AI with simple everyday tasks."
+>
+  <Hero
+    eyebrow="Everyday AI"
+    title="Everyday AI Tasks"
+    text="Use AI for small, practical tasks such as lists, steps, simple messages and easier explanations."
+    ctaText="Begin the journey"
+    ctaHref="#player"
+  />
+
+  <section class="panel" aria-labelledby="journey-intro-title">
+    <SectionHeader
+      eyebrow="Journey player"
+      title="Small tasks, practical confidence"
+      text="This journey keeps AI use low risk and everyday, so you can practise with tasks that feel manageable."
+    />
+  </section>
+
+  <div id="player">
+    <JourneyPlayer
+      journeyId="everyday-ai-tasks"
+      steps={everydayAiTasks}
+      completeHref="/journeys/everyday-ai-tasks/complete/"
+    />
+  </div>
+</BaseLayout>
