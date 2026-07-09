@@ -1,22 +1,4 @@
-export interface ChoiceOption {
-  label: string;
-  feedback?: string;
-  isBest?: boolean;
-}
-
-export interface LessonStep {
-  id: string;
-  title: string;
-  time: string;
-  body: string[];
-  whyItMatters: string;
-  actionTitle: string;
-  actionSteps: string[];
-  choices?: Array<string | ChoiceOption>;
-  examplePrompt?: string;
-  readyToContinue: string;
-  takeaway: string;
-}
+import type { ChoiceOption, LessonStep } from '../types/journey';
 
 const tryAnotherOption = ' Try another option if you would like to compare, or continue when you are ready.';
 
