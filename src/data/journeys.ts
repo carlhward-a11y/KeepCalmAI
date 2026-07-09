@@ -39,5 +39,15 @@ export const journeys: JourneySummary[] = [
     difficulty: 'beginner',
     status: 'published',
     href: '/journeys/everyday-ai-tasks/'
+  },
+  {
+    id: 'checking-ai-answers',
+    title: 'Checking AI Answers',
+    collection: 'Safe Confidence',
+    description: 'A calm beginner journey for checking AI answers before relying on important information.',
+    estimatedTime: '18 minutes',
+    difficulty: 'beginner',
+    status: 'published',
+    href: '/journeys/checking-ai-answers/'
   }
 ];
