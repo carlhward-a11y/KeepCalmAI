@@ -12,6 +12,7 @@ export function getNextRecommendation(): Recommendation {
   const first = profile.journeys['ai-without-overwhelm'];
   const prompts = profile.journeys['writing-better-prompts'];
   const everyday = profile.journeys['everyday-ai-tasks'];
+  const checking = profile.journeys['checking-ai-answers'];
 
   if (!first?.complete) {
     return {
@@ -40,6 +41,15 @@ export function getNextRecommendation(): Recommendation {
     };
   }
 
+  if (!checking?.complete) {
+    return {
+      title: 'Checking AI Answers',
+      text: 'Build calm habits for checking important AI answers before relying on them.',
+      href: '/journeys/checking-ai-answers/',
+      cta: 'Open next journey'
+    };
+  }
+
   return {
     title: 'Review your notebook',
     text: 'You have completed the current journeys. Review your saved prompts and reflections, or repeat a journey when it would be useful.',
@@ -53,11 +63,19 @@ export function getConfidenceLabel(): { title: string; text: string } {
   const first = profile.journeys['ai-without-overwhelm'];
   const prompts = profile.journeys['writing-better-prompts'];
   const everyday = profile.journeys['everyday-ai-tasks'];
+  const checking = profile.journeys['checking-ai-answers'];
+
+  if (checking?.complete) {
+    return {
+      title: 'Four journeys complete',
+      text: 'You have completed the current beginner journey set.'
+    };
+  }
 
   if (everyday?.complete) {
     return {
       title: 'Three journeys complete',
-      text: 'You have completed the current beginner journey set.'
+      text: 'You have completed the first three beginner journeys.'
     };
   }
 
