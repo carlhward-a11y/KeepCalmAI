@@ -6,6 +6,8 @@ import ProgressResume from '../../components/ProgressResume.astro';
 import JourneyMap from '../../components/JourneyMap.astro';
 import { journeys } from '../../data/journeys';
 import { aiWithoutOverwhelm } from '../../data/aiWithoutOverwhelm';
+import { writingBetterPrompts } from '../../data/writingBetterPrompts';
+import { everydayAiTasks } from '../../data/everydayAiTasks';
 ---
 
 <BaseLayout
@@ -19,13 +21,27 @@ import { aiWithoutOverwhelm } from '../../data/aiWithoutOverwhelm';
     href="/journeys/ai-without-overwhelm/"
   />
 
+  <ProgressResume
+    journeyId="writing-better-prompts"
+    title="Writing Better Prompts"
+    totalSteps={writingBetterPrompts.length}
+    href="/journeys/writing-better-prompts/"
+  />
+
+  <ProgressResume
+    journeyId="everyday-ai-tasks"
+    title="Everyday AI Tasks"
+    totalSteps={everydayAiTasks.length}
+    href="/journeys/everyday-ai-tasks/"
+  />
+
   <JourneyMap />
 
   <section class="panel">
     <SectionHeader
       eyebrow="All journeys"
       title="Current journey library"
-      text="The first journey is active. Additional journeys are shown in the learning map as planned product routes."
+      text="Choose from the active beginner journeys below. Each one is designed to build confidence through small, practical steps."
     />
     <div class="grid">
       {journeys.map((journey) => (
