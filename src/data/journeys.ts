@@ -29,5 +29,15 @@ export const journeys: JourneySummary[] = [
     difficulty: 'beginner',
     status: 'published',
     href: '/journeys/writing-better-prompts/'
+  },
+  {
+    id: 'everyday-ai-tasks',
+    title: 'Everyday AI Tasks',
+    collection: 'Everyday AI',
+    description: 'A calm beginner journey for using AI with simple daily lists, steps, messages and safer checking habits.',
+    estimatedTime: '18 minutes',
+    difficulty: 'beginner',
+    status: 'published',
+    href: '/journeys/everyday-ai-tasks/'
   }
 ];
