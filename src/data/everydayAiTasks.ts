@@ -262,17 +262,17 @@ export const everydayAiTasks: LessonStep[] = [
   },
   {
     id: 'useful-prompt',
-    title: 'Save one useful prompt',
+    title: 'Keep one useful prompt',
     time: 'About 1 minute',
     body: [
       'It can help to keep one everyday prompt you might use again.',
-      'You do not need to save everything. One useful prompt is enough.'
+      'You do not need to keep everything. One useful prompt is enough.'
     ],
-    whyItMatters: 'Saving a prompt turns a practice step into something reusable.',
+    whyItMatters: 'Keeping a prompt turns a practice step into something reusable.',
     actionTitle: 'Choose a prompt to keep',
     actionSteps: [
       'Choose one prompt from this journey that felt useful.',
-      'Copy it somewhere safe, or save it to your notebook if the option is available.',
+      'Copy it into your own notes if you want to keep it.',
       'Keep it simple.'
     ],
     examplePrompt: 'Turn this task into five small steps I can do one at a time. Keep the steps simple and realistic.',
