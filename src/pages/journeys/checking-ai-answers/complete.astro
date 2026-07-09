@@ -1,0 +1,36 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import SectionHeader from '../../../components/SectionHeader.astro';
+import Callout from '../../../components/Callout.astro';
+---
+
+<BaseLayout
+  title="Checking AI Answers Complete | KeepCalmAI"
+  description="Completion screen for Checking AI Answers."
+>
+  <section class="panel success-panel" aria-labelledby="complete-title">
+    <SectionHeader
+      eyebrow="Journey complete"
+      title="You have completed Checking AI Answers"
+      text="You have practised calm checking habits for important AI answers."
+    />
+
+    <div class="success-mark" aria-hidden="true">✓</div>
+
+    <Callout
+      title="What you have practised"
+      text="You have learnt how to spot answers that need checking, ask better follow-up questions and compare key points against reliable sources."
+    />
+
+    <Callout
+      title="One small next step"
+      text="Next time an AI answer matters, ask what might be uncertain or missing, then check the key point against a reliable source."
+      variant="try"
+    />
+
+    <div class="completion-actions">
+      <a class="button" href="/journeys/">Back to journeys</a>
+      <a class="button button-secondary" href="/journeys/checking-ai-answers/">Repeat this journey</a>
+    </div>
+  </section>
+</BaseLayout>
