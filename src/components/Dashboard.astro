@@ -4,10 +4,12 @@ import Achievements from './Achievements.astro';
 import { aiWithoutOverwhelm } from '../data/aiWithoutOverwhelm';
 import { writingBetterPrompts } from '../data/writingBetterPrompts';
 import { everydayAiTasks } from '../data/everydayAiTasks';
+import { checkingAiAnswers } from '../data/checkingAiAnswers';
 
 const firstJourneyTotal = aiWithoutOverwhelm.length;
 const promptJourneyTotal = writingBetterPrompts.length;
 const everydayJourneyTotal = everydayAiTasks.length;
+const checkingJourneyTotal = checkingAiAnswers.length;
 ---
 
 <section class="dashboard" aria-labelledby="dashboard-title">
@@ -40,6 +42,13 @@ const everydayJourneyTotal = everydayAiTasks.length;
     title="Everyday AI Tasks"
     totalSteps={everydayJourneyTotal}
     href="/journeys/everyday-ai-tasks/"
+  />
+
+  <ProgressResume
+    journeyId="checking-ai-answers"
+    title="Checking AI Answers"
+    totalSteps={checkingJourneyTotal}
+    href="/journeys/checking-ai-answers/"
   />
 
   <div class="dashboard-grid">
@@ -93,7 +102,7 @@ const everydayJourneyTotal = everydayAiTasks.length;
   <Achievements />
 </section>
 
-<script define:vars={{ firstJourneyTotal, promptJourneyTotal, everydayJourneyTotal }}>
+<script define:vars={{ firstJourneyTotal, promptJourneyTotal, everydayJourneyTotal, checkingJourneyTotal }}>
   function getLearnerProfile() {
     const defaultProfile = {
       onboarding: {},
@@ -132,12 +141,15 @@ const everydayJourneyTotal = everydayAiTasks.length;
   const first = profile.journeys?.['ai-without-overwhelm'];
   const prompts = profile.journeys?.['writing-better-prompts'];
   const everyday = profile.journeys?.['everyday-ai-tasks'];
+  const checking = profile.journeys?.['checking-ai-answers'];
   const firstCurrent = Number(first?.currentStep || 0);
   const firstComplete = first?.complete === true;
   const promptCurrent = Number(prompts?.currentStep || 0);
   const promptComplete = prompts?.complete === true;
   const everydayCurrent = Number(everyday?.currentStep || 0);
   const everydayComplete = everyday?.complete === true;
+  const checkingCurrent = Number(checking?.currentStep || 0);
+  const checkingComplete = checking?.complete === true;
 
   const greeting = document.querySelector('#dashboard-greeting');
   const intro = document.querySelector('#dashboard-intro');
@@ -169,9 +181,14 @@ const everydayJourneyTotal = everydayAiTasks.length;
   }
 
   if (currentTitle && status) {
-    if (everydayComplete) {
-      currentTitle.textContent = 'Everyday AI Tasks';
+    if (checkingComplete) {
+      currentTitle.textContent = 'Checking AI Answers';
       status.textContent = 'Completed. You have finished the current beginner journey set.';
+    } else if (checkingCurrent > 0 || everydayComplete) {
+      currentTitle.textContent = 'Checking AI Answers';
+      status.textContent = checkingCurrent > 0
+        ? `In progress. You are on step ${checkingCurrent + 1} of ${checkingJourneyTotal}.`
+        : 'Recommended next. Ready to begin.';
     } else if (everydayCurrent > 0 || promptComplete) {
       currentTitle.textContent = 'Everyday AI Tasks';
       status.textContent = everydayCurrent > 0
@@ -191,9 +208,12 @@ const everydayJourneyTotal = everydayAiTasks.length;
   }
 
   if (confidence && confidenceText) {
-    if (everydayComplete) {
-      confidence.textContent = 'Three journeys complete';
+    if (checkingComplete) {
+      confidence.textContent = 'Four journeys complete';
       confidenceText.textContent = 'You have completed the current beginner journey set.';
+    } else if (everydayComplete) {
+      confidence.textContent = 'Three journeys complete';
+      confidenceText.textContent = 'You have completed the first three beginner journeys.';
     } else if (promptComplete) {
       confidence.textContent = 'Two journeys complete';
       confidenceText.textContent = 'You have completed the foundations and prompt skills journeys.';
@@ -210,11 +230,16 @@ const everydayJourneyTotal = everydayAiTasks.length;
   }
 
   if (nextTitle && nextText && nextLink) {
-    if (everydayComplete) {
+    if (checkingComplete) {
       nextTitle.textContent = 'Review your notebook';
       nextText.textContent = 'Review saved prompts and reflections, or repeat a journey when it would be useful.';
       nextLink.textContent = 'Open notebook';
       nextLink.setAttribute('href', '/notebook/');
+    } else if (everydayComplete) {
+      nextTitle.textContent = 'Checking AI Answers';
+      nextText.textContent = 'Build calm habits for checking important AI answers before relying on them.';
+      nextLink.textContent = 'Open next journey';
+      nextLink.setAttribute('href', '/journeys/checking-ai-answers/');
     } else if (promptComplete) {
       nextTitle.textContent = 'Everyday AI Tasks';
       nextText.textContent = 'Use AI for simple daily lists, steps, messages and safer checking habits.';
