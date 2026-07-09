@@ -8,6 +8,7 @@ import { journeys } from '../../data/journeys';
 import { aiWithoutOverwhelm } from '../../data/aiWithoutOverwhelm';
 import { writingBetterPrompts } from '../../data/writingBetterPrompts';
 import { everydayAiTasks } from '../../data/everydayAiTasks';
+import { checkingAiAnswers } from '../../data/checkingAiAnswers';
 ---
 
 <BaseLayout
@@ -33,6 +34,13 @@ import { everydayAiTasks } from '../../data/everydayAiTasks';
     title="Everyday AI Tasks"
     totalSteps={everydayAiTasks.length}
     href="/journeys/everyday-ai-tasks/"
+  />
+
+  <ProgressResume
+    journeyId="checking-ai-answers"
+    title="Checking AI Answers"
+    totalSteps={checkingAiAnswers.length}
+    href="/journeys/checking-ai-answers/"
   />
 
   <JourneyMap />
