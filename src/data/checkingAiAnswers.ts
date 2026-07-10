@@ -140,6 +140,7 @@ function withFeedback(stepId: string, labels: string[]): ChoiceOption[] {
 export const checkingAiAnswers: LessonStep[] = [
   {
     id: 'welcome',
+    type: 'welcome',
     title: 'Welcome to Checking AI Answers',
     time: 'About 30 seconds',
     body: [
@@ -158,6 +159,7 @@ export const checkingAiAnswers: LessonStep[] = [
   },
   {
     id: 'confident-but-wrong',
+    type: 'learn',
     title: 'AI can sound confident and still be wrong',
     time: 'About 1 minute',
     body: [
@@ -176,6 +178,7 @@ export const checkingAiAnswers: LessonStep[] = [
   },
   {
     id: 'needs-checking-most',
+    type: 'choice',
     title: 'Which answer needs checking most?',
     time: 'About 1 minute',
     body: [
@@ -200,6 +203,7 @@ export const checkingAiAnswers: LessonStep[] = [
   },
   {
     id: 'checking-categories',
+    type: 'safety',
     title: 'The five areas to check carefully',
     time: 'About 1 minute',
     body: [
@@ -218,6 +222,7 @@ export const checkingAiAnswers: LessonStep[] = [
   },
   {
     id: 'ask-uncertain',
+    type: 'prompt',
     title: 'Ask what might be uncertain',
     time: 'About 1 minute',
     body: [
@@ -237,6 +242,7 @@ export const checkingAiAnswers: LessonStep[] = [
   },
   {
     id: 'better-follow-up',
+    type: 'choice',
     title: 'Which follow-up improves checking?',
     time: 'About 1 minute',
     body: [
@@ -261,6 +267,7 @@ export const checkingAiAnswers: LessonStep[] = [
   },
   {
     id: 'trusted-source',
+    type: 'choice',
     title: 'Choose a reliable source',
     time: 'About 1 minute',
     body: [
@@ -285,6 +292,7 @@ export const checkingAiAnswers: LessonStep[] = [
   },
   {
     id: 'compare-against-source',
+    type: 'try',
     title: 'Compare against a trusted source',
     time: 'About 2 minutes',
     body: [
@@ -303,6 +311,7 @@ export const checkingAiAnswers: LessonStep[] = [
   },
   {
     id: 'safest-next-action',
+    type: 'choice',
     title: 'What is the safest next action?',
     time: 'About 1 minute',
     body: [
@@ -327,6 +336,7 @@ export const checkingAiAnswers: LessonStep[] = [
   },
   {
     id: 'not-final-authority',
+    type: 'safety',
     title: 'Know when AI is not the final authority',
     time: 'About 1 minute',
     body: [
@@ -351,6 +361,9 @@ export const checkingAiAnswers: LessonStep[] = [
   },
   {
     id: 'checking-reflection',
+    type: 'reflection',
+    reflectionPrompt: 'What is one checking habit you want to remember?',
+    nextButtonLabel: 'Continue when you are ready',
     title: 'A short checking reflection',
     time: 'About 1 minute',
     body: [
@@ -369,6 +382,7 @@ export const checkingAiAnswers: LessonStep[] = [
   },
   {
     id: 'confidence-check',
+    type: 'confidence',
     title: 'How does checking feel now?',
     time: 'About 1 minute',
     body: [
@@ -393,6 +407,8 @@ export const checkingAiAnswers: LessonStep[] = [
   },
   {
     id: 'complete',
+    type: 'complete',
+    nextButtonLabel: 'Finish journey',
     title: 'Journey complete',
     time: 'About 45 seconds',
     body: [
