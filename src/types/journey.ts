@@ -5,6 +5,19 @@ export interface ChoiceOption {
   promptPart?: string;
 }
 
+export type JourneyStepType =
+  | 'welcome'
+  | 'orientation'
+  | 'learn'
+  | 'try'
+  | 'prompt'
+  | 'choice'
+  | 'reflection'
+  | 'safety'
+  | 'confidence'
+  | 'summary'
+  | 'complete';
+
 export interface LessonStep {
   id: string;
   title: string;
@@ -17,4 +30,9 @@ export interface LessonStep {
   examplePrompt?: string;
   readyToContinue: string;
   takeaway: string;
+  type?: JourneyStepType;
+  reflectionPrompt?: string;
+  progressLabel?: string;
+  completionMessage?: string;
+  nextButtonLabel?: string;
 }
