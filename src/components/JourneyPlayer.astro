@@ -1,28 +1,9 @@
 ---
-interface ChoiceOption {
-  label: string;
-  feedback?: string;
-  isBest?: boolean;
-  promptPart?: string;
-}
-
-interface Step {
-  id: string;
-  title: string;
-  time: string;
-  body: string[];
-  whyItMatters: string;
-  actionTitle: string;
-  actionSteps: string[];
-  choices?: Array<string | ChoiceOption>;
-  examplePrompt?: string;
-  readyToContinue: string;
-  takeaway: string;
-}
+import type { LessonStep } from '../types/journey';
 
 interface Props {
   journeyId: string;
-  steps: Step[];
+  steps: LessonStep[];
   completeHref?: string;
 }
 
@@ -133,6 +114,7 @@ const encodedSteps = JSON.stringify(steps);
   const steps = JSON.parse(player?.getAttribute('data-steps') || '[]');
   const journeyId = player?.getAttribute('data-journey') || '';
   const completeHref = player?.getAttribute('data-complete-href') || '/journeys/';
+  const defaultReflectionPrompt = 'You can save one thought from this step if it would be useful later. This is optional.';
 
   function clampScore(value) {
     return Math.max(1, Math.min(10, Number(value || 1)));
@@ -234,6 +216,7 @@ const encodedSteps = JSON.stringify(steps);
   const choiceStatus = document.querySelector('#choice-status');
   const takeaway = document.querySelector('#player-takeaway');
   const reflectionBox = document.querySelector('#reflection-box');
+  const reflectionHelp = document.querySelector('#reflection-help');
   const reflectionText = document.querySelector('#reflection-text');
   const saveReflection = document.querySelector('#save-reflection');
   const reflectionStatus = document.querySelector('#reflection-status');
@@ -295,16 +278,35 @@ const encodedSteps = JSON.stringify(steps);
     updatePromptWorkspace(workspace);
   }
 
+  function getStepType(step) {
+    if (step.type) return step.type;
+    if (step.id.includes('complete')) return 'complete';
+    if (step.id.includes('summary')) return 'summary';
+    if (step.id.includes('check') || step.id.includes('safe') || step.id.includes('wrong')) return 'safety';
+    if (step.choices?.length) return 'choice';
+    if (step.examplePrompt) return 'prompt';
+    return 'learn';
+  }
+
+  function getProgressLabel(step, currentIndex, total) {
+    return step.progressLabel || `Step ${currentIndex + 1} of ${total}`;
+  }
+
+  function getNextButtonLabel(step, currentIndex, total) {
+    return step.nextButtonLabel || (currentIndex === total - 1 ? 'Finish journey' : 'I have done this, continue');
+  }
+
+  function shouldShowReflection(step, currentIndex, total) {
+    const stepType = getStepType(step);
+    return stepType === 'reflection' || currentIndex === total - 1 || stepType === 'summary' || stepType === 'complete';
+  }
+
   function getStepIcon(step) {
     if (step.choices?.length) return '✓';
     if (step.examplePrompt) return '⌘';
     if (step.id.includes('check') || step.id.includes('safe') || step.id.includes('wrong')) return '?';
     if (step.id.includes('complete') || step.id.includes('summary')) return '★';
     return 'K';
-  }
-
-  function shouldShowReflection(step) {
-    return current === steps.length - 1 || step.id.includes('summary') || step.id.includes('complete');
   }
 
   function getMentorText(step) {
@@ -396,7 +398,8 @@ const encodedSteps = JSON.stringify(steps);
 
   function updateReflectionBox(step) {
     if (!reflectionBox || !reflectionText || !reflectionStatus) return;
-    reflectionBox.hidden = !shouldShowReflection(step);
+    reflectionBox.hidden = !shouldShowReflection(step, current, steps.length);
+    if (reflectionHelp) reflectionHelp.textContent = personalise(step.reflectionPrompt || defaultReflectionPrompt);
     reflectionStatus.textContent = '';
     if (reflectionText instanceof HTMLTextAreaElement) reflectionText.value = '';
   }
@@ -451,7 +454,7 @@ const encodedSteps = JSON.stringify(steps);
     const progress = Math.round(((current + 1) / steps.length) * 100);
     const mentor = getMentorText(step);
 
-    progressLabel.textContent = `Step ${current + 1} of ${steps.length}`;
+    progressLabel.textContent = personalise(getProgressLabel(step, current, steps.length));
     progressBar.style.width = `${progress}%`;
     visualIcon.textContent = getStepIcon(step);
     platformNote.textContent = platformName === 'your AI assistant' ? '' : `Using: ${platformName}`;
@@ -480,7 +483,7 @@ const encodedSteps = JSON.stringify(steps);
     }
 
     back.disabled = current === 0;
-    next.textContent = current === steps.length - 1 ? 'Finish journey' : 'I have done this, continue';
+    next.textContent = personalise(getNextButtonLabel(step, current, steps.length));
     saveProgress();
     title.focus();
   }
