@@ -119,15 +119,15 @@ export const everydayAiTasks: LessonStep[] = [
     title: 'Choose a familiar task',
     time: 'About 1 minute',
     body: [
-      'Start by choosing an everyday task that feels familiar.',
-      'You will explore several everyday examples during this journey, but choosing one now gives you an easy place to begin.'
+      'Choose an everyday task that feels familiar as a simple warm-up.',
+      'This does not choose a route. The next screens will guide you through several everyday examples in sequence.'
     ],
     whyItMatters: 'Low-risk tasks let you practise without adding worry or pressure.',
-    actionTitle: 'Choose one example to start with',
+    actionTitle: 'Choose one familiar example to start with',
     actionSteps: [
       'Read the examples below.',
       'Choose the one that feels most familiar.',
-      'You will see several other everyday examples as you continue.'
+      'Then continue through the other examples one at a time.'
     ],
     choices: withFeedback('choose-task', [
       'Make a short list.',
@@ -135,13 +135,13 @@ export const everydayAiTasks: LessonStep[] = [
       'Draft a short message.',
       'Make something easier to understand.'
     ]),
-    readyToContinue: 'Continue when you have chosen a familiar starting example.',
-    takeaway: 'The best first task is simple and safe.'
+    readyToContinue: 'Continue when you have chosen a familiar warm-up example.',
+    takeaway: 'This is a starting point, not a choice of route.'
   },
   {
     id: 'short-list',
     type: 'prompt',
-    title: 'Ask for a short list',
+    title: 'Example 1: ask for a short list',
     time: 'About 1 minute',
     body: [
       'Lists are a useful everyday starting point.',
@@ -155,13 +155,13 @@ export const everydayAiTasks: LessonStep[] = [
       'Read the answer once.'
     ],
     examplePrompt: 'Make a short list of five simple things I could do to prepare for tomorrow morning. Keep it practical and easy to scan.',
-    readyToContinue: 'Continue when you have tried or read the list prompt.',
+    readyToContinue: 'Continue when you are ready to move to the next example.',
     takeaway: 'A short list can make a task feel more manageable.'
   },
   {
     id: 'messy-thoughts',
     type: 'prompt',
-    title: 'Turn messy thoughts into steps',
+    title: 'Example 2: turn messy thoughts into steps',
     time: 'About 2 minutes',
     body: [
       'AI can help when your thoughts are scattered.',
@@ -175,13 +175,13 @@ export const everydayAiTasks: LessonStep[] = [
       'Check whether the steps feel realistic.'
     ],
     examplePrompt: 'I need to tidy my desk but feel a bit stuck. Turn this into five small steps I can do one at a time.',
-    readyToContinue: 'Continue when you have seen how AI can turn a thought into steps.',
+    readyToContinue: 'Continue when you are ready to move to the next example.',
     takeaway: 'AI can help create a starting point when a task feels messy.'
   },
   {
     id: 'draft-message',
     type: 'prompt',
-    title: 'Draft a short message',
+    title: 'Example 3: draft a short message',
     time: 'About 2 minutes',
     body: [
       'AI can help you start a message, but you stay in control of the final wording.',
@@ -195,13 +195,13 @@ export const everydayAiTasks: LessonStep[] = [
       'Change anything that does not sound like you.'
     ],
     examplePrompt: 'Draft a short, friendly message to a neighbour asking if they could let me know when a parcel arrives. Keep it polite and no more than four sentences.',
-    readyToContinue: 'Continue when you have read or adapted the message prompt.',
+    readyToContinue: 'Continue when you are ready to move to the next example.',
     takeaway: 'AI can help you start, but the final message is yours.'
   },
   {
     id: 'simpler-version',
     type: 'prompt',
-    title: 'Ask for a simpler version',
+    title: 'Example 4: ask for a simpler version',
     time: 'About 1 minute',
     body: [
       'If an answer is too long or unclear, ask for a simpler version.',
@@ -215,7 +215,7 @@ export const everydayAiTasks: LessonStep[] = [
       'Decide whether it is easier to use.'
     ],
     examplePrompt: 'Make that simpler, shorter and easier to act on.',
-    readyToContinue: 'Continue when you understand how to ask for a simpler version.',
+    readyToContinue: 'Continue when you are ready to move on from the example tour.',
     takeaway: 'You can ask AI to make an answer easier.'
   },
   {
