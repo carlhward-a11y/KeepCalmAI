@@ -96,6 +96,7 @@ function withFeedback(stepId: string, labels: string[]): ChoiceOption[] {
 export const everydayAiTasks: LessonStep[] = [
   {
     id: 'welcome',
+    type: 'welcome',
     title: 'Welcome to Everyday AI Tasks',
     time: 'About 30 seconds',
     body: [
@@ -114,6 +115,7 @@ export const everydayAiTasks: LessonStep[] = [
   },
   {
     id: 'choose-task',
+    type: 'choice',
     title: 'Choose a simple task',
     time: 'About 1 minute',
     body: [
@@ -138,6 +140,7 @@ export const everydayAiTasks: LessonStep[] = [
   },
   {
     id: 'short-list',
+    type: 'prompt',
     title: 'Ask for a short list',
     time: 'About 1 minute',
     body: [
@@ -157,6 +160,7 @@ export const everydayAiTasks: LessonStep[] = [
   },
   {
     id: 'messy-thoughts',
+    type: 'prompt',
     title: 'Turn messy thoughts into steps',
     time: 'About 2 minutes',
     body: [
@@ -176,6 +180,7 @@ export const everydayAiTasks: LessonStep[] = [
   },
   {
     id: 'draft-message',
+    type: 'prompt',
     title: 'Draft a short message',
     time: 'About 2 minutes',
     body: [
@@ -195,6 +200,7 @@ export const everydayAiTasks: LessonStep[] = [
   },
   {
     id: 'simpler-version',
+    type: 'prompt',
     title: 'Ask for a simpler version',
     time: 'About 1 minute',
     body: [
@@ -214,6 +220,7 @@ export const everydayAiTasks: LessonStep[] = [
   },
   {
     id: 'compare-output',
+    type: 'choice',
     title: 'What makes an answer useful?',
     time: 'About 1 minute',
     body: [
@@ -238,6 +245,7 @@ export const everydayAiTasks: LessonStep[] = [
   },
   {
     id: 'safety-check',
+    type: 'safety',
     title: 'Check before relying on it',
     time: 'About 1 minute',
     body: [
@@ -262,6 +270,7 @@ export const everydayAiTasks: LessonStep[] = [
   },
   {
     id: 'useful-prompt',
+    type: 'prompt',
     title: 'Keep one useful prompt',
     time: 'About 1 minute',
     body: [
@@ -281,6 +290,9 @@ export const everydayAiTasks: LessonStep[] = [
   },
   {
     id: 'reflection',
+    type: 'reflection',
+    reflectionPrompt: 'What is one everyday task where AI could help a little?',
+    nextButtonLabel: 'Continue when you are ready',
     title: 'A short reflection',
     time: 'About 1 minute',
     body: [
@@ -299,6 +311,7 @@ export const everydayAiTasks: LessonStep[] = [
   },
   {
     id: 'confidence-check',
+    type: 'confidence',
     title: 'How does everyday AI feel now?',
     time: 'About 1 minute',
     body: [
@@ -323,6 +336,7 @@ export const everydayAiTasks: LessonStep[] = [
   },
   {
     id: 'one-next-action',
+    type: 'choice',
     title: 'Choose one next action',
     time: 'About 1 minute',
     body: [
@@ -347,6 +361,8 @@ export const everydayAiTasks: LessonStep[] = [
   },
   {
     id: 'complete',
+    type: 'complete',
+    nextButtonLabel: 'Finish journey',
     title: 'Journey complete',
     time: 'About 45 seconds',
     body: [
