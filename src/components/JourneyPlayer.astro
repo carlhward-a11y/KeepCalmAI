@@ -119,7 +119,14 @@ const encodedSteps = JSON.stringify(steps);
 </section>
 
 <script>
-  import { addNotebookEntry } from '../lib/learnerProfile';
+  import {
+    addNotebookEntry,
+    getJourneyProgress,
+    getLearnerProfile,
+    updateJourneyProgress as saveJourneyProgress,
+    updateLearnerProfile,
+    updatePromptWorkspace
+  } from '../lib/learnerProfile';
   import { saveCurrentPromptToNotebook } from '../lib/promptWorkspace';
 
   const player = document.querySelector('.player');
@@ -127,70 +134,26 @@ const encodedSteps = JSON.stringify(steps);
   const journeyId = player?.getAttribute('data-journey') || '';
   const completeHref = player?.getAttribute('data-complete-href') || '/journeys/';
 
-  function getLearnerProfile() {
-    const defaultProfile = {
-      onboarding: {},
-      journeys: {},
-      promptWorkspace: {},
-      notebook: [],
-      accessibility: {
-        dyslexia: false,
-        adhd: false,
-        screenReader: false,
-        lowVision: false,
-        cognitiveFatigue: false,
-        technologyAnxiety: true
-      },
-      learningDNA: {
-        understandingAI: 1,
-        promptSkills: 1,
-        safetyAwareness: 1,
-        confidence: 1,
-        prefersBullets: false,
-        needsReassurance: true,
-        shorterSteps: false
-      }
-    };
-    const raw = window.localStorage.getItem('keepcalmai:learner-profile');
-
-    try {
-      return raw ? { ...defaultProfile, ...JSON.parse(raw) } : defaultProfile;
-    } catch {
-      return defaultProfile;
-    }
-  }
-
-  function saveLearnerProfile(profile) {
-    window.localStorage.setItem('keepcalmai:learner-profile', JSON.stringify(profile));
-  }
-
   function clampScore(value) {
     return Math.max(1, Math.min(10, Number(value || 1)));
   }
 
   function updateLearningDNA(updater) {
-    const profile = getLearnerProfile();
-    const currentDNA = {
-      understandingAI: 1,
-      promptSkills: 1,
-      safetyAwareness: 1,
-      confidence: 1,
-      prefersBullets: false,
-      needsReassurance: true,
-      shorterSteps: false,
-      ...(profile.learningDNA || {})
-    };
-    const nextDNA = updater(currentDNA);
-    saveLearnerProfile({
-      ...profile,
-      learningDNA: {
-        ...currentDNA,
-        ...nextDNA,
-        understandingAI: clampScore(nextDNA.understandingAI ?? currentDNA.understandingAI),
-        promptSkills: clampScore(nextDNA.promptSkills ?? currentDNA.promptSkills),
-        safetyAwareness: clampScore(nextDNA.safetyAwareness ?? currentDNA.safetyAwareness),
-        confidence: clampScore(nextDNA.confidence ?? currentDNA.confidence)
-      }
+    updateLearnerProfile((profile) => {
+      const currentDNA = profile.learningDNA;
+      const nextDNA = updater(currentDNA);
+
+      return {
+        ...profile,
+        learningDNA: {
+          ...currentDNA,
+          ...nextDNA,
+          understandingAI: clampScore(nextDNA.understandingAI ?? currentDNA.understandingAI),
+          promptSkills: clampScore(nextDNA.promptSkills ?? currentDNA.promptSkills),
+          safetyAwareness: clampScore(nextDNA.safetyAwareness ?? currentDNA.safetyAwareness),
+          confidence: clampScore(nextDNA.confidence ?? currentDNA.confidence)
+        }
+      };
     });
   }
 
@@ -199,29 +162,16 @@ const encodedSteps = JSON.stringify(steps);
       const nextDNA = { ...dna };
       const label = String(choice?.label || '').toLowerCase();
 
-      if (choice?.isBest === true) {
-        nextDNA.confidence = dna.confidence + 1;
-      }
-
-      if (choice?.isBest === false) {
-        nextDNA.needsReassurance = true;
-      }
-
-      if (choice?.promptPart) {
-        nextDNA.promptSkills = dna.promptSkills + 1;
-      }
+      if (choice?.isBest === true) nextDNA.confidence = dna.confidence + 1;
+      if (choice?.isBest === false) nextDNA.needsReassurance = true;
+      if (choice?.promptPart) nextDNA.promptSkills = dna.promptSkills + 1;
 
       if (step.id.includes('safe') || step.id.includes('privacy') || step.id.includes('check')) {
         nextDNA.safetyAwareness = dna.safetyAwareness + (choice?.isBest === true ? 2 : 0);
       }
 
-      if (label.includes('bullet')) {
-        nextDNA.prefersBullets = true;
-      }
-
-      if (label.includes('still unsure')) {
-        nextDNA.needsReassurance = true;
-      }
+      if (label.includes('bullet')) nextDNA.prefersBullets = true;
+      if (label.includes('still unsure')) nextDNA.needsReassurance = true;
 
       if (label.includes('help someone else') || label.includes('could help')) {
         nextDNA.needsReassurance = false;
@@ -235,49 +185,23 @@ const encodedSteps = JSON.stringify(steps);
   function updateLearningDNAForCompletion() {
     updateLearningDNA((dna) => {
       if (journeyId === 'ai-without-overwhelm') {
-        return {
-          ...dna,
-          understandingAI: dna.understandingAI + 2,
-          confidence: dna.confidence + 2
-        };
+        return { ...dna, understandingAI: dna.understandingAI + 2, confidence: dna.confidence + 2 };
       }
 
       if (journeyId === 'writing-better-prompts') {
-        return {
-          ...dna,
-          promptSkills: dna.promptSkills + 2,
-          confidence: dna.confidence + 1
-        };
+        return { ...dna, promptSkills: dna.promptSkills + 2, confidence: dna.confidence + 1 };
       }
 
-      return {
-        ...dna,
-        confidence: dna.confidence + 1
-      };
+      return { ...dna, confidence: dna.confidence + 1 };
     });
   }
 
-  function updateJourneyProgress(patch) {
-    const profile = getLearnerProfile();
-    const existing = profile.journeys?.[journeyId] || { currentStep: 0, complete: false, answers: {} };
-    const nextProgress = { ...existing, ...patch };
-    const nextProfile = {
-      ...profile,
-      journeys: {
-        ...(profile.journeys || {}),
-        [journeyId]: nextProgress
-      }
-    };
-    saveLearnerProfile(nextProfile);
-    return nextProgress;
-  }
-
   const profile = getLearnerProfile();
-  const onboarding = profile.onboarding || {};
-  const accessibility = profile.accessibility || {};
-  const learningDNA = profile.learningDNA || {};
+  const onboarding = profile.onboarding;
+  const accessibility = profile.accessibility;
+  const learningDNA = profile.learningDNA;
   const platformName = onboarding.platform || 'your AI assistant';
-  const initialProgress = profile.journeys?.[journeyId] || { currentStep: 0, complete: false, answers: {} };
+  const initialProgress = getJourneyProgress(journeyId);
   let current = Number(initialProgress.currentStep || 0);
   let answers = initialProgress.answers || {};
 
@@ -331,9 +255,7 @@ const encodedSteps = JSON.stringify(steps);
     if (accessibility.lowVision || accessibility.dyslexia) notes.push('clearer visual spacing is on');
     if (accessibility.screenReader) notes.push('screen reader friendly mode is on');
 
-    if (adaptationNote) {
-      adaptationNote.textContent = notes.length ? `Support: ${notes.join(', ')}.` : '';
-    }
+    if (adaptationNote) adaptationNote.textContent = notes.length ? `Support: ${notes.join(', ')}.` : '';
   }
 
   function normaliseChoice(choice) {
@@ -342,10 +264,7 @@ const encodedSteps = JSON.stringify(steps);
 
   function personalise(text) {
     const value = String(text);
-
-    if (platformName === 'your AI assistant') {
-      return value.replaceAll('Ask your AI this', 'Ask your AI assistant this');
-    }
+    if (platformName === 'your AI assistant') return value.replaceAll('Ask your AI this', 'Ask your AI assistant this');
 
     return value
       .replaceAll('your AI assistant', platformName)
@@ -360,25 +279,20 @@ const encodedSteps = JSON.stringify(steps);
   function updatePromptWorkspaceFromAnswers() {
     if (journeyId !== 'writing-better-prompts') return;
 
-    const profile = getLearnerProfile();
-    const promptWorkspace = { ...(profile.promptWorkspace || {}) };
+    const currentWorkspace = getLearnerProfile().promptWorkspace;
+    const workspace = { ...currentWorkspace };
 
     ['task', 'context', 'format', 'tone'].forEach((part) => {
       const value = getPromptPart(answers[part]);
-      if (value) promptWorkspace[part] = value;
+      if (value) workspace[part] = value;
     });
 
-    promptWorkspace.generatedPrompt = [
-      promptWorkspace.task,
-      promptWorkspace.context,
-      promptWorkspace.format,
-      promptWorkspace.tone
-    ].filter(Boolean).join(' ').trim();
+    workspace.generatedPrompt = [workspace.task, workspace.context, workspace.format, workspace.tone]
+      .filter(Boolean)
+      .join(' ')
+      .trim();
 
-    saveLearnerProfile({
-      ...profile,
-      promptWorkspace
-    });
+    updatePromptWorkspace(workspace);
   }
 
   function getStepIcon(step) {
@@ -440,13 +354,13 @@ const encodedSteps = JSON.stringify(steps);
   }
 
   function saveAnswers() {
-    updateJourneyProgress({ currentStep: current, answers });
+    saveJourneyProgress(journeyId, { currentStep: current, answers });
     updatePromptWorkspaceFromAnswers();
     saveStatus.textContent = 'Choice saved on this device.';
   }
 
   function saveProgress() {
-    updateJourneyProgress({ currentStep: current, answers });
+    saveJourneyProgress(journeyId, { currentStep: current, answers });
     saveStatus.textContent = current === 0 ? 'Progress is saved on this device.' : `Progress saved: step ${current + 1}.`;
   }
 
@@ -482,13 +396,9 @@ const encodedSteps = JSON.stringify(steps);
 
   function updateReflectionBox(step) {
     if (!reflectionBox || !reflectionText || !reflectionStatus) return;
-
     reflectionBox.hidden = !shouldShowReflection(step);
     reflectionStatus.textContent = '';
-
-    if (reflectionText instanceof HTMLTextAreaElement) {
-      reflectionText.value = '';
-    }
+    if (reflectionText instanceof HTMLTextAreaElement) reflectionText.value = '';
   }
 
   function renderChoices(step) {
@@ -587,7 +497,7 @@ const encodedSteps = JSON.stringify(steps);
       current += 1;
       render();
     } else {
-      updateJourneyProgress({ currentStep: current, answers, complete: true });
+      saveJourneyProgress(journeyId, { currentStep: current, answers, complete: true });
       updateLearningDNAForCompletion();
       window.location.href = completeHref;
     }
@@ -596,7 +506,7 @@ const encodedSteps = JSON.stringify(steps);
   reset.addEventListener('click', () => {
     current = 0;
     answers = {};
-    updateJourneyProgress({ currentStep: 0, complete: false, answers: {} });
+    saveJourneyProgress(journeyId, { currentStep: 0, complete: false, answers: {} });
     render();
   });
 
@@ -611,9 +521,9 @@ const encodedSteps = JSON.stringify(steps);
 
   saveBuilderPrompt.addEventListener('click', () => {
     updatePromptWorkspaceFromAnswers();
-    const before = getLearnerProfile().notebook?.length || 0;
+    const before = getLearnerProfile().notebook.length;
     saveCurrentPromptToNotebook(journeyId, steps[current]?.id);
-    const after = getLearnerProfile().notebook?.length || 0;
+    const after = getLearnerProfile().notebook.length;
 
     if (builderSaveStatus) {
       builderSaveStatus.textContent = after > before
