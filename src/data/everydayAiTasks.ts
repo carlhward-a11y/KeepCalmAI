@@ -116,18 +116,18 @@ export const everydayAiTasks: LessonStep[] = [
   {
     id: 'choose-task',
     type: 'choice',
-    title: 'Choose a simple task',
+    title: 'Choose a familiar task',
     time: 'About 1 minute',
     body: [
-      'Start with a task that does not need private or sensitive information.',
-      'A list, a plan, a draft message or a simpler explanation is enough.'
+      'Start by choosing an everyday task that feels familiar.',
+      'You will explore several everyday examples during this journey, but choosing one now gives you an easy place to begin.'
     ],
     whyItMatters: 'Low-risk tasks let you practise without adding worry or pressure.',
-    actionTitle: 'Choose one task type',
+    actionTitle: 'Choose one example to start with',
     actionSteps: [
-      'Read the options below.',
-      'Choose one task that feels useful today.',
-      'You can change your mind later.'
+      'Read the examples below.',
+      'Choose the one that feels most familiar.',
+      'You will see several other everyday examples as you continue.'
     ],
     choices: withFeedback('choose-task', [
       'Make a short list.',
@@ -135,7 +135,7 @@ export const everydayAiTasks: LessonStep[] = [
       'Draft a short message.',
       'Make something easier to understand.'
     ]),
-    readyToContinue: 'Continue when you have chosen one everyday task type.',
+    readyToContinue: 'Continue when you have chosen a familiar starting example.',
     takeaway: 'The best first task is simple and safe.'
   },
   {
