@@ -166,6 +166,7 @@ function withFeedback(stepId: string, labels: string[]): ChoiceOption[] {
 export const aiWithoutOverwhelm: LessonStep[] = [
   {
     id: 'welcome',
+    type: 'welcome',
     title: 'Welcome',
     time: 'About 30 seconds',
     body: [
@@ -184,6 +185,7 @@ export const aiWithoutOverwhelm: LessonStep[] = [
   },
   {
     id: 'not-behind',
+    type: 'choice',
     title: 'You are not behind',
     time: 'About 45 seconds',
     body: [
@@ -208,6 +210,7 @@ export const aiWithoutOverwhelm: LessonStep[] = [
   },
   {
     id: 'what-we-will-do',
+    type: 'orientation',
     title: 'What we will do together',
     time: 'About 1 minute',
     body: [
@@ -226,6 +229,7 @@ export const aiWithoutOverwhelm: LessonStep[] = [
   },
   {
     id: 'what-is-ai',
+    type: 'learn',
     title: 'What is AI?',
     time: 'About 1 minute',
     body: [
@@ -244,6 +248,7 @@ export const aiWithoutOverwhelm: LessonStep[] = [
   },
   {
     id: 'ai-is-not-magic',
+    type: 'safety',
     title: 'AI is not magic',
     time: 'About 1 minute',
     body: [
@@ -262,6 +267,7 @@ export const aiWithoutOverwhelm: LessonStep[] = [
   },
   {
     id: 'ai-is-a-conversation',
+    type: 'learn',
     title: 'AI is a conversation',
     time: 'About 1 minute',
     body: [
@@ -280,6 +286,7 @@ export const aiWithoutOverwhelm: LessonStep[] = [
   },
   {
     id: 'already-used-ai',
+    type: 'choice',
     title: 'You may have used AI already',
     time: 'About 1 minute',
     body: [
@@ -304,6 +311,8 @@ export const aiWithoutOverwhelm: LessonStep[] = [
   },
   {
     id: 'small-reflection',
+    type: 'reflection',
+    reflectionPrompt: 'Does AI feel a little less unfamiliar now?',
     title: 'A small reflection',
     time: 'About 45 seconds',
     body: [
@@ -322,6 +331,7 @@ export const aiWithoutOverwhelm: LessonStep[] = [
   },
   {
     id: 'open-ai-assistant',
+    type: 'try',
     title: 'Open your AI assistant',
     time: 'About 1 minute',
     body: [
@@ -340,6 +350,7 @@ export const aiWithoutOverwhelm: LessonStep[] = [
   },
   {
     id: 'what-do-you-see',
+    type: 'orientation',
     title: 'What do you see?',
     time: 'About 1 minute',
     body: [
@@ -358,6 +369,7 @@ export const aiWithoutOverwhelm: LessonStep[] = [
   },
   {
     id: 'message-box',
+    type: 'learn',
     title: 'The message box',
     time: 'About 45 seconds',
     body: [
@@ -376,6 +388,7 @@ export const aiWithoutOverwhelm: LessonStep[] = [
   },
   {
     id: 'copy-first-prompt',
+    type: 'prompt',
     title: 'Copy your first prompt',
     time: 'About 1 minute',
     body: [
@@ -395,6 +408,7 @@ export const aiWithoutOverwhelm: LessonStep[] = [
   },
   {
     id: 'paste-first-prompt',
+    type: 'prompt',
     title: 'Paste the prompt',
     time: 'About 1 minute',
     body: [
@@ -413,6 +427,7 @@ export const aiWithoutOverwhelm: LessonStep[] = [
   },
   {
     id: 'read-answer',
+    type: 'choice',
     title: 'Read the answer',
     time: 'About 1 minute',
     body: [
@@ -437,6 +452,7 @@ export const aiWithoutOverwhelm: LessonStep[] = [
   },
   {
     id: 'did-it-surprise-you',
+    type: 'choice',
     title: 'Did that surprise you?',
     time: 'About 45 seconds',
     body: [
@@ -461,6 +477,7 @@ export const aiWithoutOverwhelm: LessonStep[] = [
   },
   {
     id: 'ai-is-not-google',
+    type: 'learn',
     title: 'AI is not Google',
     time: 'About 1 minute',
     body: [
@@ -479,6 +496,7 @@ export const aiWithoutOverwhelm: LessonStep[] = [
   },
   {
     id: 'ask-another-question',
+    type: 'prompt',
     title: 'Ask another question',
     time: 'About 1 minute',
     body: [
@@ -498,6 +516,7 @@ export const aiWithoutOverwhelm: LessonStep[] = [
   },
   {
     id: 'make-it-shorter',
+    type: 'prompt',
     title: 'Make it shorter',
     time: 'About 1 minute',
     body: [
@@ -517,6 +536,7 @@ export const aiWithoutOverwhelm: LessonStep[] = [
   },
   {
     id: 'make-it-simpler',
+    type: 'prompt',
     title: 'Make it simpler',
     time: 'About 1 minute',
     body: [
@@ -536,6 +556,7 @@ export const aiWithoutOverwhelm: LessonStep[] = [
   },
   {
     id: 'ask-for-example',
+    type: 'prompt',
     title: 'Ask for an example',
     time: 'About 1 minute',
     body: [
@@ -555,6 +576,7 @@ export const aiWithoutOverwhelm: LessonStep[] = [
   },
   {
     id: 'notice-improvement',
+    type: 'choice',
     title: 'Notice how the answer improves',
     time: 'About 1 minute',
     body: [
@@ -579,6 +601,7 @@ export const aiWithoutOverwhelm: LessonStep[] = [
   },
   {
     id: 'what-is-prompt',
+    type: 'learn',
     title: 'What is a prompt?',
     time: 'About 1 minute',
     body: [
@@ -597,6 +620,7 @@ export const aiWithoutOverwhelm: LessonStep[] = [
   },
   {
     id: 'good-prompt',
+    type: 'prompt',
     title: 'A useful prompt',
     time: 'About 1 minute',
     body: [
@@ -616,6 +640,7 @@ export const aiWithoutOverwhelm: LessonStep[] = [
   },
   {
     id: 'poor-prompt',
+    type: 'prompt',
     title: 'A vague prompt',
     time: 'About 1 minute',
     body: [
@@ -635,6 +660,7 @@ export const aiWithoutOverwhelm: LessonStep[] = [
   },
   {
     id: 'compare-prompts',
+    type: 'choice',
     title: 'Compare two prompts',
     time: 'About 1 minute',
     body: [
@@ -659,6 +685,7 @@ export const aiWithoutOverwhelm: LessonStep[] = [
   },
   {
     id: 'write-your-own',
+    type: 'prompt',
     title: 'Write your own prompt',
     time: 'About 2 minutes',
     body: [
@@ -678,6 +705,7 @@ export const aiWithoutOverwhelm: LessonStep[] = [
   },
   {
     id: 'ai-can-be-wrong',
+    type: 'safety',
     title: 'AI can be wrong',
     time: 'About 1 minute',
     body: [
@@ -696,6 +724,7 @@ export const aiWithoutOverwhelm: LessonStep[] = [
   },
   {
     id: 'when-to-check',
+    type: 'safety',
     title: 'When should you check?',
     time: 'About 1 minute',
     body: [
@@ -720,6 +749,7 @@ export const aiWithoutOverwhelm: LessonStep[] = [
   },
   {
     id: 'human-judgement',
+    type: 'safety',
     title: 'Human judgement matters',
     time: 'About 1 minute',
     body: [
@@ -739,6 +769,8 @@ export const aiWithoutOverwhelm: LessonStep[] = [
   },
   {
     id: 'safety-reflection',
+    type: 'reflection',
+    reflectionPrompt: 'What is one safety rule you want to remember?',
     title: 'A safety reflection',
     time: 'About 1 minute',
     body: [
@@ -763,6 +795,7 @@ export const aiWithoutOverwhelm: LessonStep[] = [
   },
   {
     id: 'you-have-learnt',
+    type: 'learn',
     title: 'You have learnt a lot',
     time: 'About 45 seconds',
     body: [
@@ -781,6 +814,7 @@ export const aiWithoutOverwhelm: LessonStep[] = [
   },
   {
     id: 'confidence-now',
+    type: 'confidence',
     title: 'Where do you feel now?',
     time: 'About 1 minute',
     body: [
@@ -805,6 +839,7 @@ export const aiWithoutOverwhelm: LessonStep[] = [
   },
   {
     id: 'try-tomorrow',
+    type: 'choice',
     title: 'One thing to try tomorrow',
     time: 'About 1 minute',
     body: [
@@ -829,6 +864,7 @@ export const aiWithoutOverwhelm: LessonStep[] = [
   },
   {
     id: 'summary',
+    type: 'summary',
     title: 'What you now know',
     time: 'About 1 minute',
     body: [
@@ -847,6 +883,8 @@ export const aiWithoutOverwhelm: LessonStep[] = [
   },
   {
     id: 'journey-complete',
+    type: 'complete',
+    nextButtonLabel: 'Finish journey',
     title: 'Journey complete',
     time: 'About 1 minute',
     body: [
