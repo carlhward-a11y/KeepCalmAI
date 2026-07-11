@@ -1,0 +1,118 @@
+name: Apply JourneyPlayer step-type label
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Add accessible step-type label
+        shell: python
+        run: |
+          from pathlib import Path
+
+          path = Path('src/components/JourneyPlayer.astro')
+          text = path.read_text()
+
+          old_markup = '''      <p id="player-platform" class="platform-note"></p>
+      <p id="player-adaptation" class="platform-note"></p>
+      <p id="player-time" class="lesson-time"></p>
+      <h1 id="player-title" tabindex="-1"></h1>'''
+          new_markup = '''      <p id="player-platform" class="platform-note"></p>
+      <p id="player-adaptation" class="platform-note"></p>
+      <p id="player-step-type" class="step-type-label">Learn</p>
+      <p id="player-time" class="lesson-time"></p>
+      <h1 id="player-title" tabindex="-1"></h1>'''
+          if old_markup not in text:
+              raise SystemExit('Could not find player heading markup')
+          text = text.replace(old_markup, new_markup, 1)
+
+          old_query = "  const adaptationNote = document.querySelector('#player-adaptation');\n  const time = document.querySelector('#player-time');"
+          new_query = "  const adaptationNote = document.querySelector('#player-adaptation');\n  const stepTypeLabel = document.querySelector('#player-step-type');\n  const time = document.querySelector('#player-time');"
+          if old_query not in text:
+              raise SystemExit('Could not find DOM query insertion point')
+          text = text.replace(old_query, new_query, 1)
+
+          old_helper = '''  function getProgressLabel(step, currentIndex, total) {
+    return step.progressLabel || `Step ${currentIndex + 1} of ${total}`;
+  }
+'''
+          new_helper = '''  function getStepTypeLabel(step) {
+    const labels = {
+      welcome: 'Welcome',
+      orientation: 'Get ready',
+      learn: 'Learn',
+      try: 'Try this',
+      prompt: 'Prompt practice',
+      choice: 'Choose',
+      reflection: 'Reflect',
+      safety: 'Safety check',
+      confidence: 'Confidence check',
+      summary: 'Recap',
+      complete: 'Complete'
+    };
+
+    return labels[getStepType(step)] || 'Learn';
+  }
+
+  function getProgressLabel(step, currentIndex, total) {
+    return step.progressLabel || `Step ${currentIndex + 1} of ${total}`;
+  }
+'''
+          if old_helper not in text:
+              raise SystemExit('Could not find helper insertion point')
+          text = text.replace(old_helper, new_helper, 1)
+
+          old_render = "    progressLabel.textContent = personalise(getProgressLabel(step, current, steps.length));\n    progressBar.style.width = `${progress}%`;"
+          new_render = "    progressLabel.textContent = personalise(getProgressLabel(step, current, steps.length));\n    if (stepTypeLabel) stepTypeLabel.textContent = getStepTypeLabel(step);\n    progressBar.style.width = `${progress}%`;"
+          if old_render not in text:
+              raise SystemExit('Could not find render insertion point')
+          text = text.replace(old_render, new_render, 1)
+
+          style = '''
+
+<style>
+  .step-type-label {
+    display: inline-block;
+    margin: 0 0 0.45rem;
+    padding: 0.25rem 0.65rem;
+    border: 1px solid var(--border, #d8dde3);
+    border-radius: 999px;
+    background: var(--surface-soft, #f5f7f8);
+    color: var(--text-muted, #4f5963);
+    font-size: 0.82rem;
+    font-weight: 700;
+    line-height: 1.3;
+    letter-spacing: 0.02em;
+  }
+</style>
+'''
+          if '.step-type-label {' not in text:
+              text = text.rstrip() + style
+
+          path.write_text(text)
+
+      - name: Validate and build
+        run: |
+          npm ci
+          npm run validate:journeys
+          npm run build
+
+      - name: Commit target file and remove temporary workflow
+        run: |
+          rm .github/workflows/apply-journey-step-label.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/components/JourneyPlayer.astro .github/workflows/apply-journey-step-label.yml
+          git commit -m "Add accessible journey step-type label"
+          git push
