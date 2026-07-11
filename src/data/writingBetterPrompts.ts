@@ -120,7 +120,7 @@ export const writingBetterPrompts: LessonStep[] = [
       { label: 'for someone who is new to the topic', feedback: 'Good. This tells AI to pitch the answer at beginner level.', promptPart: 'for someone who is new to the topic' },
       { label: 'for a colleague at work', feedback: 'Good. This gives AI a workplace audience and helps shape the wording.', promptPart: 'for a colleague at work' },
       { label: 'for a short everyday task', feedback: 'Good. This keeps the answer practical and low pressure.', promptPart: 'for a short everyday task' },
-      { label: 'for me to use as a checklist', feedback: 'Good. This gives AI a clear purpose for the output.', promptPart: 'for me to use as a checklist' }
+      { label: 'for me to act on later', feedback: 'Good. This gives AI a clear purpose and makes the result easier to use later.', promptPart: 'for me to act on later' }
     ],
     readyToContinue: 'Continue when you have chosen one piece of context.',
     takeaway: 'A little context helps AI give a better answer.'
