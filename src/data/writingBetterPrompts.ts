@@ -3,6 +3,7 @@ import type { LessonStep } from '../types/journey';
 export const writingBetterPrompts: LessonStep[] = [
   {
     id: 'welcome',
+    type: 'welcome',
     title: 'Welcome back',
     time: 'About 30 seconds',
     body: [
@@ -21,6 +22,7 @@ export const writingBetterPrompts: LessonStep[] = [
   },
   {
     id: 'prompt-is-instruction',
+    type: 'learn',
     title: 'A prompt is an instruction',
     time: 'About 1 minute',
     body: [
@@ -61,6 +63,7 @@ export const writingBetterPrompts: LessonStep[] = [
   },
   {
     id: 'four-part-prompt',
+    type: 'orientation',
     title: 'The four-part prompt',
     time: 'About 1 minute',
     body: [
@@ -79,6 +82,7 @@ export const writingBetterPrompts: LessonStep[] = [
   },
   {
     id: 'task',
+    type: 'choice',
     title: 'Part 1: task',
     time: 'About 1 minute',
     body: [
@@ -103,6 +107,7 @@ export const writingBetterPrompts: LessonStep[] = [
   },
   {
     id: 'context',
+    type: 'choice',
     title: 'Part 2: context',
     time: 'About 1 minute',
     body: [
@@ -127,6 +132,7 @@ export const writingBetterPrompts: LessonStep[] = [
   },
   {
     id: 'format',
+    type: 'choice',
     title: 'Part 3: format',
     time: 'About 1 minute',
     body: [
@@ -151,6 +157,7 @@ export const writingBetterPrompts: LessonStep[] = [
   },
   {
     id: 'tone',
+    type: 'choice',
     title: 'Part 4: tone',
     time: 'About 1 minute',
     body: [
@@ -175,6 +182,7 @@ export const writingBetterPrompts: LessonStep[] = [
   },
   {
     id: 'build-prompt',
+    type: 'prompt',
     title: 'Build a prompt',
     time: 'About 2 minutes',
     body: [
@@ -194,6 +202,7 @@ export const writingBetterPrompts: LessonStep[] = [
   },
   {
     id: 'compare-vague-clear',
+    type: 'choice',
     title: 'Compare vague and clear',
     time: 'About 1 minute',
     body: [
@@ -218,6 +227,7 @@ export const writingBetterPrompts: LessonStep[] = [
   },
   {
     id: 'follow-up-prompts',
+    type: 'prompt',
     title: 'Follow-up prompts',
     time: 'About 1 minute',
     body: [
@@ -237,6 +247,7 @@ export const writingBetterPrompts: LessonStep[] = [
   },
   {
     id: 'ask-for-options',
+    type: 'prompt',
     title: 'Ask for options',
     time: 'About 1 minute',
     body: [
@@ -256,6 +267,7 @@ export const writingBetterPrompts: LessonStep[] = [
   },
   {
     id: 'keep-your-voice',
+    type: 'prompt',
     title: 'Keep your own voice',
     time: 'About 1 minute',
     body: [
@@ -275,6 +287,7 @@ export const writingBetterPrompts: LessonStep[] = [
   },
   {
     id: 'prompt-safety',
+    type: 'safety',
     title: 'Prompt safely',
     time: 'About 1 minute',
     body: [
@@ -299,6 +312,7 @@ export const writingBetterPrompts: LessonStep[] = [
   },
   {
     id: 'personal-prompt',
+    type: 'prompt',
     title: 'Write your own prompt',
     time: 'About 2 minutes',
     body: [
@@ -318,6 +332,7 @@ export const writingBetterPrompts: LessonStep[] = [
   },
   {
     id: 'confidence-check',
+    type: 'confidence',
     title: 'Confidence check',
     time: 'About 1 minute',
     body: [
@@ -342,6 +357,7 @@ export const writingBetterPrompts: LessonStep[] = [
   },
   {
     id: 'summary',
+    type: 'summary',
     title: 'What you now know',
     time: 'About 1 minute',
     body: [
@@ -366,6 +382,8 @@ export const writingBetterPrompts: LessonStep[] = [
   },
   {
     id: 'complete',
+    type: 'complete',
+    nextButtonLabel: 'Finish journey',
     title: 'Journey complete',
     time: 'About 45 seconds',
     body: [
